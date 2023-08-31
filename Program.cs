@@ -1,2 +1,17 @@
-﻿// See https://aka.ms/new-console-template for more information
-Console.WriteLine("Hello, World!");
+﻿if (args.Length > 1)
+    Console.WriteLine("Please, enter read to read or cheep to cheep");
+else if (args[0] == "read")
+    Read();
+else if (args[0] == "cheep")
+    Cheep();
+
+
+static void Read()
+{
+    return;
+}
+
+static void Cheep()
+{
+    return;
+}
