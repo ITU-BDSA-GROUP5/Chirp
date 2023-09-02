@@ -21,12 +21,13 @@ static void Read()
     }
 }
 
-static string FormatCheep(string cheep){
+static string FormatCheep(string cheep)
+{
     Regex cheepSegmentRegex = new Regex(@"(?<user>[a-zA-Z]+),""(?<cheep>.+)"",(?<timestamp>[0-9]+)");
     GroupCollection cheepSegments = cheepSegmentRegex.Matches(cheep)[0].Groups;
-    DateTimeOffset timestamp = DateTimeOffset.FromUnixTimeSeconds(long.Parse(cheepSegments["timestamp"].Value));
-    
-    return $"{cheepSegments["user"].Value} @ {timestamp}: {cheepSegments["cheep"].Value}";
+    DateTimeOffset timestamp = DateTimeOffset.FromUnixTimeSeconds(long.Parse(cheepSegments["timestamp"].Value)).LocalDateTime;
+
+    return $"{cheepSegments["user"].Value} @ {timestamp.ToString("G")}: {cheepSegments["cheep"].Value}";
 }
 
 static void Cheep()
