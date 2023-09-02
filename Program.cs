@@ -15,7 +15,7 @@ static void Cheep(string message)
 {
     string user = Environment.UserName;
     var time = DateTimeOffset.UtcNow.ToUnixTimeSeconds();
-    if(!File.Exists("chirp_cli_db2.csv"))
+    if(!File.Exists("chirp_cli_db.csv"))
     {
         using StreamWriter sw = File.CreateText("chirp_cli_db.csv");
         sw.WriteLine($"{user},{message},{time}");
