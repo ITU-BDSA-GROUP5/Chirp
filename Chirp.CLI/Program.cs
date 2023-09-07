@@ -1,3 +1,5 @@
+namespace Chirp.CLI;
+
 using System.Text.RegularExpressions;
 
 if (args.Length > 1)
