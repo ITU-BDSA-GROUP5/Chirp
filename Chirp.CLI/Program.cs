@@ -1,50 +1,38 @@
-namespace Chirp.CLI;
+using Chirp.CLI;
+using SimpleDB;
 
-using System.Text.RegularExpressions;
-
-if (args.Length > 1)
+if (args.Length < 1)
     Console.WriteLine("Please, enter read to read or cheep to cheep");
 else if (args[0] == "read")
     Read();
 else if (args[0] == "cheep")
     Cheep(args[1]);
 
-//Prints all past cheeps
 static void Read()
 {
-    using (StreamReader reader = File.OpenText("chirp_cli_db.csv"))
-    {
-        string cheep;
-        reader.ReadLine();
-        while ((cheep = reader.ReadLine()) is not null)
-        {
-            Console.WriteLine(FormatCheep(cheep));
-        }
+    IDatabaseRepository<Cheep> db = GetDB();
+    IEnumerable<Cheep> cheeps = db.Read();
+    foreach (Cheep cheep in cheeps) {
+        Console.WriteLine(FormatCheep(cheep));
     }
 }
 
-static string FormatCheep(string cheep)
+static string FormatCheep(Cheep cheep)
 {
-    Regex cheepSegmentRegex = new Regex(@"(?<user>[a-zA-Z]+),""(?<cheep>.+)"",(?<timestamp>[0-9]+)");
-    GroupCollection cheepSegments = cheepSegmentRegex.Matches(cheep)[0].Groups;
-    DateTimeOffset timestamp = DateTimeOffset.FromUnixTimeSeconds(long.Parse(cheepSegments["timestamp"].Value)).LocalDateTime;
+    DateTimeOffset timestamp = DateTimeOffset.FromUnixTimeSeconds(cheep.Timestamp).LocalDateTime;
 
-    return $"{cheepSegments["user"].Value} @ {timestamp.ToString("G")}: {cheepSegments["cheep"].Value}";
+    return $"{cheep.Author} @ {timestamp.ToString("G")}: {cheep.Message}";
 }
 
 static void Cheep(string message)
 {
-    string user = Environment.UserName;
+    IDatabaseRepository<Cheep> db = GetDB();
+    string author = Environment.UserName;
     var time = DateTimeOffset.UtcNow.ToUnixTimeSeconds();
-    if(!File.Exists("chirp_cli_db.csv"))
-    {
-        using StreamWriter sw = File.CreateText("chirp_cli_db.csv");
-        sw.WriteLine($"{user},{message},{time}");
-    }
-    else
-    {
-        using StreamWriter sw = File.AppendText("chirp_cli_db.csv");
-        sw.WriteLine($"{user},{message},{time}");
-    }
-    return;
+
+    db.Store(new Cheep(author, message, time));
+}
+
+static IDatabaseRepository<Cheep> GetDB() {
+    return new CSVDatabase<Cheep>("./chirp_cli_db.csv");
 }
