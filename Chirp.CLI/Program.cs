@@ -1,27 +1,30 @@
 using Chirp.CLI;
 using SimpleDB;
+using static Chirp.CLI.UserInterface;
+using System.Text.RegularExpressions;
+using DocoptNet;
 
-if (args.Length < 1)
-    Console.WriteLine("Please, enter read to read or cheep to cheep");
-else if (args[0] == "read")
+string usage = @"
+Usage:
+	chirp <command> [<message>]";
+	
+// This line was taken from chatgpt
+var arguments = new Docopt().Apply(usage, args, version: "Chirp 1.0", exit: true);
+
+if (arguments is null){throw new ArgumentNullException(nameof(arguments)); }
+string input = arguments["<command>"].ToString();
+
+if (input == "read")
     Read();
-else if (args[0] == "cheep")
-    Cheep(args[1]);
+else if (input == "cheep")
+	Cheep(arguments["<message>"].ToString());
 
 static void Read()
 {
     IDatabaseRepository<Cheep> db = GetDB();
     IEnumerable<Cheep> cheeps = db.Read();
-    foreach (Cheep cheep in cheeps) {
-        Console.WriteLine(FormatCheep(cheep));
-    }
-}
 
-static string FormatCheep(Cheep cheep)
-{
-    DateTimeOffset timestamp = DateTimeOffset.FromUnixTimeSeconds(cheep.Timestamp).LocalDateTime;
-
-    return $"{cheep.Author} @ {timestamp.ToString("G")}: {cheep.Message}";
+	PrintCheeps(cheeps);
 }
 
 static void Cheep(string message)

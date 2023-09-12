@@ -1,4 +1,4 @@
-﻿namespace SimpleDB;
+namespace SimpleDB;
 
 using System.Globalization;
 using CsvHelper;
@@ -28,6 +28,7 @@ public class CSVDatabase<T> : IDatabaseRepository<T>
         using (var csv = new CsvWriter(writer, CultureInfo.InvariantCulture))
         {
             csv.WriteRecord(record);
+			csv.NextRecord(); // makes a new line
         }
     }
 }
