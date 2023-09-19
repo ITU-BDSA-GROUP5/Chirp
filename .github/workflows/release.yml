@@ -29,5 +29,5 @@ jobs:
         if: startsWith(github.ref, 'refs/tags/')
         with:
           files: |
-            src/Chirp.CLI/bin/Debug/net7.0/osx-arm64/publish/Chirp.CLI
-            src/Chirp.CLI/bin/Debug/net7.0/osx-arm64/publish/chirp_cli_db.csv
+            src/Chirp.CLI/bin/Debug/net7.0/linux-x64/publish/Chirp.CLI
+            src/Chirp.CLI/bin/Debug/net7.0/linux-x64/publish/chirp_cli_db.csv
