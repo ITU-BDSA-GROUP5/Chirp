@@ -1,10 +1,9 @@
 name: Release
 
 on:
-  workflow_dispatch
-  # push:
-  #   tags:
-  #     - "v*.*.*"
+  push:
+    tags:
+      - "v*.*.*"
 
 jobs:
   release:
@@ -26,7 +25,7 @@ jobs:
         run: dotnet publish
       - name: Release
         uses: softprops/action-gh-release@v1
-        # if: startsWith(github.ref, 'refs/tags/')
+        if: startsWith(github.ref, 'refs/tags/')
         with:
           files: |
             src/Chirp.CLI/bin/Debug/net7.0/linux-x64/publish/Chirp.CLI
