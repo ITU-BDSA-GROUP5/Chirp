@@ -38,5 +38,7 @@ static void Cheep(string message)
 
 static IDatabaseRepository<Cheep> GetDB()
 {
-	return new CSVDatabase<Cheep>("chirp_cli_db.csv");
+	CSVDatabase<Cheep> db = SimpleDB.CSVDatabase<Cheep>.GetInstance();
+	db.SetPath("chirp_cli_db.csv");
+	return db;
 }
