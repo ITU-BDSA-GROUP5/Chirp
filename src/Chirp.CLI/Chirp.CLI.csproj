@@ -1,18 +1,34 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
-  <ItemGroup>
-    <ProjectReference Include="..\SimpleDB\SimpleDB.csproj" />
-  </ItemGroup>
+	<ItemGroup>
+		<ProjectReference Include="..\SimpleDB\SimpleDB.csproj" />
+	</ItemGroup>
 
-  <ItemGroup>
-    <PackageReference Include="docopt.net" Version="0.8.1" />
-  </ItemGroup>
+	<ItemGroup>
+		<PackageReference Include="docopt.net" Version="0.8.1" />
+	</ItemGroup>
 
-  <PropertyGroup>
-    <OutputType>Exe</OutputType>
-    <TargetFramework>net7.0</TargetFramework>
-    <ImplicitUsings>enable</ImplicitUsings>
-    <Nullable>enable</Nullable>
-  </PropertyGroup>
+	<!-- trying to make the csv file tag along...
+		maybe the csv file should somehow be embedded in the exe file-->
+	<ItemGroup>
+		<None Update="chirp_cli_db.csv">
+			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+			<CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+		</None>
+	</ItemGroup>
+
+	<!-- <ItemGroup>
+		<EmbeddedResource Include="chirp_cli_db.csv" />
+	</ItemGroup> -->
+
+	<PropertyGroup>
+		<OutputType>Exe</OutputType>
+		<TargetFramework>net7.0</TargetFramework>
+		<ImplicitUsings>enable</ImplicitUsings>
+		<Nullable>enable</Nullable>
+		<PublishSingleFile>true</PublishSingleFile>
+		<SelfContained>true</SelfContained>
+		<!-- <IncludeAllContentForSelfExtract>true</IncludeAllContentForSelfExtract> -->
+	</PropertyGroup>
 
 </Project>
