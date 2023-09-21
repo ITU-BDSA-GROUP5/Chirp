@@ -14,7 +14,7 @@ namespace Chirp.CLI
 		{
 			DateTimeOffset timestamp = DateTimeOffset.FromUnixTimeSeconds(cheep.Timestamp).LocalDateTime;
 
-			return $"{cheep.Author} @ {timestamp.ToString("G")}: {cheep.Message}";
+			return $"{cheep.Author} @ {timestamp.ToString("dd/MM/yyyy HH:mm:ss")}: {cheep.Message}";
 		}
 	}
 
