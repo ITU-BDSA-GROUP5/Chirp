@@ -49,4 +49,5 @@ jobs:
         uses: softprops/action-gh-release@v1
         with:
           files: |
+            "Chirp.CLI-${{  github.ref_name }}-osx-arm64"
             "Chirp.CLI*"
