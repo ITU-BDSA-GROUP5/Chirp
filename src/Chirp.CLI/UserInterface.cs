@@ -1,6 +1,6 @@
 namespace Chirp.CLI 
 {
-	static class UserInterface
+	public static class UserInterface
 	{	
         public static void PrintCheeps(IEnumerable<Cheep> cheeps)
 		{
