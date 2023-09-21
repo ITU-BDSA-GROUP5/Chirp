@@ -24,6 +24,13 @@ public sealed class CSVDatabase<T> : IDatabaseRepository<T>
 
 	public void SetPath(string csvPath)
 	{
+        if (!File.Exists(csvPath))
+        {
+            using (StreamWriter sw = File.CreateText(csvPath))
+            {
+                sw.WriteLine("Author,Message,Timestamp");
+            }
+        }
 		CSVPath = csvPath;
 	}
 
