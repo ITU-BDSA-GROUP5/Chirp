@@ -37,7 +37,7 @@ jobs:
 
           7z a -tzip "${release_osx_arm64}.zip" "./${release_osx_arm64}/Chirp.CLI"
           7z a -tzip "${release_osx_x64}.zip" "./${release_osx_x64}/Chirp.CLI"
-          7z a -tzip "${release_win_x64}.zip" "./${release_win_x64}/Chirp.CLI"
+          7z a -tzip "${release_win_x64}.zip" "./${release_win_x64}/Chirp.CLI.exe"
           7z a -tzip "${release_linux_x64}.zip" "./${release_linux_x64}/Chirp.CLI"
 
           rm -r "$release_osx_arm64"
