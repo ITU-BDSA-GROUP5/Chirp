@@ -7,10 +7,7 @@ public sealed class CSVDatabase<T> : IDatabaseRepository<T>
 {
 	private static CSVDatabase<T>? instance = null;
 	static string CSVPath = "";
-	private CSVDatabase(string csvPath)
-	{
-		CSVPath = csvPath;
-	}
+	private CSVDatabase(){}
 
 	public string GetPath()
 	{
@@ -38,7 +35,7 @@ public sealed class CSVDatabase<T> : IDatabaseRepository<T>
 	{
 		if (instance == null)
 		{
-			instance = new CSVDatabase<T>(CSVPath);
+			instance = new CSVDatabase<T>();
 		}
 		return instance;
 	}

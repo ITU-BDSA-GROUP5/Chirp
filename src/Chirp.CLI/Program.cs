@@ -1,44 +1,30 @@
+namespace Chirp.CLI;
+
 using Chirp.CLI;
 using SimpleDB;
-using static Chirp.CLI.UserInterface;
 using System.Text.RegularExpressions;
 using DocoptNet;
 
-string usage = @"
-Usage:
-	chirp <command> [<message>]";
+public class Program {
 
-// This line was taken from chatgpt
-var arguments = new Docopt().Apply(usage, args, version: "Chirp 1.0", exit: true);
+	public static void Main(string[] args) {
+		CSVDatabase<Cheep> db = SimpleDB.CSVDatabase<Cheep>.GetInstance();
+		db.SetPath("chirp_cli_db.csv");
+		CLI cli = new CLI(db);
 
-if (arguments is null) { throw new ArgumentNullException(nameof(arguments)); }
-string input = arguments["<command>"].ToString();
+		string usage = @"
+		Usage:
+			chirp <command> [<message>]";
 
-if (input == "read")
-	Read();
-else if (input == "cheep")
-	Cheep(arguments["<message>"].ToString());
+		// This line was taken from chatgpt
+		var arguments = new Docopt().Apply(usage, args, version: "Chirp 1.0", exit: true);
 
-static void Read()
-{
-	IDatabaseRepository<Cheep> db = GetDB();
-	IEnumerable<Cheep> cheeps = db.Read();
+		if (arguments is null) { throw new ArgumentNullException(nameof(arguments)); }
+		string input = arguments["<command>"].ToString();
 
-	PrintCheeps(cheeps);
-}
-
-static void Cheep(string message)
-{
-	IDatabaseRepository<Cheep> db = GetDB();
-	string author = Environment.UserName;
-	var time = DateTimeOffset.UtcNow.ToUnixTimeSeconds();
-
-	db.Store(new Cheep(author, message, time));
-}
-
-static IDatabaseRepository<Cheep> GetDB()
-{
-	CSVDatabase<Cheep> db = SimpleDB.CSVDatabase<Cheep>.GetInstance();
-	db.SetPath("chirp_cli_db.csv");
-	return db;
+		if (input == "read")
+			cli.Read();
+		else if (input == "cheep")
+			cli.Cheep(arguments["<message>"].ToString());
+		}
 }

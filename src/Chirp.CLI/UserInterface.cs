@@ -1,8 +1,8 @@
 namespace Chirp.CLI 
 {
-	static class UserInterface
+	public class UserInterface
 	{	
-        public static void PrintCheeps(IEnumerable<Cheep> cheeps)
+        public void PrintCheeps(IEnumerable<Cheep> cheeps)
 		{
 			foreach (Cheep cheep in cheeps) 
 			{
@@ -10,7 +10,7 @@ namespace Chirp.CLI
 			}
 		}
         
-		public static string FormatCheep(Cheep cheep)
+		public string FormatCheep(Cheep cheep)
 		{
 			DateTimeOffset timestamp = DateTimeOffset.FromUnixTimeSeconds(cheep.Timestamp).LocalDateTime;
 
