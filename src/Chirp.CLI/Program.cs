@@ -34,22 +34,22 @@ else if (input == "cheep")
 
 async Task Read()
 {
- try
-{
-    IEnumerable<Cheep> cheeps = await client.GetFromJsonAsync<IEnumerable<Cheep>>("cheeps");
-	if (cheeps != null) 
-	{ 
-		PrintCheeps(cheeps);
-	}
-	else
+	try
 	{
-    	Console.WriteLine("No cheeps found.");
+		IEnumerable<Cheep> cheeps = await client.GetFromJsonAsync<IEnumerable<Cheep>>("cheeps");
+		if (cheeps != null)
+		{
+			PrintCheeps(cheeps);
+		}
+		else
+		{
+			Console.WriteLine("No cheeps found.");
+		}
 	}
-}
-catch (Exception ex)
-{
-    Console.WriteLine($"error reading tweets: {ex.Message}");
-}
+	catch (Exception ex)
+	{
+		Console.WriteLine($"error reading tweets: {ex.Message}");
+	}
 }
 
 static void Cheep(string message)
