@@ -1,8 +1,5 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
-	<ItemGroup>
-		<ProjectReference Include="..\SimpleDB\SimpleDB.csproj" />
-	</ItemGroup>
 
 	<ItemGroup>
 		<PackageReference Include="docopt.net" Version="0.8.1" />

@@ -1,8 +1,20 @@
 using Chirp.CLI;
-using SimpleDB;
 using static Chirp.CLI.UserInterface;
 using System.Text.RegularExpressions;
 using DocoptNet;
+using System.Net;
+using System.Net.Http.Headers;
+using System.Net.Http.Json;
+using System.Net.Http;
+
+
+//taken from slides
+string baseURL = "http://127.0.0.1:5242";
+using HttpClient client = new();
+client.DefaultRequestHeaders.Accept.Clear();
+client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+client.BaseAddress = new Uri(baseURL);
+
 
 string usage = @"
 Usage:
@@ -15,30 +27,36 @@ if (arguments is null) { throw new ArgumentNullException(nameof(arguments)); }
 string input = arguments["<command>"].ToString();
 
 if (input == "read")
-	Read();
+	await Read();
 else if (input == "cheep")
 	Cheep(arguments["<message>"].ToString());
 
-static void Read()
-{
-	IDatabaseRepository<Cheep> db = GetDB();
-	IEnumerable<Cheep> cheeps = db.Read();
 
-	PrintCheeps(cheeps);
+async Task Read()
+{
+ try
+{
+    IEnumerable<Cheep> cheeps = await client.GetFromJsonAsync<IEnumerable<Cheep>>("cheeps");
+	if (cheeps != null) 
+	{ 
+		PrintCheeps(cheeps);
+	}
+	else
+	{
+    	Console.WriteLine("No cheeps found.");
+	}
+}
+catch (Exception ex)
+{
+    Console.WriteLine($"error reading tweets: {ex.Message}");
+}
 }
 
 static void Cheep(string message)
 {
-	IDatabaseRepository<Cheep> db = GetDB();
+	/*IDatabaseRepository<Cheep> db = GetDB();
 	string author = Environment.UserName;
 	var time = DateTimeOffset.UtcNow.ToUnixTimeSeconds();
 
-	db.Store(new Cheep(author, message, time));
-}
-
-static IDatabaseRepository<Cheep> GetDB()
-{
-	CSVDatabase<Cheep> db = SimpleDB.CSVDatabase<Cheep>.GetInstance();
-	db.SetPath("chirp_cli_db.csv");
-	return db;
+	db.Store(new Cheep(author, message, time));*/
 }
