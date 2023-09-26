@@ -44,10 +44,8 @@ jobs:
           rm -r "$release_osx_x64"
           rm -r "$release_win_x64"
           rm -r "$release_linux_x64"
-          echo | ls
       - name: Release
         uses: softprops/action-gh-release@v1
         with:
-          files: |
-            "Chirp.CLI-${{  github.ref_name }}-osx-arm64"
-            "Chirp.CLI*"
+          tag_name: ${{ github.ref_name }}
+          files: "Chirp.CLI*"
