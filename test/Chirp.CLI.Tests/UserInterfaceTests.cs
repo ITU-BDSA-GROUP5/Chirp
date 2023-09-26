@@ -6,11 +6,13 @@ public class UserInterfaceTests
 	public void FormatCheep_Cheeps_ReturnsProperString(string author, string message, long timestamp, string expectation)
 	{
 		// Arrange
+		var userInterface = new UserInterface();
+
 		Cheep cheep = new Cheep(author, message, timestamp);
 		string CheepText = "";
 
 		// Act
-		CheepText = UserInterface.FormatCheep(cheep);
+		CheepText = userInterface.FormatCheep(cheep);
 
 		// Assert
 		Assert.Equal(expectation, CheepText);
