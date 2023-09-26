@@ -26,6 +26,8 @@ var arguments = new Docopt().Apply(usage, args, version: "Chirp 1.0", exit: true
 if (arguments is null) { throw new ArgumentNullException(nameof(arguments)); }
 string input = arguments["<command>"].ToString();
 
+var userInterface = new UserInterface();
+
 if (input == "read")
 	await Read();
 else if (input == "cheep")
