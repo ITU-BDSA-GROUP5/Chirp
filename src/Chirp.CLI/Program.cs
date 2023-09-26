@@ -29,7 +29,7 @@ string input = arguments["<command>"].ToString();
 if (input == "read")
 	await Read();
 else if (input == "cheep")
-	Cheep(arguments["<message>"].ToString());
+	await Cheep(arguments["<message>"].ToString());
 
 
 async Task Read()
@@ -52,11 +52,18 @@ async Task Read()
 	}
 }
 
-static void Cheep(string message)
+async Task Cheep(string message)
 {
-	/*IDatabaseRepository<Cheep> db = GetDB();
-	string author = Environment.UserName;
-	var time = DateTimeOffset.UtcNow.ToUnixTimeSeconds();
+	try
+	{
+		string author = Environment.UserName;
+		var time = DateTimeOffset.UtcNow.ToUnixTimeSeconds();
 
-	db.Store(new Cheep(author, message, time));*/
+		var cheep = new Cheep(author, message, time);
+		var response = await client.PostAsJsonAsync("cheep", cheep);
+	}
+	catch (Exception ex)
+	{
+		Console.WriteLine($"error reading tweets: {ex.Message}");
+	}
 }
