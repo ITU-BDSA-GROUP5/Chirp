@@ -9,7 +9,7 @@ using System.Net.Http;
 
 
 //taken from slides
-string baseURL = "http://127.0.0.1:5242";
+string baseURL = "http://localhost:5242";
 using HttpClient client = new();
 client.DefaultRequestHeaders.Accept.Clear();
 client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
@@ -41,7 +41,7 @@ async Task Read()
 		IEnumerable<Cheep> cheeps = await client.GetFromJsonAsync<IEnumerable<Cheep>>("cheeps");
 		if (cheeps != null)
 		{
-			PrintCheeps(cheeps);
+			userInterface.PrintCheeps(cheeps);
 		}
 		else
 		{
