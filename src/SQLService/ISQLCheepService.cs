@@ -1,14 +1,17 @@
-public interface ISQLCheepService {
+namespace SQLService
+
+public interface ISQLCheepService
+{
     
     //Saves a cheep to the database
     //Arguments:
     //  - Cheep cheep, cheep to be saved
-    public void SaveCheep(Cheep cheep);
+    public void Save(Cheep cheep);
 
     //Fetches cheeps from the database
     //Arguments:
     //  - optional string author, specifies the author whose cheeps should be fetched
-    public IEnumerable<Cheep> FetchCheeps(string? author);
+    public IEnumerable<Cheep> Fetch(string? author);
 }
 
-record Cheep() {string author, long timestamp, string message}
+public record Cheep() {string author, long timestamp, string message}
