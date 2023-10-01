@@ -1,8 +1,8 @@
-namespace SQLService
+namespace SQLService;
 
 public interface ISQLCheepService
 {
-    
+
     //Saves a cheep to the database
     //Arguments:
     //  - Cheep cheep, cheep to be saved
@@ -14,4 +14,4 @@ public interface ISQLCheepService
     public IEnumerable<Cheep> Fetch(string? author);
 }
 
-public record Cheep() {string author, long timestamp, string message}
+public record Cheep(string author, long timestamp, string message);

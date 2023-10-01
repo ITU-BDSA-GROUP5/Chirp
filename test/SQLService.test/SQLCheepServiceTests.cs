@@ -10,7 +10,7 @@ public class SQLCheepServiceTests
 
     //Integration tests
 
-    [[Fact]
+    [Fact]
     public void Fetch_AfterSaveSingleCheep_ReturnsSameCheep()
     {
         // Arrange
@@ -22,6 +22,6 @@ public class SQLCheepServiceTests
         IEnumerable<Cheep> cheeps = service.Fetch("Tester");
 
         // Assert
-        Assert.True(cheeps.contains(cheep)); //This may cause issues if AssertTrue works on the references and not the values
-    }]
+        Assert.True(cheeps.Contains(cheep)); //This may cause issues if AssertTrue works on the references and not the values
+    }
 }
