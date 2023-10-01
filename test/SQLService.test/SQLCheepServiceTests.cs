@@ -14,7 +14,7 @@ public class SQLCheepServiceTests
     public void Fetch_AfterSaveSingleCheep_ReturnsSameCheep()
     {
         // Arrange
-        ISQLCheepService service = new SQLCheepService();
+        ISQLCheepService service = SQLCheepService.GetInstance();
         Cheep cheep = new Cheep("Tester", 1696168349, "This is a test :)");
 
         // Act
