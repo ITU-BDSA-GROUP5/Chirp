@@ -40,7 +40,7 @@ public class DBFacade : IDBFacade
 
     public void SetDataSource(string dataSource) { this.DataSource = dataSource; }
 
-    public override List<CheepViewModel> Fetch(int startIndex, int endIndex)
+    public List<CheepViewModel> Fetch(int startIndex, int endIndex)
     {
         List<CheepViewModel> cheeps = new();
 
@@ -79,7 +79,7 @@ public class DBFacade : IDBFacade
         return cheeps;
     }
 
-    public override List<CheepViewModel> FetchFromAuthor(string author)
+    public List<CheepViewModel> FetchFromAuthor(int startIndex, int endIndex, string author)
     {
         List<CheepViewModel> cheeps = new();
 
