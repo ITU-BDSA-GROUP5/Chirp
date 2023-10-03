@@ -68,7 +68,7 @@ public class DBFacade : IDBFacade
                     CheepViewModel cheep = new CheepViewModel(
                         reader.GetString(0),
                         reader.GetString(1),
-                        UnixTimeStampToDateTimeString(reader.GetLong(2))
+                        UnixTimeStampToDateTimeString(reader.GetInt64(2))
                     );
 
                     cheeps.Add(cheep);
@@ -109,7 +109,7 @@ public class DBFacade : IDBFacade
                     CheepViewModel cheep = new CheepViewModel(
                         reader.GetString(0),
                         reader.GetString(1),
-                        UnixTimeStampToDateTimeString(reader.GetLong(2))
+                        UnixTimeStampToDateTimeString(reader.GetInt64(2))
                     );
 
                     cheeps.Add(cheep);
