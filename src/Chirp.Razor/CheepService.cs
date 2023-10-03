@@ -2,36 +2,36 @@ public record CheepViewModel(string Author, string Message, string Timestamp);
 
 public interface ICheepService
 {
-    public List<CheepViewModel> GetCheeps();
-    public List<CheepViewModel> GetCheepsFromAuthor(string author);
+    public List<CheepViewModel> GetCheeps(int page);
+    public List<CheepViewModel> GetCheepsFromAuthor(int page, string author);
 }
 
 public class CheepService : ICheepService
 {
-    // These would normally be loaded from a database for example
-    private static readonly List<CheepViewModel> _cheeps = new()
-        {
-            new CheepViewModel("Helge", "Hello, BDSA students!", UnixTimeStampToDateTimeString(1690892208)),
-            new CheepViewModel("Rasmus", "Hej, velkommen til kurset.", UnixTimeStampToDateTimeString(1690895308)),
-        };
-
-    public List<CheepViewModel> GetCheeps()
+    private IDBFacade dbfacade;
+    private int pageSize = 37;
+    
+    public CheepService()
     {
-        return _cheeps;
+        dbfacade = DBFacade.GetInstance();
+    }
+    
+    public List<CheepViewModel> GetCheeps(int page)
+    {
+        return dbfacade.Fetch(pageSize * page, pageSize * (page + 1));
     }
 
-    public List<CheepViewModel> GetCheepsFromAuthor(string author)
+    public List<CheepViewModel> GetCheepsFromAuthor(int page, string author)
     {
-        // filter by the provided author name
-        return _cheeps.Where(x => x.Author == author).ToList();
+        return dbfacade.FetchFromAuthor(pageSize * page, pageSize * (page + 1), author);
     }
 
-    private static string UnixTimeStampToDateTimeString(double unixTimeStamp)
+    private static string UnixTimeStampToDateTimeString(long unixTimeStamp)
     {
         // Unix timestamp is seconds past epoch
         DateTime dateTime = new DateTime(1970, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc);
         dateTime = dateTime.AddSeconds(unixTimeStamp);
-        return dateTime.ToString("MM/dd/yy H:mm:ss");
+        return dateTime.ToString("dd/MM/yy H:mm:ss");
     }
 
 }

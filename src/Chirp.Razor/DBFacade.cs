@@ -1,20 +1,22 @@
 using Microsoft.Data.Sqlite;
 
-namespace SQLService;
-
 public interface IDBFacade
 {
     /// <summary>
-    ///     Fetches all cheeps.
+    ///     Fetches all cheeps in range, sorted by time in a descending order.
     /// </summary>
+    /// <param name="startIndex">Index of first cheep in range.</param>
+    /// <param name="endIndex">First index out of range.</param>
     /// <returns>All cheeps from all authors.</returns>
-    public List<CheepViewModel> Fetch();
+    public List<CheepViewModel> Fetch(int startIndex, int endIndex);
     /// <summary>
     ///     Fetches cheeps from a specified author.
     /// </summary>
+    /// <param name="startIndex">Index of first cheep in range.</param>
+    /// <param name="endIndex">First index out of range.</param>
     /// <param name="author">The username of the author</param>
     /// <returns>All cheeps from the author.</returns>
-    public List<CheepViewModel> FetchFromAuthor(string author);
+    public List<CheepViewModel> FetchFromAuthor(int startIndex, int endIndex, string author);
 }
 
 public class DBFacade : IDBFacade
@@ -38,7 +40,7 @@ public class DBFacade : IDBFacade
 
     public void SetDataSource(string dataSource) { this.DataSource = dataSource; }
 
-    public override List<CheepViewModel> Fetch()
+    public override List<CheepViewModel> Fetch(int startIndex, int endIndex)
     {
         List<CheepViewModel> cheeps = new();
 
@@ -52,7 +54,12 @@ public class DBFacade : IDBFacade
                 SELECT username, text, pub_date
                 FROM message m
                 JOIN user u ON m.author_id = u.user_id
+                ORDER BY m.pub_date DESC
+                LIMIT $limit OFFSET $offset
             ";
+            command.Parameters.AddWithValue("$limit", endIndex-startIndex);
+            command.Parameters.AddWithValue("$offset", startIndex);
+
 
             using (var reader = command.ExecuteReader())
             {
@@ -83,7 +90,12 @@ public class DBFacade : IDBFacade
                 FROM message m
                 JOIN user u ON m.author_id = u.user_id
                 WHERE username = $author
+                ORDER BY m.pub_date DESC
+                LIMIT $limit OFFSET $offset
             ";
+            command.Parameters.AddWithValue("$limit", endIndex-startIndex);
+            command.Parameters.AddWithValue("$offset", startIndex);
+
             command.Parameters.AddWithValue("$author", author);
 
             using (var reader = command.ExecuteReader())
