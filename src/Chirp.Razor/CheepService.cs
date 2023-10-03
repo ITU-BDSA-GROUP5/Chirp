@@ -18,11 +18,11 @@ public class CheepService : ICheepService
 
 	public List<CheepViewModel> GetCheeps(int page)
 	{
-		return dbfacade.Fetch(pageSize * page, pageSize * (page + 1));
+		return dbfacade.Fetch(pageSize * (page - 1), pageSize * page);
 	}
 
 	public List<CheepViewModel> GetCheepsFromAuthor(int page, string author)
 	{
-		return dbfacade.FetchFromAuthor(pageSize * page, pageSize * (page + 1), author);
+		return dbfacade.FetchFromAuthor(pageSize * (page - 1), pageSize * page, author);
 	}
 }
