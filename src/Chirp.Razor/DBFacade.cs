@@ -67,4 +67,36 @@ public class DBFacade : IDBFacade
 
         return cheeps;
     }
+
+    public override List<CheepViewModel> FetchFromAuthor(string author)
+    {
+        List<CheepViewModel> cheeps = new();
+
+        using (var connection = new SqliteConnection($"Data Source={DataSource}"))
+        {
+            connection.Open();
+
+            var command = connection.CreateCommand();
+            command.CommandText =
+            @"
+                SELECT username, text, pub_date
+                FROM message m
+                JOIN user u ON m.author_id = u.user_id
+                WHERE username = $author
+            ";
+            command.Parameters.AddWithValue("$author", author);
+
+            using (var reader = command.ExecuteReader())
+            {
+                while (reader.Read())
+                {
+                    CheepViewModel cheep = new CheepViewModel(reader.GetString(0), reader.GetString(1), reader.GetLong(2));
+
+                    cheeps.Add(cheep);
+                }
+            }
+        }
+
+        return cheeps;
+    }
 }
