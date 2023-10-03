@@ -25,13 +25,4 @@ public class CheepService : ICheepService
     {
         return dbfacade.FetchFromAuthor(pageSize * page, pageSize * (page + 1), author);
     }
-
-    private static string UnixTimeStampToDateTimeString(long unixTimeStamp)
-    {
-        // Unix timestamp is seconds past epoch
-        DateTime dateTime = new DateTime(1970, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc);
-        dateTime = dateTime.AddSeconds(unixTimeStamp);
-        return dateTime.ToString("dd/MM/yy H:mm:ss");
-    }
-
 }

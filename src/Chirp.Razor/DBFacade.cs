@@ -65,7 +65,11 @@ public class DBFacade : IDBFacade
             {
                 while (reader.Read())
                 {
-                    CheepViewModel cheep = new CheepViewModel(reader.GetString(0), reader.GetString(1), reader.GetLong(2));
+                    CheepViewModel cheep = new CheepViewModel(
+                        reader.GetString(0),
+                        reader.GetString(1),
+                        UnixTimeStampToDateTimeString(reader.GetLong(2))
+                    );
 
                     cheeps.Add(cheep);
                 }
@@ -102,7 +106,11 @@ public class DBFacade : IDBFacade
             {
                 while (reader.Read())
                 {
-                    CheepViewModel cheep = new CheepViewModel(reader.GetString(0), reader.GetString(1), reader.GetLong(2));
+                    CheepViewModel cheep = new CheepViewModel(
+                        reader.GetString(0),
+                        reader.GetString(1),
+                        UnixTimeStampToDateTimeString(reader.GetLong(2))
+                    );
 
                     cheeps.Add(cheep);
                 }
@@ -110,5 +118,12 @@ public class DBFacade : IDBFacade
         }
 
         return cheeps;
+    }
+
+    private static string UnixTimeStampToDateTimeString(long unixTimeStamp)
+    {
+        DateTime dateTime = new DateTime(1970, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc);
+        dateTime = dateTime.AddSeconds(unixTimeStamp);
+        return dateTime.ToString("dd/MM/yy H:mm:ss");
     }
 }
