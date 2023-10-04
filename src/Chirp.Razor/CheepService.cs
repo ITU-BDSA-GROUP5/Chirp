@@ -9,7 +9,7 @@ public interface ICheepService
 public class CheepService : ICheepService
 {
 	private IDBFacade dbfacade;
-	private int pageSize = 37;
+	private int pageSize = 32;
 
 	public CheepService()
 	{
