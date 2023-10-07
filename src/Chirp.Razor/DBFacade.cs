@@ -36,7 +36,11 @@ public class DBFacade : IDBFacade
 		instance.SetDataSource(DefaultDataSource);
 		return instance;
 	}
-	private DBFacade() { }
+	private DBFacade()
+	{
+		using var db = new ChirpDBContext();
+		Console.WriteLine($"Database path: {db.DbPath}");
+	}
 
 	public void SetDataSource(string dataSource) { this.DataSource = dataSource; }
 
