@@ -6,8 +6,8 @@ public class ChirpDBContext : DbContext
 	public string DbPath { get; }
 	public ChirpDBContext()
 	{
-		var path = Path.GetTempPath();
-		DbPath = Path.Combine(path, "Chirp.db");
+		var fullPath = Path.GetFullPath("./data/");
+		DbPath = Path.Combine(fullPath, "Chirp.db");
 	}
 
 	protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
