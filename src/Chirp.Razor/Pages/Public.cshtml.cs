@@ -1,22 +1,23 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Chirp.Razor.Repositories;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 
 namespace Chirp.Razor.Pages;
 
 public class PublicModel : PageModel
 {
-	private readonly ICheepService _service;
+	private readonly ICheepRepository _repository;
 	public List<CheepViewModel> Cheeps { get; set; }
 
-	public PublicModel(ICheepService service)
+	public PublicModel(ICheepRepository repository)
 	{
-		_service = service;
+		_repository = repository;
 	}
 
 
 	public ActionResult OnGet([FromQuery(Name = "page")] int page = 1)
 	{
-		Cheeps = _service.GetCheeps(page);
+		Cheeps = _repository.GetCheeps(page);
 		return Page();
 	}
 }
