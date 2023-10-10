@@ -5,7 +5,7 @@ public class ChirpDBContextTests
 {
 
 	[Fact]
-	public void testDBContext()
+	public void DBContext_PropertyTest()
 	{
 		var dBContext = new ChirpDBContext();
 		string path = dBContext.DbPath;
@@ -13,7 +13,7 @@ public class ChirpDBContextTests
 	}
 
 	[Fact]
-	public void testCheep()
+	public void Cheep_PropertyTest()
 	{
 		var author = new Author();
 		var cheep = new Cheep();
@@ -37,7 +37,7 @@ public class ChirpDBContextTests
 	}
 
 	[Fact]
-	public void testAuthor()
+	public void Author_PropertyTest()
 	{
 		var author = new Author();
 
