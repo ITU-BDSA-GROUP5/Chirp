@@ -1,19 +1,20 @@
 namespace Chirp.Razor.Tests;
+using Chirp.Razor.Repositories;
 
-public class CheepServiceUnitTests
+public class CheepRepositoryUnitTests
 {
-	private readonly ICheepService _cheepService;
+	private readonly ICheepRepository _cheepRepository;
 
-	public CheepServiceUnitTests()
+	public CheepRepositoryUnitTests()
 	{
-		_cheepService = new CheepService();
+		_cheepRepository = new CheepRepository();
 	}
 
 	[Fact]
 	public void Read_CheepNotNull()
 	{
 		// Arrange
-		var cheeps = _cheepService.GetCheeps(1);
+		var cheeps = _cheepRepository.GetCheeps(1);
 
 		// Act
 		CheepViewModel? cheep = cheeps.FirstOrDefault();
@@ -26,10 +27,10 @@ public class CheepServiceUnitTests
 	public void Read_CheepsDescendingOrder()
 	{
 		// Arrange
-		var cheeps = _cheepService.GetCheeps(1);
+		var cheeps = _cheepRepository.GetCheeps(1);
 
 		// Act
-		var orderedCheeps = _cheepService.GetCheeps(1).OrderByDescending(cheep => cheep.Timestamp);
+		var orderedCheeps = _cheepRepository.GetCheeps(1).OrderByDescending(cheep => cheep.Timestamp);
 
 		// Assert
 		Assert.Equal(cheeps, orderedCheeps);

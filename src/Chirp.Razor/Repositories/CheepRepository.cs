@@ -1,6 +1,4 @@
-﻿using Microsoft.EntityFrameworkCore;
-
-public record CheepViewModel(string Author, string Message, string Timestamp);
+﻿public record CheepViewModel(string Author, string Message, string Timestamp);
 
 namespace Chirp.Razor.Repositories
 {
