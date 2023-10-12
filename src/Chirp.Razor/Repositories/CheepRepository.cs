@@ -14,7 +14,8 @@ namespace Chirp.Razor.Repositories
 
 		private readonly ChirpDBContext _context;
 
-		public CheepRepository(ChirpDBContext context) { 
+		public CheepRepository(ChirpDBContext context)
+		{
 			_context = context;
 		}
 
@@ -23,6 +24,7 @@ namespace Chirp.Razor.Repositories
 			return _context.Cheeps
 				.Skip(page)
 				.Take(pageSize)
+				.OrderByDescending(c => c.TimeStamp)
 				.Select(c => new CheepViewModel(c.Author.Name, c.Text, c.TimeStamp.ToString()))
 				.ToList();
 		}
@@ -32,6 +34,7 @@ namespace Chirp.Razor.Repositories
 			return _context.Cheeps
 				.Skip(page)
 				.Take(pageSize)
+				.OrderByDescending(c => c.TimeStamp)
 				.Where(c => c.Author.Name == author)
 				.Select(c => new CheepViewModel(c.Author.Name, c.Text, c.TimeStamp.ToString()))
 				.ToList();

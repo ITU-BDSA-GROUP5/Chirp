@@ -3,31 +3,28 @@ using SQLitePCL;
 
 public class ChirpDBContextTests
 {
-
-	[Fact]
-	public void DBContext_PropertyTest()
-	{
-		var dBContext = new ChirpDBContext();
-		string path = dBContext.DbPath;
-		Assert.EndsWith("/data/Chirp.db", path);
-	}
-
 	[Fact]
 	public void Cheep_PropertyTest()
 	{
-		var author = new Author();
-		var cheep = new Cheep();
-
 		int cheepId = 1;
 		string text = "test";
 		var date = DateTime.Now;
 		int authorId = 1;
 
-		cheep.AuthorId = authorId;
-		cheep.Author = author;
-		cheep.CheepId = cheepId;
-		cheep.Text = text;
-		cheep.TimeStamp = date;
+		var author = new Author
+		{
+			Name = "name",
+			Email = "email"
+		};
+
+		var cheep = new Cheep
+		{
+			AuthorId = authorId,
+			Author = author,
+			CheepId = cheepId,
+			Text = text,
+			TimeStamp = date
+		};
 
 		Assert.Equal(author, cheep.Author);
 		Assert.Equal(authorId, cheep.AuthorId);
@@ -39,17 +36,20 @@ public class ChirpDBContextTests
 	[Fact]
 	public void Author_PropertyTest()
 	{
-		var author = new Author();
-
 		int authorId = 1;
 		string email = "lol@lol.dk";
 		string name = "name";
 		var cheepList = new List<Cheep>();
 
-		author.AuthorId = authorId;
-		author.Email = email;
-		author.Name = name;
-		author.Cheeps = cheepList;
+		var author = new Author
+		{
+			AuthorId = authorId,
+			Email = email,
+			Name = name,
+			Cheeps = cheepList
+		};
+
+
 
 		Assert.Equal(authorId, author.AuthorId);
 		Assert.Equal(email, author.Email);

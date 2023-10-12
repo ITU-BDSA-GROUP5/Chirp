@@ -5,10 +5,8 @@ var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddRazorPages();
-//builder.Services.AddSingleton<ICheepService, CheepService>();
-//builder.Services.AddScoped<ICheepRepository, CheepRepository>();
+
 builder.Services.AddScoped<ICheepRepository, CheepRepository>();
-string pathToDB = Path.Combine(Path.GetFullPath("./data/"), "Chirp.db");
 builder.Services.AddDbContext<ChirpDBContext>(options =>
 	options.UseSqlite(builder.Configuration.GetConnectionString("ChirpContextSQLite")));
 
@@ -24,11 +22,11 @@ if (!app.Environment.IsDevelopment())
 
 using (var scope = app.Services.CreateScope())
 {
-    var services = scope.ServiceProvider;
+	var services = scope.ServiceProvider;
 
-    var context = services.GetRequiredService<ChirpDBContext>();
-    context.Database.EnsureCreated();
-    DbInitializer.SeedDatabase(context);
+	var context = services.GetRequiredService<ChirpDBContext>();
+	context.Database.EnsureCreated();
+	DbInitializer.SeedDatabase(context);
 }
 
 app.UseHttpsRedirection();
