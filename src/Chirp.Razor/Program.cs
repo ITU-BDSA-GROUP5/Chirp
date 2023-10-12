@@ -1,4 +1,5 @@
 using Chirp.Razor.Repositories;
+using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -7,7 +8,9 @@ builder.Services.AddRazorPages();
 //builder.Services.AddSingleton<ICheepService, CheepService>();
 //builder.Services.AddScoped<ICheepRepository, CheepRepository>();
 builder.Services.AddScoped<ICheepRepository, CheepRepository>();
-
+string pathToDB = Path.Combine(Path.GetFullPath("./data/"), "Chirp.db");
+builder.Services.AddDbContext<ChirpDBContext>(options =>
+	options.UseSqlite(builder.Configuration.GetConnectionString("ChirpContextSQLite")));
 
 var app = builder.Build();
 
@@ -17,6 +20,15 @@ if (!app.Environment.IsDevelopment())
 	app.UseExceptionHandler("/Error");
 	// The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
 	app.UseHsts();
+}
+
+using (var scope = app.Services.CreateScope())
+{
+    var services = scope.ServiceProvider;
+
+    var context = services.GetRequiredService<ChirpDBContext>();
+    context.Database.EnsureCreated();
+    DbInitializer.SeedDatabase(context);
 }
 
 app.UseHttpsRedirection();

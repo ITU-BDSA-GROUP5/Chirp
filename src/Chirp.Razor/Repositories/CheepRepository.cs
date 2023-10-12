@@ -12,13 +12,15 @@ namespace Chirp.Razor.Repositories
 	{
 		private int pageSize = 32;
 
-		public CheepRepository() { }
+		private readonly ChirpDBContext _context;
+
+		public CheepRepository(ChirpDBContext context) { 
+			_context = context;
+		}
 
 		public List<CheepViewModel> GetCheeps(int page)
 		{
-			using var dbContext = new ChirpDBContext();
-
-			return dbContext.Cheeps
+			return _context.Cheeps
 				.Skip(page)
 				.Take(pageSize)
 				.Select(c => new CheepViewModel(c.Author.Name, c.Text, c.TimeStamp.ToString()))
@@ -27,9 +29,7 @@ namespace Chirp.Razor.Repositories
 
 		public List<CheepViewModel> GetCheepsFromAuthor(int page, string author)
 		{
-			using var dbContext = new ChirpDBContext();
-
-			return dbContext.Cheeps
+			return _context.Cheeps
 				.Skip(page)
 				.Take(pageSize)
 				.Where(c => c.Author.Name == author)
