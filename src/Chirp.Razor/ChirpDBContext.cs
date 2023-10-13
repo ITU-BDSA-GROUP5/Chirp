@@ -3,15 +3,14 @@ public class ChirpDBContext : DbContext
 {
 	public DbSet<Author> Authors { get; set; }
 	public DbSet<Cheep> Cheeps { get; set; }
-	public string DbPath { get; }
-	public ChirpDBContext()
+	public ChirpDBContext(DbContextOptions<ChirpDBContext> options) : base(options)
 	{
-		var fullPath = Path.GetFullPath("./data/");
-		DbPath = Path.Combine(fullPath, "Chirp.db");
+		
 	}
 
-	protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-	{
-		optionsBuilder.UseSqlite($"Data Source={DbPath}");
-	}
+    protected override void OnModelCreating(ModelBuilder modelBuilder)
+    {
+        modelBuilder.Entity<Author>().ToTable("Authors");
+		modelBuilder.Entity<Cheep>().ToTable("Cheeps");
+    }
 }
