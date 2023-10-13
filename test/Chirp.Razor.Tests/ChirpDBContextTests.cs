@@ -37,7 +37,7 @@ public class ChirpDBContextTests
 	public void Author_PropertyTest()
 	{
 		int authorId = 1;
-		string email = "lol@lol.dk";
+		string email = "email@domain.dk";
 		string name = "name";
 		var cheepList = new List<Cheep>();
 
