@@ -40,12 +40,8 @@ jobs:
           # Publish to targets listed in matrix using 
           dotnet publish src/Chirp.Razor/Chirp.Razor.csproj --framework net7.0 --runtime "${{ matrix.target }}" -c Release -o "$release_name"
 
-          # Only zip single file - specify exe for windows 
-          if [ "${{ matrix.target }}" == "win-x64" ]; then
-            7z a -tzip "${release_name}.zip" "./${release_name}/Chirp.Razor.exe"
-          else
-            7z a -tzip "${release_name}.zip" "./${release_name}/Chirp.Razor"
-          fi
+          # Zip release 
+          7z a -tzip "${release_name}.zip" "./${release_name}/*"
 
           rm -r "$release_name"
       - name: Release 
