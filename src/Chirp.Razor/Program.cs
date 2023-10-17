@@ -23,10 +23,9 @@ if (!app.Environment.IsDevelopment())
 using (var scope = app.Services.CreateScope())
 {
 	var services = scope.ServiceProvider;
-
-	var context = services.GetRequiredService<ChirpDBContext>();
-	context.Database.EnsureCreated();
-	DbInitializer.SeedDatabase(context);
+    var context = services.GetRequiredService<ChirpDBContext>();
+    context.Database.EnsureCreated();
+    DbInitializer.SeedDatabase(context);
 }
 
 app.UseHttpsRedirection();
