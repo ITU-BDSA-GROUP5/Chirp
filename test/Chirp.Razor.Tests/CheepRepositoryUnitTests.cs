@@ -1,7 +1,5 @@
 namespace Chirp.Razor.Tests;
 
-using System.Diagnostics;
-
 using Chirp.Razor.Repositories;
 using Microsoft.Data.Sqlite;
 using Microsoft.EntityFrameworkCore;
@@ -34,7 +32,7 @@ public class CheepRepositoryUnitTests
 		_cheepRepository = new CheepRepository(context);
 	}
 
-	public void Dispose() => _connection.Dispose();
+	private protected void Dispose() => _connection.Dispose();
 
 	[Fact]
 	public void Read_CheepNotNull()
