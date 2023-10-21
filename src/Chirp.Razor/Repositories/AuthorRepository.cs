@@ -1,4 +1,5 @@
 ﻿using System.Linq;
+using System.Xml.Linq;
 
 namespace Chirp.Razor.Repositories
 {
@@ -25,7 +26,11 @@ namespace Chirp.Razor.Repositories
 
         public List<Author> getAuthorByEmail(string email)
         {
-            throw new NotImplementedException();
+            return _context.Authors
+                .Take(_context.Authors.Count<Author>())
+                .OrderByDescending(a => a.AuthorId)
+                .Where(a => a.Email == email)
+                .ToList();
         }
 
         public List<Author> getAuthorByName(string name)
