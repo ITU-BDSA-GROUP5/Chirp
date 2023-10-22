@@ -7,7 +7,8 @@ namespace Chirp.Razor.Repositories
     {
         public List<Author> getAuthorByName(string name);
         public List<Author> getAuthorByEmail(string email);
-        public void createNewAuthor(string name, string email);
+        public void createNewAuthor(Guid id, string name, string email);
+        public int getHumanReadableId(Guid id);
     }
 
     public class AuthorRepository : IAuthorRepository
@@ -19,10 +20,12 @@ namespace Chirp.Razor.Repositories
             _context = context;
         }
 
-        public void createNewAuthor(string name, string email)
+        public void createNewAuthor(Guid id, string name, string email)
         {
             throw new NotImplementedException();
         }
+
+        public int getHumanReadableId(Guid id) { return id.GetHashCode(); }
 
         public List<Author> getAuthorByEmail(string email)
         {
