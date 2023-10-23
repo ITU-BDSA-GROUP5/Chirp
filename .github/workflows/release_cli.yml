@@ -7,7 +7,7 @@ on:
 
 jobs:
   release:
-    name: simple release
+    name: CLI Release
     runs-on: ubuntu-latest
 
     steps:

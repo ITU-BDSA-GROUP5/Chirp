@@ -7,21 +7,11 @@ on:
 
 jobs:
   release:
-    name: simple release
+    name: Razor Release
     strategy:
       matrix:
-        kind: ['linux', 'windows', 'macOS']
-        include:
-          - kind: linux
-            os: ubuntu-latest
-            target: linux-x64
-          - kind: windows
-            os: windows-latest
-            target: win-x64
-          - kind: macOS
-            os: macos-latest
-            target: [osx-64, osx-arm64]
-    runs-on: ${{ matrix.os }}
+        target: ["linux-x64", "win-x64", "osx-x64", "osx-arm64"]
+    runs-on: ubuntu-latest
     steps:
       - name: Checkout
         uses: actions/checkout@v3
@@ -44,7 +34,7 @@ jobs:
           7z a -tzip "${release_name}.zip" "./${release_name}/*"
 
           rm -r "$release_name"
-      - name: Release 
+      - name: Release
         uses: softprops/action-gh-release@v1
         with:
           tag_name: ${{ github.ref_name }}
