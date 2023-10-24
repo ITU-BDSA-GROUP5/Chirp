@@ -1,11 +1,9 @@
-﻿public record CheepViewModel(string Author, string Message, string Timestamp);
-
-namespace Chirp.Razor.Repositories
+﻿namespace Chirp.Razor.Repositories
 {
 	public interface ICheepRepository
 	{
-		public List<CheepViewModel> GetCheeps(int page);
-		public List<CheepViewModel> GetCheepsFromAuthor(int page, string author);
+		public List<CheepDTO> GetCheeps(int page);
+		public List<CheepDTO> GetCheepsFromAuthor(int page, string author);
 	}
 
 	public class CheepRepository : ICheepRepository
@@ -19,24 +17,32 @@ namespace Chirp.Razor.Repositories
 			_context = context;
 		}
 
-		public List<CheepViewModel> GetCheeps(int page)
+		public List<CheepDTO> GetCheeps(int page)
 		{
 			return _context.Cheeps
 				.OrderByDescending(c => c.TimeStamp)
 				.Skip((page - 1) * pageSize)
 				.Take(pageSize)
-				.Select(c => new CheepViewModel(c.Author.Name, c.Text, c.TimeStamp.ToString()))
+				.Select(c => new CheepDTO {
+					AuthorName = c.Author.Name,
+					Message = c.Text,
+					TimeStamp = c.TimeStamp.ToString()
+				})
 				.ToList();
 		}
 
-		public List<CheepViewModel> GetCheepsFromAuthor(int page, string author)
+		public List<CheepDTO> GetCheepsFromAuthor(int page, string author)
 		{
 			return _context.Cheeps
 				.OrderByDescending(c => c.TimeStamp)
 				.Skip((page - 1) * pageSize)
 				.Take(pageSize)
 				.Where(c => c.Author.Name == author)
-				.Select(c => new CheepViewModel(c.Author.Name, c.Text, c.TimeStamp.ToString()))
+				.Select(c => new CheepDTO {
+					AuthorName = c.Author.Name,
+					Message = c.Text,
+					TimeStamp = c.TimeStamp.ToString()
+				})
 				.ToList();
 		}
 	}
