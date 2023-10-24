@@ -45,7 +45,7 @@ public class CheepRepositoryUnitTests
 		var cheeps = repository.GetCheeps(1);
 
 		// Act
-		CheepViewModel? cheep = cheeps.FirstOrDefault();
+		CheepDTO? cheep = cheeps.FirstOrDefault();
 
 		// Assert
 		Assert.NotNull(cheep);
@@ -67,7 +67,7 @@ public class CheepRepositoryUnitTests
 		var cheeps = repository.GetCheeps(1);
 
 		// Act
-		var orderedCheeps = repository.GetCheeps(1).OrderByDescending(cheep => cheep.Timestamp);
+		var orderedCheeps = repository.GetCheeps(1).OrderByDescending(cheep => cheep.TimeStamp);
 
 		// Assert
 		Assert.Equal(cheeps, orderedCheeps);
