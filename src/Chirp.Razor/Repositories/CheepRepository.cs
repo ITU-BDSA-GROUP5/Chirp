@@ -23,7 +23,7 @@ namespace Chirp.Razor.Repositories
 		{
 			return _context.Cheeps
 				.OrderByDescending(c => c.TimeStamp)
-				.Skip((page == 1 ? 0 : page) * pageSize)
+				.Skip((page - 1) * pageSize)
 				.Take(pageSize)
 				.Select(c => new CheepViewModel(c.Author.Name, c.Text, c.TimeStamp.ToString()))
 				.ToList();
@@ -33,7 +33,7 @@ namespace Chirp.Razor.Repositories
 		{
 			return _context.Cheeps
 				.OrderByDescending(c => c.TimeStamp)
-				.Skip((page == 1 ? 0 : page) * pageSize)
+				.Skip((page - 1) * pageSize)
 				.Take(pageSize)
 				.Where(c => c.Author.Name == author)
 				.Select(c => new CheepViewModel(c.Author.Name, c.Text, c.TimeStamp.ToString()))
