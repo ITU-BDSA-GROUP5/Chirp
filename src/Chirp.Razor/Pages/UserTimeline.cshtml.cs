@@ -14,7 +14,7 @@ public class UserTimelineModel : PageModel
 		_repository = repository;
 	}
 
-	public ActionResult OnGet(string author, [FromQuery(Name = "page")] int page = 0)
+	public ActionResult OnGet(string author, [FromQuery(Name = "page")] int page = 1)
 	{
 		Cheeps = _repository.GetCheepsFromAuthor(page, author);
 		return Page();
