@@ -22,7 +22,14 @@ namespace Chirp.Razor.Repositories
 
         public void createNewAuthor(Guid id, string name, string email)
         {
-            throw new NotImplementedException();
+            var existing = getAuthorByEmail(email);
+            if (existing.Any())
+            {
+                //Console.WriteLine("Author " + email + " already exists");
+                return;
+            } 
+            _context.Authors.Add(new Author { AuthorId = getHumanReadableId(id), Name = name, Email = email, Cheeps = new List<Cheep>() });
+            _context.SaveChanges();
         }
 
         public int getHumanReadableId(Guid id) { return id.GetHashCode(); }
