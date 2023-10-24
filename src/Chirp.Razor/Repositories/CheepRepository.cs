@@ -1,4 +1,6 @@
-﻿public record CheepViewModel(string Author, string Message, string Timestamp);
+﻿using System.Xml.Linq;
+
+public record CheepViewModel(string Author, string Message, string Timestamp);
 
 namespace Chirp.Razor.Repositories
 {
@@ -6,7 +8,8 @@ namespace Chirp.Razor.Repositories
 	{
 		public List<CheepViewModel> GetCheeps(int page);
 		public List<CheepViewModel> GetCheepsFromAuthor(int page, string author);
-	}
+		public void createNewCheep(Guid id, int authorid, Author author, string text);
+    }
 
 	public class CheepRepository : ICheepRepository
 	{
@@ -19,7 +22,16 @@ namespace Chirp.Razor.Repositories
 			_context = context;
 		}
 
-		public List<CheepViewModel> GetCheeps(int page)
+		public void createNewCheep(Guid id, int authorid, Author author, string text)
+		{
+			var timestamp = DateTime.Now;
+            _context.Cheeps.Add(new Cheep { CheepId = getHumanReadableId(id), AuthorId = authorid, Author = author, Text = text, TimeStamp = timestamp });
+            _context.SaveChanges();
+        }
+
+        public int getHumanReadableId(Guid id) { return id.GetHashCode(); }
+
+        public List<CheepViewModel> GetCheeps(int page)
 		{
 			return _context.Cheeps
 				.Skip(page)
