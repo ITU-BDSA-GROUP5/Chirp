@@ -20,9 +20,9 @@
 		public List<CheepDTO> GetCheeps(int page)
 		{
 			return _context.Cheeps
-				.Skip(page)
-				.Take(pageSize)
 				.OrderByDescending(c => c.TimeStamp)
+				.Skip((page - 1) * pageSize)
+				.Take(pageSize)
 				.Select(c => new CheepDTO {
 					AuthorName = c.Author.Name,
 					Message = c.Text,
@@ -34,9 +34,9 @@
 		public List<CheepDTO> GetCheepsFromAuthor(int page, string author)
 		{
 			return _context.Cheeps
-				.Skip(page)
-				.Take(pageSize)
 				.OrderByDescending(c => c.TimeStamp)
+				.Skip((page - 1) * pageSize)
+				.Take(pageSize)
 				.Where(c => c.Author.Name == author)
 				.Select(c => new CheepDTO {
 					AuthorName = c.Author.Name,

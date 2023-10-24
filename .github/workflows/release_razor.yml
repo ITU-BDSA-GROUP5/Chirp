@@ -1,0 +1,41 @@
+name: Release-Razor
+
+on:
+  push:
+    tags:
+      - "v*.*.*"
+
+jobs:
+  release:
+    name: Razor Release
+    strategy:
+      matrix:
+        target: ["linux-x64", "win-x64", "osx-x64", "osx-arm64"]
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+      - name: setup .NET
+        uses: actions/setup-dotnet@v3
+        with:
+          dotnet-version: 7.0.x
+      - name: Restore dependencies
+        run: dotnet restore
+      - name: Build
+        shell: bash
+        run: |
+          tag=$(git describe --tags --abbrev=0)
+          release_name="Chirp.Razor-$tag-${{ matrix.target }}"
+
+          # Publish to targets listed in matrix using 
+          dotnet publish src/Chirp.Razor/Chirp.Razor.csproj --framework net7.0 --runtime "${{ matrix.target }}" -c Release -o "$release_name"
+
+          # Zip release 
+          7z a -tzip "${release_name}.zip" "./${release_name}/*"
+
+          rm -r "$release_name"
+      - name: Release
+        uses: softprops/action-gh-release@v1
+        with:
+          tag_name: ${{ github.ref_name }}
+          files: "Chirp.Razor*"
