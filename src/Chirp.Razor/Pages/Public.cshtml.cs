@@ -7,14 +7,11 @@ namespace Chirp.Razor.Pages;
 public class PublicModel : PageModel
 {
 	private readonly ICheepRepository _repository;
-	//private readonly IAuthorRepository _authorRepository;
-	public List<CheepViewModel> Cheeps { get; set; }
+	public required List<CheepDTO> Cheeps { get; set; }
 
 	public PublicModel(ICheepRepository repository/*, IAuthorRepository authorRepository*/)
 	{
 		_repository = repository;
-		//_authorRepository = authorRepository;
-		Cheeps = new List<CheepViewModel>();
 	}
 
 
