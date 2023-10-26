@@ -8,7 +8,8 @@ builder.Services.AddRazorPages();
 
 builder.Services.AddScoped<ICheepRepository, CheepRepository>();
 builder.Services.AddDbContext<ChirpDBContext>(options =>
-	options.UseSqlite(builder.Configuration.GetConnectionString("ChirpContextSQLite")));
+	options.UseSqlite("Data Source=./data/Chirp.db"));
+//options.UseSqlite(builder.Configuration.GetConnectionString("ChirpContextSQLite")));
 
 var app = builder.Build();
 
