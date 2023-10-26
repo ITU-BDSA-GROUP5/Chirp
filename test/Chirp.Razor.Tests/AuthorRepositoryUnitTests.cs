@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace Chirp.Razor.Tests
 {
-    internal class AuthorRepositoryUnitTests
+    public class AuthorRepositoryUnitTests
     {
         private readonly IAuthorRepository _authorRepository;
         private readonly SqliteConnection _connection;
@@ -36,5 +36,39 @@ namespace Chirp.Razor.Tests
 
             _authorRepository = new AuthorRepository(context);
         }
-    }
+
+
+
+        [Fact]
+        public void CreateNewAuthor_Values(){
+            // Arrange
+            Guid id = new Guid();
+            string name = "John Doe";
+            string email = "JohnDoe@itu.dk";
+
+            // Act
+            _authorRepository.CreateNewAuthor(id, name, email);
+
+            var authors = _authorRepository.GetAuthorByName("John Doe");
+            AuthorDTO author = authors.FirstOrDefault();
+
+            // Assert
+            Assert.Equal(name, author.Name);
+            Assert.Equal(email, author.Email);
+        }
+
+        [Fact]
+        public void GetAuthorByEmail_Values()
+        {
+            // Arrange
+            string email = "Roger+Histand@hotmail.com";
+
+            // Act
+            var authors = _authorRepository.GetAuthorByEmail(email);
+
+            // Assert
+            Assert.NotNull(authors);
+            Assert.Equal(email, authors.First().Email);
+        }
+ }
 }

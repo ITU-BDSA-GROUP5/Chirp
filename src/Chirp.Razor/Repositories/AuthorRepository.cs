@@ -5,8 +5,8 @@ namespace Chirp.Razor.Repositories
 {
     public interface IAuthorRepository
     {
-        public List<Author> GetAuthorByName(string name);
-        public List<Author> GetAuthorByEmail(string email);
+        public List<AuthorDTO> GetAuthorByName(string name);
+        public List<AuthorDTO> GetAuthorByEmail(string email);
         public void CreateNewAuthor(Guid id, string name, string email);
         public int GetHumanReadableId(Guid id);
     }
@@ -34,21 +34,29 @@ namespace Chirp.Razor.Repositories
 
         public int GetHumanReadableId(Guid id) { return id.GetHashCode(); }
 
-        public List<Author> GetAuthorByEmail(string email)
+        public List<AuthorDTO> GetAuthorByEmail(string email)
         {
             return _context.Authors
-                .Take(_context.Authors.Count<Author>())
                 .OrderByDescending(a => a.AuthorId)
                 .Where(a => a.Email == email)
+                .Select(a => new AuthorDTO
+				{
+					Name = a.Name,
+					Email = a.Email
+				})
                 .ToList();
         }
 
-        public List<Author> GetAuthorByName(string name)
+        public List<AuthorDTO> GetAuthorByName(string name)
         {
             return _context.Authors
-                .Take(_context.Authors.Count<Author>())
                 .OrderByDescending(a => a.AuthorId)
                 .Where(a => a.Name == name)
+                .Select(a => new AuthorDTO
+				{
+					Name = a.Name,
+					Email = a.Email
+				})
                 .ToList();
         }
     }
