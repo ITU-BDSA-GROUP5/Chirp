@@ -42,11 +42,11 @@ public class CheepRepositoryUnitTests
 		var a1 = new Author() { AuthorId = 13, Name = "John Doe", Email = "Johndoe@hotmail.com", Cheeps = new List<Cheep>() };
 		Guid id = new Guid();
 		string text = "Hello world!";
-		
+
 		// Act
 		_cheepRepository.CreateNewCheep(id, a1.AuthorId, a1, text);
 		var cheeps = _cheepRepository.GetCheeps(1);
-		CheepDTO cheep = cheeps.FirstOrDefault();
+		CheepDTO cheep = cheeps.First();
 
 		// Assert
 		Assert.Equal(text, cheep.Message);
