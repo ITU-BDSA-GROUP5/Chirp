@@ -1,4 +1,4 @@
-﻿using Chirp.Razor.Repositories;
+using Chirp.Razor.Repositories;
 using Microsoft.Data.Sqlite;
 using Microsoft.EntityFrameworkCore;
 
