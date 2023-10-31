@@ -1,5 +1,4 @@
 
-using Microsoft.VisualStudio.TestPlatform.TestHost;
 using Microsoft.AspNetCore.Mvc.Testing;
 
 public class TestAPI : IClassFixture<WebApplicationFactory<Program>>

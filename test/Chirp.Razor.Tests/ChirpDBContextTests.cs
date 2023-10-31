@@ -1,6 +1,3 @@
-using System.Data.Common;
-using SQLitePCL;
-
 public class ChirpDBContextTests
 {
 	[Fact]

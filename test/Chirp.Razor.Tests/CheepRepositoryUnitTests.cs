@@ -1,7 +1,7 @@
 namespace Chirp.Razor.Tests;
 
 using Chirp.Core;
-using Chirp.Razor.Repositories;
+using Chirp.Infrastructure.Repositories;
 using Microsoft.Data.Sqlite;
 using Microsoft.EntityFrameworkCore;
 
