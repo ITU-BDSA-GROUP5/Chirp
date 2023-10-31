@@ -5,7 +5,6 @@
 		public List<AuthorDTO> GetAuthorByName(string name);
 		public List<AuthorDTO> GetAuthorByEmail(string email);
 		public void CreateNewAuthor(Guid id, string name, string email);
-		public int GetHumanReadableId(Guid id);
 	}
 
 	public class AuthorRepository : IAuthorRepository
@@ -29,7 +28,7 @@
 			_context.SaveChanges();
 		}
 
-		public int GetHumanReadableId(Guid id) { return id.GetHashCode(); }
+		private int GetHumanReadableId(Guid id) { return id.GetHashCode(); }
 
 		public List<AuthorDTO> GetAuthorByEmail(string email)
 		{
