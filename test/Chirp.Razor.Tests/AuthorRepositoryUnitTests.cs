@@ -66,5 +66,19 @@ namespace Chirp.Razor.Tests
 			Assert.NotNull(authors);
 			Assert.Equal(email, authors.First().Email);
 		}
-	}
+
+        [Fact]
+        public void GetAuthorByName_Values()
+        {
+            // Arrange
+            string name = "Roger Histand";
+
+            // Act
+            var authors = _authorRepository.GetAuthorByName(name);
+
+            // Assert
+            Assert.NotNull(authors);
+            Assert.Equal(name, authors.First().Name);
+        }
+    }
 }
