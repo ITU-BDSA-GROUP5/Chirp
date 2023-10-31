@@ -34,8 +34,8 @@
 		public List<AuthorDTO> GetAuthorByEmail(string email)
 		{
 			return _context.Authors
-				.OrderByDescending(a => a.AuthorId)
 				.Where(a => a.Email == email)
+				.OrderByDescending(a => a.AuthorId)
 				.Select(a => new AuthorDTO
 				{
 					Name = a.Name,
@@ -47,8 +47,8 @@
 		public List<AuthorDTO> GetAuthorByName(string name)
 		{
 			return _context.Authors
-				.OrderByDescending(a => a.AuthorId)
 				.Where(a => a.Name == name)
+				.OrderByDescending(a => a.AuthorId)
 				.Select(a => new AuthorDTO
 				{
 					Name = a.Name,
