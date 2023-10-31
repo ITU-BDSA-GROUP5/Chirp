@@ -9,7 +9,7 @@ public class PublicModel : PageModel
 	private readonly ICheepRepository _repository;
 	public required List<CheepDTO> Cheeps { get; set; }
 
-	public PublicModel(ICheepRepository repository/*, IAuthorRepository authorRepository*/)
+	public PublicModel(ICheepRepository repository)
 	{
 		_repository = repository;
 	}
@@ -19,18 +19,6 @@ public class PublicModel : PageModel
 	{
 		Cheeps = _repository.GetCheeps(page);
 
-		//_repository.createNewCheep(new Guid(), );
-
-		//List<Author> authorList = _authorRepository.getAuthorByEmail("jeremymicheal@gmail.com");
-		//Console.WriteLine(authorList.Count);
-		//_authorRepository.createNewAuthor(new Guid(), "Jeremy Micheal", "jeremymicheal@gmail.com");
-		//      authorList = _authorRepository.getAuthorByEmail("jeremymicheal@gmail.com");
-		//      Console.WriteLine(authorList.Count);
-
-		//List<Author> authorList = _authorRepository.getAuthorByEmail("Mellie+Yost@ku.dk");
-		//Console.WriteLine(authorList.Count);
-		//foreach (var item in authorList) { Console.WriteLine(item.Name + ", " + item.Email + ", " + item.AuthorId); }
-		//Console.WriteLine("--- " + _authorRepository.getAuthorByName("Roger Hilstand"));
 		return Page();
 	}
 }

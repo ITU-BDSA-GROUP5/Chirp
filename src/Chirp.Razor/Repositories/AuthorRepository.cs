@@ -22,7 +22,7 @@
 			var existing = GetAuthorByEmail(email);
 			if (existing.Any())
 			{
-				//Console.WriteLine("Author " + email + " already exists");
+				Console.WriteLine("Author " + email + " already exists. No new author was made");
 				return;
 			}
 			_context.Authors.Add(new Author { AuthorId = GetHumanReadableId(id), Name = name, Email = email, Cheeps = new List<Cheep>() });
