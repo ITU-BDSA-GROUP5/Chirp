@@ -1,12 +1,6 @@
+using Chirp.Core;
 namespace Chirp.Razor.Repositories
 {
-	public interface ICheepRepository
-	{
-		public List<CheepDTO> GetCheeps(int page);
-		public List<CheepDTO> GetCheepsFromAuthor(int page, string author);
-		public void CreateNewCheep(Guid id, Author author, string text);
-
-	}
 
 	public class CheepRepository : ICheepRepository
 	{
@@ -19,10 +13,16 @@ namespace Chirp.Razor.Repositories
 			_context = context;
 		}
 
-		public void CreateNewCheep(Guid id, Author author, string text)
+		public void CreateNewCheep(CreateCheepDTO cheep)
 		{
 			var timestamp = DateTime.Now;
-			_context.Cheeps.Add(new Cheep { CheepId = GetHumanReadableId(id), AuthorId = author.AuthorId, Author = author, Text = text, TimeStamp = timestamp });
+			Author author = new Author
+			{
+				AuthorId = cheep.AuthorId,
+				Email = cheep.Email,
+				Name = cheep.Name
+			};
+			_context.Cheeps.Add(new Cheep { CheepId = GetHumanReadableId(cheep.CheepGuid), AuthorId = cheep.AuthorId, Author = author, Text = cheep.Text, TimeStamp = timestamp });
 			_context.SaveChanges();
 		}
 

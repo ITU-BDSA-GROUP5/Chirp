@@ -1,5 +1,6 @@
 namespace Chirp.Razor.Tests;
 
+using Chirp.Core;
 using Chirp.Razor.Repositories;
 using Microsoft.Data.Sqlite;
 using Microsoft.EntityFrameworkCore;
@@ -39,12 +40,20 @@ public class CheepRepositoryUnitTests
 	public void CreateNewCheep_WithValues_ExistsInDatabase()
 	{
 		// Arrange
-		var a1 = new Author() { AuthorId = 13, Name = "John Doe", Email = "Johndoe@hotmail.com", Cheeps = new List<Cheep>() };
-		Guid id = new Guid();
+		var author = new Author() { AuthorId = 13, Name = "John Doe", Email = "Johndoe@hotmail.com", Cheeps = new List<Cheep>() };
+		Guid CheepId = new Guid();
 		string text = "Hello world!";
 
 		// Act
-		_cheepRepository.CreateNewCheep(id, a1, text);
+		_cheepRepository.CreateNewCheep(new CreateCheepDTO
+		{
+			CheepGuid = CheepId,
+			AuthorId = author.AuthorId,
+			Name = author.Name,
+			Email = author.Email,
+			Text = text
+		});
+
 		var cheeps = _cheepRepository.GetCheeps(1);
 		CheepDTO cheep = cheeps.First();
 
