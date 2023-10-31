@@ -35,7 +35,7 @@ namespace Chirp.Razor.Tests
 
 
 		[Fact]
-		public void CreateNewAuthor_Values()
+		public void CreateNewAuthor_WithValues_ExistsInDatabase()
 		{
 			// Arrange
 			Guid id = new Guid();
@@ -54,7 +54,7 @@ namespace Chirp.Razor.Tests
 		}
 
 		[Fact]
-		public void GetAuthorByEmail_Values()
+		public void GetAuthorByEmail_SingleAuthor_ReturnSameEmail()
 		{
 			// Arrange
 			string email = "Roger+Histand@hotmail.com";
@@ -68,7 +68,7 @@ namespace Chirp.Razor.Tests
 		}
 
         [Fact]
-        public void GetAuthorByName_Values()
+        public void GetAuthorByName_SingleAuthor_ReturnSameName()
         {
             // Arrange
             string name = "Roger Histand";
