@@ -1,6 +1,6 @@
 public class CheepDTO
 {
-    public string AuthorName { get; set; }
-    public string Message { get; set; }
-    public string TimeStamp { get; set; }
+	public required string AuthorName { get; set; }
+	public required string Message { get; set; }
+	public required string TimeStamp { get; set; }
 }

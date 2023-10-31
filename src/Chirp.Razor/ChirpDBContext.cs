@@ -1,4 +1,5 @@
 using Microsoft.EntityFrameworkCore;
+
 public class ChirpDBContext : DbContext
 {
 	public DbSet<Author> Authors { get; set; }
@@ -10,7 +11,7 @@ public class ChirpDBContext : DbContext
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
-        modelBuilder.Entity<Author>().ToTable("Authors");
+		modelBuilder.Entity<Author>().ToTable("Authors");
 		modelBuilder.Entity<Cheep>().ToTable("Cheeps");
     }
 }

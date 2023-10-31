@@ -1,4 +1,4 @@
-﻿using Chirp.Razor.Repositories;
+using Chirp.Razor.Repositories;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 
@@ -18,6 +18,7 @@ public class PublicModel : PageModel
 	public ActionResult OnGet([FromQuery(Name = "page")] int page = 1)
 	{
 		Cheeps = _repository.GetCheeps(page);
+
 		return Page();
 	}
 }

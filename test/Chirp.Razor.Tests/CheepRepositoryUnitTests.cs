@@ -34,8 +34,27 @@ public class CheepRepositoryUnitTests
 
 	private protected void Dispose() => _connection.Dispose();
 
+	// BEWARE this test depends on cheeps being sorted by timestamp in descending order
 	[Fact]
-	public void Read_CheepNotNull()
+	public void CreateNewCheep_WithValues_ExistsInDatabase()
+	{
+		// Arrange
+		var a1 = new Author() { AuthorId = 13, Name = "John Doe", Email = "Johndoe@hotmail.com", Cheeps = new List<Cheep>() };
+		Guid id = new Guid();
+		string text = "Hello world!";
+
+		// Act
+		_cheepRepository.CreateNewCheep(id, a1.AuthorId, a1, text);
+		var cheeps = _cheepRepository.GetCheeps(1);
+		CheepDTO cheep = cheeps.First();
+
+		// Assert
+		Assert.Equal(text, cheep.Message);
+		Assert.Equal("John Doe", cheep.AuthorName);
+	}
+
+	[Fact]
+	public void GetCheeps_SingleCheep_CheepNotNull()
 	{
 		// Arrange
 		var cheeps = _cheepRepository.GetCheeps(1);
@@ -48,7 +67,7 @@ public class CheepRepositoryUnitTests
 	}
 
 	[Fact]
-	public void Read_CheepsDescendingOrder()
+	public void GetCheeps_OnePageOfCheeps_CheepsDescendingOrder()
 	{
 		// Arrange
 		var cheeps = _cheepRepository.GetCheeps(1).Select(c => c.ToString());
@@ -61,7 +80,7 @@ public class CheepRepositoryUnitTests
 	}
 
 	[Fact]
-	public void Read_CheepPageSize()
+	public void GetCheeps_AmmountOfCheeps_EqualToPageSize()
 	{
 		// Arrange
 		int pageSize = 32;
