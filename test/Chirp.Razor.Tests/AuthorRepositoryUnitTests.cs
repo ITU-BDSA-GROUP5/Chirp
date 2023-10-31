@@ -1,3 +1,4 @@
+using Chirp.Core;
 using Chirp.Razor.Repositories;
 using Microsoft.Data.Sqlite;
 using Microsoft.EntityFrameworkCore;
@@ -67,18 +68,18 @@ namespace Chirp.Razor.Tests
 			Assert.Equal(email, authors.First().Email);
 		}
 
-        [Fact]
-        public void GetAuthorByName_SingleAuthor_ReturnSameName()
-        {
-            // Arrange
-            string name = "Roger Histand";
+		[Fact]
+		public void GetAuthorByName_SingleAuthor_ReturnSameName()
+		{
+			// Arrange
+			string name = "Roger Histand";
 
-            // Act
-            var authors = _authorRepository.GetAuthorByName(name);
+			// Act
+			var authors = _authorRepository.GetAuthorByName(name);
 
-            // Assert
-            Assert.NotNull(authors);
-            Assert.Equal(name, authors.First().Name);
-        }
-    }
+			// Assert
+			Assert.NotNull(authors);
+			Assert.Equal(name, authors.First().Name);
+		}
+	}
 }
