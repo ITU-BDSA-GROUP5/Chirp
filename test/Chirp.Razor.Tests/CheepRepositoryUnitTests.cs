@@ -44,7 +44,7 @@ public class CheepRepositoryUnitTests
 		string text = "Hello world!";
 
 		// Act
-		_cheepRepository.CreateNewCheep(id, a1.AuthorId, a1, text);
+		_cheepRepository.CreateNewCheep(id, a1, text);
 		var cheeps = _cheepRepository.GetCheeps(1);
 		CheepDTO cheep = cheeps.First();
 

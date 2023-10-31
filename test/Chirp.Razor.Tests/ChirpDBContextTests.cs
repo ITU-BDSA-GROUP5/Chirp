@@ -13,6 +13,7 @@ public class ChirpDBContextTests
 
 		var author = new Author
 		{
+			AuthorId = authorId,
 			Name = "name",
 			Email = "email"
 		};
