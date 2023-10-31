@@ -40,7 +40,7 @@ public class CheepRepositoryUnitTests
 	public void CreateNewCheep_WithValues_ExistsInDatabase()
 	{
 		// Arrange
-		var a1 = new Author() { AuthorId = 13, Name = "John Doe", Email = "Johndoe@hotmail.com", Cheeps = new List<Cheep>() };
+		var author = new Author() { AuthorId = 13, Name = "John Doe", Email = "Johndoe@hotmail.com", Cheeps = new List<Cheep>() };
 		Guid CheepId = new Guid();
 		string text = "Hello world!";
 
@@ -48,9 +48,9 @@ public class CheepRepositoryUnitTests
 		_cheepRepository.CreateNewCheep(new CreateCheepDTO
 		{
 			CheepGuid = CheepId,
-			AuthorId = a1.AuthorId,
-			Name = a1.Name,
-			Email = a1.Email,
+			AuthorId = author.AuthorId,
+			Name = author.Name,
+			Email = author.Email,
 			Text = text
 		});
 

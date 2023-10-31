@@ -1,4 +1,3 @@
-namespace Chirp.Core;
 public interface IAuthorRepository
 {
 	public List<AuthorDTO> GetAuthorByName(string name);
