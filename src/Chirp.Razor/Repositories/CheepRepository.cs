@@ -46,10 +46,10 @@ namespace Chirp.Razor.Repositories
 		public List<CheepDTO> GetCheepsFromAuthor(int page, string author)
 		{
 			return _context.Cheeps
+				.Where(c => c.Author.Name == author)
 				.OrderByDescending(c => c.TimeStamp)
 				.Skip((page - 1) * pageSize)
 				.Take(pageSize)
-				.Where(c => c.Author.Name == author)
 				.Select(c => new CheepDTO
 				{
 					AuthorName = c.Author.Name,
