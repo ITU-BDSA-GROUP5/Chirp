@@ -1,9 +1,8 @@
-using Chirp.Core;
-using Chirp.Razor.Repositories;
+using Chirp.Infrastructure.Repositories;
 using Microsoft.Data.Sqlite;
 using Microsoft.EntityFrameworkCore;
 
-namespace Chirp.Razor.Tests
+namespace Chirp.Infrastructure.Tests
 {
 	public class AuthorRepositoryUnitTests
 	{

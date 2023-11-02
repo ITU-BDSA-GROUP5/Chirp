@@ -1,5 +1,5 @@
-using Chirp.Core;
-namespace Chirp.Razor.Repositories
+﻿using Chirp.Core;
+namespace Chirp.Infrastructure.Repositories
 {
 
 	public class CheepRepository : ICheepRepository
