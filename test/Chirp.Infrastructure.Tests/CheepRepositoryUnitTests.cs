@@ -1,4 +1,4 @@
-namespace Chirp.Web.Tests;
+namespace Chirp.Infrastructure.Tests;
 
 using Chirp.Core;
 using Chirp.Infrastructure.Repositories;
