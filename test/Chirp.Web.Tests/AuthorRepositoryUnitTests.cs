@@ -3,7 +3,7 @@ using Chirp.Infrastructure.Repositories;
 using Microsoft.Data.Sqlite;
 using Microsoft.EntityFrameworkCore;
 
-namespace Chirp.Razor.Tests
+namespace Chirp.Web.Tests
 {
 	public class AuthorRepositoryUnitTests
 	{
