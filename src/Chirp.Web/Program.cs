@@ -1,17 +1,37 @@
 using Chirp.Infrastructure.Repositories;
 using Chirp.Core;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Identity.Web;
+using Microsoft.Identity.Web.UI;
+using Microsoft.AspNetCore.Authentication.OpenIdConnect;
+using Microsoft.Extensions.Azure;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// Add services to the container.
-builder.Services.AddRazorPages();
-
+// add database context and repositoies
 builder.Services.AddDbContext<ChirpDBContext>(options =>
 	options.UseSqlite(builder.Configuration.GetConnectionString("ChirpContextSQLite")));
 
 builder.Services.AddScoped<ICheepRepository, CheepRepository>();
 builder.Services.AddScoped<IAuthorRepository, AuthorRepository>();
+
+// Add authentication
+builder.Services.AddAuthentication(OpenIdConnectDefaults.AuthenticationScheme)
+        .AddMicrosoftIdentityWebApp(builder.Configuration.GetSection("AzureADB2C"));
+
+builder.Services.AddAuthorization(options =>
+{
+    // By default, all incoming requests will be authorized according to 
+    // the default policy
+    options.FallbackPolicy = options.DefaultPolicy;
+});
+
+// Add razor pages with config options
+builder.Services.AddRazorPages(options => {
+    options.Conventions.AllowAnonymousToPage("/");
+})
+.AddMvcOptions(options => { })
+.AddMicrosoftIdentityUI();
 
 var app = builder.Build();
 
@@ -37,6 +57,9 @@ using (var scope = app.Services.CreateScope())
 app.UseStaticFiles();
 
 app.UseRouting();
+
+app.UseAuthentication();
+app.UseAuthorization();
 
 app.MapRazorPages();
 
