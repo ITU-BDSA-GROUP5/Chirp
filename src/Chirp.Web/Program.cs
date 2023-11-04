@@ -36,7 +36,8 @@ builder.Services.AddAuthorization(options =>
 // Add razor pages with config options
 builder.Services.AddRazorPages(options =>
 {
-	options.Conventions.AllowAnonymousToPage("/");
+	options.Conventions.AllowAnonymousToFolder("/Shared");
+	options.Conventions.AllowAnonymousToFolder("/Public");
 })
 .AddMvcOptions(options => { })
 .AddMicrosoftIdentityUI();
