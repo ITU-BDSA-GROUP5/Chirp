@@ -4,7 +4,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Identity.Web;
 using Microsoft.Identity.Web.UI;
 using Microsoft.AspNetCore.Authentication.OpenIdConnect;
-using Microsoft.Extensions.Azure;
+using Microsoft.IdentityModel.Protocols.OpenIdConnect;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -17,18 +17,26 @@ builder.Services.AddScoped<IAuthorRepository, AuthorRepository>();
 
 // Add authentication
 builder.Services.AddAuthentication(OpenIdConnectDefaults.AuthenticationScheme)
-        .AddMicrosoftIdentityWebApp(builder.Configuration.GetSection("AzureADB2C"));
+		.AddMicrosoftIdentityWebApp(builder.Configuration.GetSection("AzureADB2C"));
+
+// The following was adapted from: https://github.com/MicrosoftDocs/azure-docs/issues/97080#issuecomment-1376484349
+builder.Services.Configure<OpenIdConnectOptions>(OpenIdConnectDefaults.AuthenticationScheme, options =>
+{
+	options.ResponseType = OpenIdConnectResponseType.Code;
+	options.Scope.Add(options.ClientId ?? "no client id :("); // mitigate warning with null-coalescing
+});
 
 builder.Services.AddAuthorization(options =>
 {
-    // By default, all incoming requests will be authorized according to 
-    // the default policy
-    options.FallbackPolicy = options.DefaultPolicy;
+	// By default, all incoming requests will be authorized according to 
+	// the default policy
+	options.FallbackPolicy = options.DefaultPolicy;
 });
 
 // Add razor pages with config options
-builder.Services.AddRazorPages(options => {
-    options.Conventions.AllowAnonymousToPage("/");
+builder.Services.AddRazorPages(options =>
+{
+	options.Conventions.AllowAnonymousToPage("/");
 })
 .AddMvcOptions(options => { })
 .AddMicrosoftIdentityUI();
