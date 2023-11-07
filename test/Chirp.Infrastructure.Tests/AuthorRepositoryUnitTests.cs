@@ -8,6 +8,7 @@ namespace Chirp.Infrastructure.Tests
 	{
 		private readonly IAuthorRepository _authorRepository;
 		private readonly SqliteConnection _connection;
+		private readonly ChirpDBContext _context;
 
 		public AuthorRepositoryUnitTests()
 		{
@@ -24,14 +25,29 @@ namespace Chirp.Infrastructure.Tests
 				.Options;
 
 			// Create the schema and seed some data
-			var context = new ChirpDBContext(contextOptions);
+			_context = new ChirpDBContext(contextOptions);
 
-			context.Database.EnsureCreated();
-			DbInitializer.SeedDatabase(context);
+			_context.Database.EnsureCreated();
+			DbInitializer.SeedDatabase(_context);
 
-			_authorRepository = new AuthorRepository(context);
+			_authorRepository = new AuthorRepository(_context);
 		}
 
+		[Fact]
+		public void CreateNewAuthor_ExistsInDatabase()
+		{
+            // Arrange
+            Guid id = new Guid();
+            string name = "Alice";
+            string email = "Alice@itu.dk";
+
+            // Act
+            _authorRepository.CreateNewAuthor(id, name, email);
+            var authorAlice = _context.Authors.Where(c => c.Name == "Alice");
+
+			// Assert
+			Assert.Single(authorAlice);
+        }
 
 
 		[Fact]
