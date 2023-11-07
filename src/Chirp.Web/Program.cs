@@ -1,17 +1,44 @@
 using Chirp.Infrastructure.Repositories;
 using Chirp.Core;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Identity.Web;
+using Microsoft.Identity.Web.UI;
+using Microsoft.AspNetCore.Authentication.OpenIdConnect;
+using Microsoft.IdentityModel.Protocols.OpenIdConnect;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// Add services to the container.
-builder.Services.AddRazorPages();
-
+// add database context and repositoies
 builder.Services.AddDbContext<ChirpDBContext>(options =>
 	options.UseSqlite(builder.Configuration.GetConnectionString("ChirpContextSQLite")));
 
 builder.Services.AddScoped<ICheepRepository, CheepRepository>();
 builder.Services.AddScoped<IAuthorRepository, AuthorRepository>();
+
+// Add authentication
+builder.Services.AddAuthentication(OpenIdConnectDefaults.AuthenticationScheme)
+	.AddMicrosoftIdentityWebApp(builder.Configuration.GetSection("AzureADB2C"));
+
+// The following was adapted from: https://github.com/MicrosoftDocs/azure-docs/issues/97080#issuecomment-1376484349
+builder.Services.Configure<OpenIdConnectOptions>(OpenIdConnectDefaults.AuthenticationScheme, options =>
+{
+	options.ResponseType = OpenIdConnectResponseType.Code;
+	options.Scope.Add(options.ClientId ?? "no client id :("); // mitigate warning with null-coalescing
+});
+
+builder.Services.AddAuthorization(options =>
+{
+	// By default, all incoming requests will be authorized according to 
+	// the default policy
+	options.FallbackPolicy = options.DefaultPolicy;
+});
+
+// Add razor pages with config options
+builder.Services.AddRazorPages(options =>
+{
+	options.Conventions.AllowAnonymousToFolder("/Shared");
+	options.Conventions.AllowAnonymousToFolder("/Public");
+}).AddMicrosoftIdentityUI();
 
 var app = builder.Build();
 
@@ -38,7 +65,11 @@ app.UseStaticFiles();
 
 app.UseRouting();
 
+app.UseAuthentication();
+app.UseAuthorization();
+
 app.MapRazorPages();
+app.MapControllers();
 
 app.Run();
 
