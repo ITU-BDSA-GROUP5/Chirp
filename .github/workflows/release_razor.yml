@@ -28,7 +28,7 @@ jobs:
           release_name="Chirp.Razor-$tag-${{ matrix.target }}"
 
           # Publish to targets listed in matrix using 
-          dotnet publish src/Chirp.Web/Chirp.Web.csproj --framework net7.0 --runtime "${{ matrix.target }}" -c Release -o "$release_name"
+          dotnet publish src/Chirp.Web/Chirp.Web.csproj --framework net7.0 --self-contained --runtime "${{ matrix.target }}" -c Release -o "$release_name"
 
           # Zip release 
           7z a -tzip "${release_name}.zip" "./${release_name}/*"
