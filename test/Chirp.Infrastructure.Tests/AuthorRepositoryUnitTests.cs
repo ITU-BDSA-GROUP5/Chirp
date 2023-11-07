@@ -34,7 +34,7 @@ namespace Chirp.Infrastructure.Tests
 		}
 
 		[Fact]
-		public void CreateNewAuthor_ExistsInDatabase()
+		public void CreateNewAuthor_SingleInDatabase()
 		{
             // Arrange
             Guid id = new Guid();
