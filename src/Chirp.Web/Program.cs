@@ -17,7 +17,7 @@ builder.Services.AddScoped<IAuthorRepository, AuthorRepository>();
 
 // Add authentication
 builder.Services.AddAuthentication(OpenIdConnectDefaults.AuthenticationScheme)
-		.AddMicrosoftIdentityWebApp(builder.Configuration.GetSection("AzureADB2C"));
+	.AddMicrosoftIdentityWebApp(builder.Configuration.GetSection("AzureADB2C"));
 
 // The following was adapted from: https://github.com/MicrosoftDocs/azure-docs/issues/97080#issuecomment-1376484349
 builder.Services.Configure<OpenIdConnectOptions>(OpenIdConnectDefaults.AuthenticationScheme, options =>
@@ -38,9 +38,7 @@ builder.Services.AddRazorPages(options =>
 {
 	options.Conventions.AllowAnonymousToFolder("/Shared");
 	options.Conventions.AllowAnonymousToFolder("/Public");
-})
-.AddMvcOptions(options => { })
-.AddMicrosoftIdentityUI();
+}).AddMicrosoftIdentityUI();
 
 var app = builder.Build();
 
@@ -71,6 +69,7 @@ app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapRazorPages();
+app.MapControllers();
 
 app.Run();
 
