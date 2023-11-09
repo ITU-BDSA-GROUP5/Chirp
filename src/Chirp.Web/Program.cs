@@ -58,8 +58,7 @@ using (var scope = app.Services.CreateScope())
 	DbInitializer.SeedDatabase(context);
 }
 
-// app.UseHttpsRedirection(); This line causes the redirection warning
-// Since no port was given, it was not being used either
+app.UseHttpsRedirection();
 
 app.UseStaticFiles();
 
