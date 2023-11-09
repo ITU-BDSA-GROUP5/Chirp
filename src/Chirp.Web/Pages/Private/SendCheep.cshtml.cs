@@ -3,23 +3,23 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 
 namespace Chirp.Web.Pages
 {
-    public class SendCheepModel : PageModel
-    {
+	public class SendCheepModel : PageModel
+	{
 
-        [BindProperty]
-        public required string Text { get; set; }
+		[BindProperty]
+		public string? CheepMessage { get; set; }
 
-        public IActionResult OnGet()
-        {
-            Text = "onGet";
-            System.Console.WriteLine(Text);
-            return Page();
-        }
+		public IActionResult OnGet()
+		{
+			CheepMessage = "Brevity is the soul of the wit.";
+			Console.WriteLine(CheepMessage);
+			return Page();
+		}
 
-        public IActionResult OnPost()
-        {
-            System.Console.WriteLine(Text);
-            return RedirectToPage("/");
-        }
-    }
+		public IActionResult OnPost()
+		{
+			Console.WriteLine(CheepMessage);
+			return Redirect("https://localhost:7102/");
+		}
+	}
 }
