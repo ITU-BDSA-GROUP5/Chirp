@@ -48,7 +48,6 @@ public class CheepRepositoryUnitTests
 		_cheepRepository.CreateNewCheep(new CreateCheepDTO
 		{
 			CheepGuid = CheepId,
-			AuthorId = author.AuthorId,
 			Name = author.Name,
 			Email = author.Email,
 			Text = text
