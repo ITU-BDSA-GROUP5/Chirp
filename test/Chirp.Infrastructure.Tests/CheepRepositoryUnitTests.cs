@@ -62,7 +62,7 @@ public class CheepRepositoryUnitTests
 		Assert.Equal("John Doe", cheep.AuthorName);
 	}
 
-	[Fact]
+    [Fact]
 	public void GetCheeps_SingleCheep_CheepNotNull()
 	{
 		// Arrange
