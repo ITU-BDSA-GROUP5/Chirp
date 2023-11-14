@@ -8,6 +8,7 @@ using Microsoft.EntityFrameworkCore;
 public class CheepRepositoryUnitTests
 {
 	private readonly ICheepRepository _cheepRepository;
+	private readonly IAuthorRepository _authorRepository;
 	private readonly SqliteConnection _connection;
 
 	public CheepRepositoryUnitTests()
@@ -18,6 +19,7 @@ public class CheepRepositoryUnitTests
 		// at the end of the test (see Dispose below).
 		_connection = new SqliteConnection("Filename=:memory:");
 		_connection.Open();
+
 
 		// These options will be used by the context instances in this test suite, including the connection opened above.
 		var contextOptions = new DbContextOptionsBuilder<ChirpDBContext>()
@@ -31,9 +33,35 @@ public class CheepRepositoryUnitTests
 		DbInitializer.SeedDatabase(context);
 
 		_cheepRepository = new CheepRepository(context);
+		_authorRepository = new AuthorRepository(context);
 	}
 
 	private protected void Dispose() => _connection.Dispose();
+
+	[Fact]
+	public void CreateNewCheep_FromNonExistingAuthor_AddsNewAuthorToDatabase()
+	{
+		// Arrange
+		string email = "email@domain.com";
+		string name = "name";
+		string cheepMessage = "Message";
+
+		CreateCheepDTO cheep = new CreateCheepDTO()
+		{
+			CheepGuid = new Guid(),
+			Text = cheepMessage,
+			Name = name,
+			Email = email
+		};
+
+		// Act
+		_cheepRepository.CreateNewCheep(cheep);
+
+		// Assert
+		AuthorDTO author = _authorRepository.GetAuthorByEmail(email).Single();
+		Assert.Equal(author.Name, name);
+		Assert.Equal(author.Email, email);
+	}
 
 	// BEWARE this test depends on cheeps being sorted by timestamp in descending order
 	[Fact]
