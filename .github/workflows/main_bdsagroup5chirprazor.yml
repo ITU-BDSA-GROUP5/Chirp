@@ -24,6 +24,12 @@ jobs:
 
       - name: Build with dotnet
         run: dotnet build src/Chirp.Web/ --configuration Release
+      
+      - name: Run EF 
+        run: | 
+          dotnet tool install --global dotnet-ef
+          dotnet tool restore
+          dotnet ef database update -p src/Chirp.Infrastructure --connection '${{ secrets.DBConnection }}' --startup-project src/Chirp.Web
 
       - name: dotnet publish
         run: dotnet publish src/Chirp.Web/ -c Release -o ${{env.DOTNET_ROOT}}/myapp
