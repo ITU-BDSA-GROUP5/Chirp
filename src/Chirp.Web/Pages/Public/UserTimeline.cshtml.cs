@@ -30,8 +30,13 @@ public class UserTimelineModel : PageModel
 	{
 		Console.WriteLine("OnPost called!");
 
+		if (CheepMessage == null)
+		{
+			return Redirect("/");
+		}
+
 		string email = User.Claims.Where(a => a.Type == "emails").Select(e => e.Value).Single();
-		string name = User.Identity.Name;
+		string name = (User.Identity?.Name) ?? throw new Exception("Name is null!");
 
 		CreateCheepDTO cheep = new CreateCheepDTO()
 		{

@@ -11,9 +11,10 @@ public class PublicModel : PageModel
 	private readonly ICheepRepository CheepRepository;
 	public required List<CheepDTO> Cheeps { get; set; }
 
-
 	[BindProperty]
 	public string? CheepMessage { get; set; }
+
+	public bool EmptyCheep { get; set; }
 
 	public PublicModel(IAuthorRepository authorRepository, ICheepRepository cheepRepository)
 	{
@@ -31,8 +32,14 @@ public class PublicModel : PageModel
 	{
 		Console.WriteLine("OnPost called!");
 
+		if (CheepMessage == null)
+		{
+			EmptyCheep = true;
+			return OnGet();
+		}
+
 		string email = User.Claims.Where(a => a.Type == "emails").Select(e => e.Value).Single();
-		string name = User.Identity.Name;
+		string name = (User.Identity?.Name) ?? throw new Exception("Name is null!");
 
 		CreateCheepDTO cheep = new CreateCheepDTO()
 		{
