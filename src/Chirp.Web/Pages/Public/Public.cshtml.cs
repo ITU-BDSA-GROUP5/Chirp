@@ -1,4 +1,5 @@
-﻿using Chirp.Core;
+﻿using System.Security.Claims;
+using Chirp.Core;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 
@@ -31,33 +32,18 @@ public class PublicModel : PageModel
 		Console.WriteLine("OnPost called!");
 
 		string email = User.Claims.Where(a => a.Type == "emails").Select(e => e.Value).Single();
-
-		Console.WriteLine(email + " wrote: " + CheepMessage);
-
-		// check if author exists
-		// fetch author
-		// possibly create author
-
-		AuthorDTO? Author = AuthorRepository.GetAuthorByEmail(email).First();
-
-		if (Author == null)
-		{
-			Author = CreateNewAuthor();
-		}
+		string name = User.Identity.Name;
 
 		CreateCheepDTO cheep = new CreateCheepDTO()
 		{
 			CheepGuid = new Guid(),
 			Text = CheepMessage,
-			Name = Author.Name,
-			Email = Author.Email
+			Name = name,
+			Email = email
 		};
 
-		return Redirect("/");
-	}
+		CheepRepository.CreateNewCheep(cheep);
 
-	private AuthorDTO CreateNewAuthor()
-	{
-		throw new NotImplementedException();
+		return Redirect("/");
 	}
 }
