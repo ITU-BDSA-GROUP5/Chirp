@@ -38,7 +38,7 @@ namespace Chirp.Infrastructure.Repositories
 				{
 					AuthorName = c.Author.Name,
 					Message = c.Text,
-					TimeStamp = c.TimeStamp.ToString()
+					TimeStamp = c.TimeStamp.ToString("yyyy-MM-dd H:mm:ss")
 				})
 				.ToList();
 		}
