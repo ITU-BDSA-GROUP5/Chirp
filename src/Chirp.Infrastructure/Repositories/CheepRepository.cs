@@ -1,4 +1,5 @@
-﻿using Chirp.Core;
+﻿using System.ComponentModel.DataAnnotations;
+using Chirp.Core;
 namespace Chirp.Infrastructure.Repositories
 {
 
@@ -16,13 +17,16 @@ namespace Chirp.Infrastructure.Repositories
 		public void CreateNewCheep(CreateCheepDTO cheep)
 		{
 			var timestamp = DateTime.Now;
-			Author author = new Author
-			{
-				AuthorId = cheep.AuthorId,
-				Email = cheep.Email,
-				Name = cheep.Name
-			};
-			_context.Cheeps.Add(new Cheep { CheepId = GetHumanReadableId(cheep.CheepGuid), AuthorId = cheep.AuthorId, Author = author, Text = cheep.Text, TimeStamp = timestamp });
+			Author author = _context.Authors.Where(a => a.Email == cheep.Email).Single();
+
+			_context.Cheeps.Add(new Cheep
+				{
+					CheepId = GetHumanReadableId(cheep.CheepGuid),
+					AuthorId = author.AuthorId,
+					Author = author,
+					Text = cheep.Text,
+					TimeStamp = timestamp
+				});
 			_context.SaveChanges();
 		}
 

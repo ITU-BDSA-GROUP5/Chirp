@@ -4,11 +4,13 @@ using Chirp.Core;
 using Chirp.Infrastructure.Repositories;
 using Microsoft.Data.Sqlite;
 using Microsoft.EntityFrameworkCore;
+using Xunit.Sdk;
 
 public class CheepRepositoryUnitTests
 {
 	private readonly ICheepRepository _cheepRepository;
 	private readonly SqliteConnection _connection;
+	private readonly ChirpDBContext _context;
 
 	public CheepRepositoryUnitTests()
 	{
@@ -18,6 +20,7 @@ public class CheepRepositoryUnitTests
 		// at the end of the test (see Dispose below).
 		_connection = new SqliteConnection("Filename=:memory:");
 		_connection.Open();
+
 
 		// These options will be used by the context instances in this test suite, including the connection opened above.
 		var contextOptions = new DbContextOptionsBuilder<ChirpDBContext>()
@@ -31,9 +34,42 @@ public class CheepRepositoryUnitTests
 		DbInitializer.SeedDatabase(context);
 
 		_cheepRepository = new CheepRepository(context);
+		_context = context;
 	}
 
 	private protected void Dispose() => _connection.Dispose();
+
+	[Fact]
+	public void CreateNewCheep_FromNonExistingAuthor_ThrowsException()
+	{
+		// Arrange
+		string email = "email@domain.com";
+		string name = "name";
+		string cheepMessage = "Message";
+
+		CreateCheepDTO cheep = new CreateCheepDTO()
+		{
+			CheepGuid = new Guid(),
+			Text = cheepMessage,
+			Name = name,
+			Email = email
+		};
+
+		Exception? exception = null;
+
+		// Act
+		try
+		{
+			_cheepRepository.CreateNewCheep(cheep);
+		}
+		catch (Exception e)
+		{
+			exception = e;
+		}
+
+		// Assert
+		Assert.NotEqual(null, exception);
+	}
 
 	// BEWARE this test depends on cheeps being sorted by timestamp in descending order
 	[Fact]
@@ -43,17 +79,18 @@ public class CheepRepositoryUnitTests
 		var author = new Author() { AuthorId = 13, Name = "John Doe", Email = "Johndoe@hotmail.com", Cheeps = new List<Cheep>() };
 		Guid CheepId = new Guid();
 		string text = "Hello world!";
-
+		_context.Authors.Add(author);
+		_context.SaveChanges();
+		
 		// Act
 		_cheepRepository.CreateNewCheep(new CreateCheepDTO
 		{
 			CheepGuid = CheepId,
-			AuthorId = author.AuthorId,
 			Name = author.Name,
 			Email = author.Email,
 			Text = text
 		});
-
+		
 		var cheeps = _cheepRepository.GetCheeps(1);
 		CheepDTO cheep = cheeps.First();
 
