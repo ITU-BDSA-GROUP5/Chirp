@@ -38,6 +38,11 @@ public class UserTimelineModel : PageModel
 		string email = User.Claims.Where(a => a.Type == "emails").Select(e => e.Value).Single();
 		string name = (User.Identity?.Name) ?? throw new Exception("Name is null!");
 
+		if (AuthorRepository.GetAuthorByEmail(email).SingleOrDefault() == null)
+		{
+			AuthorRepository.CreateNewAuthor(new Guid(), name, email);
+		}
+
 		CreateCheepDTO cheep = new CreateCheepDTO()
 		{
 			CheepGuid = new Guid(),
