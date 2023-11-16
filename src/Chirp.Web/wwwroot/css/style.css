@@ -1,3 +1,7 @@
+.wrap {
+	word-wrap: break-word;
+}
+
 body {
   background: #eccaca;
   font-family: 'Trebuchet MS', sans-serif;
