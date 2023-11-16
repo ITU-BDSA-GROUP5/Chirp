@@ -4,12 +4,13 @@ using Chirp.Core;
 using Chirp.Infrastructure.Repositories;
 using Microsoft.Data.Sqlite;
 using Microsoft.EntityFrameworkCore;
+using Xunit.Sdk;
 
 public class CheepRepositoryUnitTests
 {
 	private readonly ICheepRepository _cheepRepository;
-	private readonly IAuthorRepository _authorRepository;
 	private readonly SqliteConnection _connection;
+	private readonly ChirpDBContext _context;
 
 	public CheepRepositoryUnitTests()
 	{
@@ -33,13 +34,13 @@ public class CheepRepositoryUnitTests
 		DbInitializer.SeedDatabase(context);
 
 		_cheepRepository = new CheepRepository(context);
-		_authorRepository = new AuthorRepository(context);
+		_context = context;
 	}
 
 	private protected void Dispose() => _connection.Dispose();
 
 	[Fact]
-	public void CreateNewCheep_FromNonExistingAuthor_AddsNewAuthorToDatabase()
+	public void CreateNewCheep_FromNonExistingAuthor_ThrowsException()
 	{
 		// Arrange
 		string email = "email@domain.com";
@@ -54,13 +55,20 @@ public class CheepRepositoryUnitTests
 			Email = email
 		};
 
+		Exception? exception = null;
+
 		// Act
-		_cheepRepository.CreateNewCheep(cheep);
+		try
+		{
+			_cheepRepository.CreateNewCheep(cheep);
+		}
+		catch (Exception e)
+		{
+			exception = e;
+		}
 
 		// Assert
-		AuthorDTO author = _authorRepository.GetAuthorByEmail(email).Single();
-		Assert.Equal(author.Name, name);
-		Assert.Equal(author.Email, email);
+		Assert.NotEqual(null, exception);
 	}
 
 	// BEWARE this test depends on cheeps being sorted by timestamp in descending order
@@ -71,7 +79,9 @@ public class CheepRepositoryUnitTests
 		var author = new Author() { AuthorId = 13, Name = "John Doe", Email = "Johndoe@hotmail.com", Cheeps = new List<Cheep>() };
 		Guid CheepId = new Guid();
 		string text = "Hello world!";
-
+		_context.Authors.Add(author);
+		_context.SaveChanges();
+		
 		// Act
 		_cheepRepository.CreateNewCheep(new CreateCheepDTO
 		{
@@ -80,7 +90,7 @@ public class CheepRepositoryUnitTests
 			Email = author.Email,
 			Text = text
 		});
-
+		
 		var cheeps = _cheepRepository.GetCheeps(1);
 		CheepDTO cheep = cheeps.First();
 
