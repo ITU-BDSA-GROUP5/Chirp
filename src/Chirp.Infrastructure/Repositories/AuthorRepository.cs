@@ -1,5 +1,4 @@
-﻿using Chirp.Core;
-namespace Chirp.Infrastructure.Repositories
+﻿namespace Chirp.Infrastructure.Repositories
 {
 	public class AuthorRepository : IAuthorRepository
 	{
