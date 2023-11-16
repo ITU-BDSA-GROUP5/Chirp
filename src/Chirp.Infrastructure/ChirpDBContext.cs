@@ -1,4 +1,5 @@
 using Microsoft.EntityFrameworkCore;
+using System.Reflection.Emit;
 
 public class ChirpDBContext : DbContext
 {
@@ -13,5 +14,7 @@ public class ChirpDBContext : DbContext
 	{
 		modelBuilder.Entity<Author>().ToTable("Authors");
 		modelBuilder.Entity<Cheep>().ToTable("Cheeps");
-	}
+
+		modelBuilder.Entity<Cheep>().Property(c => c.Text).HasMaxLength(160);
+    }
 }
