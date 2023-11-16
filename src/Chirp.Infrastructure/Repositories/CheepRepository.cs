@@ -17,14 +17,7 @@ namespace Chirp.Infrastructure.Repositories
 		public void CreateNewCheep(CreateCheepDTO cheep)
 		{
 			var timestamp = DateTime.Now;
-			Author? author = _context.Authors.Where(a => a.Email == cheep.Email).SingleOrDefault();
-
-			//Create new author if they don't already exists in the database
-			if (author == null)
-			{
-				new AuthorRepository(_context).CreateNewAuthor(new Guid(), cheep.Name, cheep.Email);
-				author = _context.Authors.Where(a => a.Email == cheep.Email).Single();
-			}
+			Author author = _context.Authors.Where(a => a.Email == cheep.Email).Single();
 
 			_context.Cheeps.Add(new Cheep
 				{
