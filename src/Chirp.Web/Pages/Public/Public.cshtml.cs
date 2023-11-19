@@ -1,6 +1,5 @@
-﻿using System.Security.Claims;
-using System.Security.Cryptography.Xml;
-using Chirp.Core;
+﻿using Chirp.Core;
+using Microsoft.AspNetCore.Http.Extensions;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 
@@ -16,6 +15,9 @@ public class PublicModel : PageModel
 	public string? CheepMessage { get; set; }
 
 	public bool EmptyCheep { get; set; }
+	public int PageNumber { get; set; }
+	public int LastPageNumber { get; set; }
+	public string? PageUrl { get; set; }
 
 	public PublicModel(IAuthorRepository authorRepository, ICheepRepository cheepRepository)
 	{
@@ -26,6 +28,9 @@ public class PublicModel : PageModel
 	public ActionResult OnGet([FromQuery(Name = "page")] int page = 1)
 	{
 		Cheeps = CheepRepository.GetCheeps(page);
+		PageNumber = page;
+		LastPageNumber = CheepRepository.GetPageAmount();
+		PageUrl = HttpContext.Request.GetEncodedUrl().Split("?")[0];
 
 		return Page();
 	}

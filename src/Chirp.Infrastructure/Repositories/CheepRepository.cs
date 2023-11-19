@@ -46,6 +46,13 @@ namespace Chirp.Infrastructure.Repositories
 				.ToList();
 		}
 
+		public int GetPageAmount()
+		{
+			return (int)Math.Ceiling((double)_context.Cheeps
+			.Select(c => c)
+			.Count() / pageSize);
+		}
+
 		public List<CheepDTO> GetCheepsFromAuthor(int page, string author)
 		{
 			return _context.Cheeps
