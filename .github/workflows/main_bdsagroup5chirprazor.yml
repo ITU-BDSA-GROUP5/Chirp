@@ -27,7 +27,7 @@ jobs:
       
       - name: Run EF 
         run: | 
-          dotnet tool install --global dotnet-ef
+          dotnet tool install --global dotnet-ef --version 7.0.3
           dotnet tool restore
           dotnet ef database update -p src/Chirp.Infrastructure --connection '${{ secrets.DBConnection }}' --startup-project src/Chirp.Web
 
