@@ -42,27 +42,5 @@
 	{
 		<em>There are no cheeps so far.</em>
 	}
-	@if (Model.PageNumber == 1)
-	{
-		<div>
-			Previous @Model.PageNumber
-			<a href=@(Model.PageUrl + "?Page=" + (Model.PageNumber + 1))>Next</a>
-		</div>
-	}
-	@if (Model.PageNumber > 1 && Model.PageNumber < Model.LastPageNumber)
-	{
-		<div>
-			<a href=@(Model.PageUrl + "?Page=" + (Model.PageNumber - 1))>Previous</a>
-			@Model.PageNumber
-			<a href=@(Model.PageUrl + "?Page=" + (Model.PageNumber + 1))>Next</a>
-		</div>
-	}
-	@if (Model.PageNumber == Model.LastPageNumber)
-	{
-		<div>
-			<a href=@(Model.PageUrl + "?Page=" + (Model.PageNumber - 1))>Previous</a>
-			@Model.PageNumber
-			Next
-		</div>
-	}
+	@await Html.PartialAsync("_PageNavigation")
 </div>
