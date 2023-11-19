@@ -29,7 +29,7 @@ public class UserTimelineModel : PageModel
 		Cheeps = CheepRepository.GetCheepsFromAuthor(page, author);
 
 		PageNumber = page;
-		LastPageNumber = CheepRepository.GetPageAmount();
+		LastPageNumber = CheepRepository.GetPageAmount(author);
 		PageUrl = HttpContext.Request.GetEncodedUrl().Split("?")[0];
 
 		return Page();
