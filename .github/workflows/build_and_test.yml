@@ -31,11 +31,10 @@ jobs:
              -p 1433:1433 --name mssql --hostname mssql \
              -d \
              mcr.microsoft.com/mssql/server:2022-latest
-      - name: Run EF database update
-        run: | 
-          dotnet tool install --global dotnet-ef --version 7.0.13
-          dotnet tool restore
-          dotnet ef database update -p src/Chirp.Infrastructure --connection '${{ secrets.DBConnection }}' --startup-project src/Chirp.Web
+      - name: set dotnet user secrets
+        run: |
+          dotnet user-secrets init -p ./src/Chirp.Web
+          dotnet user-secrets set "ConnectionStrings:AZURE_SQL_CONNECTIONSTRING" "Server=localhost,1433;Initial Catalog=bdsagroup5-chirpdb;Persist Security Info=False;User ID=SA;Password=ApM5z#Afo%j&E&RL;MultipleActiveResultSets=False;Encrypt=True;TrustServerCertificate=True;Connection Timeout=30;" -p ./src/Chirp.Web
       - name: Restore dependencies
         run: dotnet restore
       - name: Build
