@@ -5,6 +5,7 @@ on:
     branches: main
   pull_request:
     branches: main
+  workflow_dispatch:
 
 jobs:
   build:
@@ -21,6 +22,20 @@ jobs:
         uses: actions/setup-dotnet@v3
         with:
           dotnet-version: 7.0.x
+      - name: Setup Docker
+        uses: docker/setup-buildx-action@v3
+      - name: Pull and Run SQL Server container
+        run: |
+          docker pull mcr.microsoft.com/mssql/server:2022-latest
+          docker run -e "ACCEPT_EULA=Y" -e "MSSQL_SA_PASSWORD=ApM5z#Afo%j&E&RL" \
+             -p 1433:1433 --name mssql --hostname mssql \
+             -d \
+             mcr.microsoft.com/mssql/server:2022-latest
+      - name: Run EF database update
+        run: | 
+          dotnet tool install --global dotnet-ef --version 7.0.13
+          dotnet tool restore
+          dotnet ef database update -p src/Chirp.Infrastructure --connection '${{ secrets.DBConnection }}' --startup-project src/Chirp.Web
       - name: Restore dependencies
         run: dotnet restore
       - name: Build
