@@ -68,7 +68,7 @@ public class CheepRepositoryUnitTests
 		}
 
 		// Assert
-		Assert.NotEqual(null, exception);
+		Assert.NotNull(exception);
 	}
 
 	// BEWARE this test depends on cheeps being sorted by timestamp in descending order
