@@ -42,12 +42,11 @@ namespace Chirp.Infrastructure.Tests
 		public void CreateNewAuthor_SingleInDatabase()
 		{
             // Arrange
-            Guid id = new Guid();
             string name = "Alice";
             string email = "Alice@itu.dk";
 
             // Act
-            _authorRepository.CreateNewAuthor(id, name, email);
+            _authorRepository.CreateNewAuthor(name, email);
             var authorAlice = _context.Authors.Where(c => c.Name == "Alice");
 
 			// Assert
@@ -59,12 +58,11 @@ namespace Chirp.Infrastructure.Tests
 		public void CreateNewAuthor_WithValues_ExistsInDatabase()
 		{
 			// Arrange
-			Guid id = new Guid();
 			string name = "John Doe";
 			string email = "JohnDoe@itu.dk";
 
 			// Act
-			_authorRepository.CreateNewAuthor(id, name, email);
+			_authorRepository.CreateNewAuthor(name, email);
 
 			var authors = _authorRepository.GetAuthorByName("John Doe");
 			AuthorDTO author = authors.First();

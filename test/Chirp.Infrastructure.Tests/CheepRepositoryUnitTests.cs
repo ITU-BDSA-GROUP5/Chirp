@@ -49,7 +49,6 @@ public class CheepRepositoryUnitTests : IAsyncLifetime
 
 		CreateCheepDTO cheep = new CreateCheepDTO()
 		{
-			CheepGuid = new Guid(),
 			Text = cheepMessage,
 			Name = name,
 			Email = email
@@ -76,8 +75,7 @@ public class CheepRepositoryUnitTests : IAsyncLifetime
 	public void CreateNewCheep_WithValues_ExistsInDatabase()
 	{
 		// Arrange
-		var author = new Author() { AuthorId = 13, Name = "John Doe", Email = "Johndoe@hotmail.com", Cheeps = new List<Cheep>() };
-		Guid CheepId = new Guid();
+		var author = new Author() { Name = "John Doe", Email = "Johndoe@hotmail.com", Cheeps = new List<Cheep>() };
 		string text = "Hello world!";
 		_context.Authors.Add(author);
 		_context.SaveChanges();
@@ -85,7 +83,6 @@ public class CheepRepositoryUnitTests : IAsyncLifetime
 		// Act
 		_cheepRepository.CreateNewCheep(new CreateCheepDTO
 		{
-			CheepGuid = CheepId,
 			Name = author.Name,
 			Email = author.Email,
 			Text = text
