@@ -33,8 +33,7 @@
 						<strong>
 							<a href="/@cheep.AuthorName">@cheep.AuthorName</a>
 							@if (User.Identity?.IsAuthenticated == true && cheep.AuthorName != User.Identity.Name){
-								// Print in terminal when follow link is pressed
-								<a href="/" onclick="">Follow</a>
+								<a href="/" onclick="cheep.">Follow</a>
 								
 							}
 						</strong>

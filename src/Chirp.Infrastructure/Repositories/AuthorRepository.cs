@@ -48,5 +48,55 @@ namespace Chirp.Infrastructure.Repositories
 				})
 				.ToList();
 		}
+
+		public List<AuthorDTO> GetFollowers(string authorname)
+		{
+			return _context.Authors
+				.Where(a => a.Name == authorname)
+				.SelectMany(a => a.Followers)
+				.OrderByDescending(a => a.AuthorId)
+				.Select(a => new AuthorDTO
+				{
+					Name = a.Name,
+					Email = a.Email
+				})
+				.ToList();
+		}
+
+		public void FollowAuthor(string followerName, string followeeName)
+		{
+			var follower = _context.Authors
+				.Where(a => a.Name == followerName)
+				.FirstOrDefault();
+			var followee = _context.Authors
+				.Where(a => a.Name == followeeName)
+				.FirstOrDefault();
+			if (follower == null || followee == null)
+			{
+				Console.WriteLine("Either follower or followee does not exist. No new follow was made");
+				return;
+			}
+			follower.Following.Add(followee);
+			followee.Followers.Add(follower);
+			_context.SaveChanges();
+		}
+
+		public void UnfollowAuthor(string followerName, string followeeName)
+		{
+			var follower = _context.Authors
+				.Where(a => a.Name == followerName)
+				.FirstOrDefault();
+			var followee = _context.Authors
+				.Where(a => a.Name == followeeName)
+				.FirstOrDefault();
+			if (follower == null || followee == null)
+			{
+				Console.WriteLine("Either follower or followee does not exist. No new follow was made");
+				return;
+			}
+			follower.Following.Remove(followee);
+			followee.Followers.Remove(follower);
+			_context.SaveChanges();
+		}
 	}
 }
