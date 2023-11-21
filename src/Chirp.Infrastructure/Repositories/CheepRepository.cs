@@ -60,6 +60,7 @@ namespace Chirp.Infrastructure.Repositories
 			);
 		}
 
+		// Method gets a subset of all cheeps from the author
 		public List<CheepDTO> GetCheepsFromAuthor(int page, string author)
 		{
 			return _context.Cheeps
@@ -71,10 +72,12 @@ namespace Chirp.Infrastructure.Repositories
 				{
 					AuthorName = c.Author.Name,
 					Message = c.Text,
-					TimeStamp = c.TimeStamp.ToString()
+					TimeStamp = c.TimeStamp.ToString("yyyy-MM-dd H:mm:ss")
 				})
 				.ToList();
 		}
+
+		// Method gets all cheeps from the author
 		private List<CheepDTO> GetCheepsFromAuthor(string author)
 		{
 			return _context.Cheeps
@@ -84,7 +87,7 @@ namespace Chirp.Infrastructure.Repositories
 				{
 					AuthorName = c.Author.Name,
 					Message = c.Text,
-					TimeStamp = c.TimeStamp.ToString()
+					TimeStamp = c.TimeStamp.ToString("yyyy-MM-dd H:mm:ss")
 				})
 				.ToList();
 		}
