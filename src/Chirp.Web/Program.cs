@@ -6,6 +6,7 @@ using Microsoft.Identity.Web.UI;
 using Microsoft.AspNetCore.Authentication.OpenIdConnect;
 using Microsoft.IdentityModel.Protocols.OpenIdConnect;
 using FluentValidation.AspNetCore;
+using FluentValidation;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -13,16 +14,16 @@ var builder = WebApplication.CreateBuilder(args);
 var connection = String.Empty;
 if (builder.Environment.IsDevelopment())
 {
-    builder.Configuration.AddEnvironmentVariables().AddJsonFile("appsettings.Development.json");
-    connection = builder.Configuration.GetConnectionString("AZURE_SQL_CONNECTIONSTRING");
+	builder.Configuration.AddEnvironmentVariables().AddJsonFile("appsettings.Development.json");
+	connection = builder.Configuration.GetConnectionString("AZURE_SQL_CONNECTIONSTRING");
 }
 else
 {
-    connection = Environment.GetEnvironmentVariable("AZURE_SQL_CONNECTIONSTRING");
+	connection = Environment.GetEnvironmentVariable("AZURE_SQL_CONNECTIONSTRING");
 }
 
 builder.Services.AddDbContext<ChirpDBContext>(options =>
-    options.UseSqlServer(connection));
+	options.UseSqlServer(connection));
 
 builder.Services.AddScoped<ICheepRepository, CheepRepository>();
 builder.Services.AddScoped<IAuthorRepository, AuthorRepository>();
@@ -53,6 +54,8 @@ builder.Services.AddRazorPages(options =>
 }).AddMicrosoftIdentityUI();
 
 //Configure fluent validation - see Andrew Lock 2023 chapter 32.4.2
+//TODO: ADD ALL VALIDATORS. AND THE LINE BELOW DOES NOT WORK AS IT SHOULD (OR THE ERROR IS TO WELL HIDDEN)
+builder.Services.AddScoped<IValidator<CheepDTO>, CheepDTOValidator>();
 builder.Services.AddFluentValidationAutoValidation(x => x.DisableDataAnnotationsValidation = true);
 
 var app = builder.Build();
