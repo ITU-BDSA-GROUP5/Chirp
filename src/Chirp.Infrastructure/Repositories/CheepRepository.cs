@@ -1,4 +1,4 @@
-﻿using Chirp.Core;
+using Chirp.Core;
 namespace Chirp.Infrastructure.Repositories
 {
 
@@ -16,13 +16,16 @@ namespace Chirp.Infrastructure.Repositories
 		public void CreateNewCheep(CreateCheepDTO cheep)
 		{
 			var timestamp = DateTime.Now;
-			Author author = new Author
+			Author author = _context.Authors.Where(a => a.Email == cheep.Email).Single();
+
+			_context.Cheeps.Add(new Cheep
 			{
-				AuthorId = cheep.AuthorId,
-				Email = cheep.Email,
-				Name = cheep.Name
-			};
-			_context.Cheeps.Add(new Cheep { CheepId = GetHumanReadableId(cheep.CheepGuid), AuthorId = cheep.AuthorId, Author = author, Text = cheep.Text, TimeStamp = timestamp });
+				CheepId = GetHumanReadableId(cheep.CheepGuid),
+				AuthorId = author.AuthorId,
+				Author = author,
+				Text = cheep.Text,
+				TimeStamp = timestamp
+			});
 			_context.SaveChanges();
 		}
 
@@ -38,11 +41,26 @@ namespace Chirp.Infrastructure.Repositories
 				{
 					AuthorName = c.Author.Name,
 					Message = c.Text,
-					TimeStamp = c.TimeStamp.ToString()
+					TimeStamp = c.TimeStamp.ToString("yyyy-MM-dd H:mm:ss")
 				})
 				.ToList();
 		}
 
+		public int GetPageAmount()
+		{
+			return (int)Math.Ceiling((double)_context.Cheeps
+			.Select(c => c)
+			.Count() / pageSize);
+		}
+		public int GetPageAmount(string author)
+		{
+			return (int)Math.Ceiling(
+				(double)GetCheepsFromAuthor(author)
+				.Count / pageSize
+			);
+		}
+
+		// Method gets a subset of all cheeps from the author
 		public List<CheepDTO> GetCheepsFromAuthor(int page, string author)
 		{
 			return _context.Cheeps
@@ -54,7 +72,22 @@ namespace Chirp.Infrastructure.Repositories
 				{
 					AuthorName = c.Author.Name,
 					Message = c.Text,
-					TimeStamp = c.TimeStamp.ToString()
+					TimeStamp = c.TimeStamp.ToString("yyyy-MM-dd H:mm:ss")
+				})
+				.ToList();
+		}
+
+		// Method gets all cheeps from the author
+		private List<CheepDTO> GetCheepsFromAuthor(string author)
+		{
+			return _context.Cheeps
+				.Where(c => c.Author.Name == author)
+				.OrderByDescending(c => c.TimeStamp)
+				.Select(c => new CheepDTO
+				{
+					AuthorName = c.Author.Name,
+					Message = c.Text,
+					TimeStamp = c.TimeStamp.ToString("yyyy-MM-dd H:mm:ss")
 				})
 				.ToList();
 		}

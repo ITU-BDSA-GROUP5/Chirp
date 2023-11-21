@@ -8,9 +8,9 @@ using Microsoft.EntityFrameworkCore;
 
 public class CheepRepositoryUnitTests : IAsyncLifetime
 {
-	private ICheepRepository? _cheepRepository;
-	private ChirpDBContext? _context;
-	private SqlConnection? _connection;
+	public required ICheepRepository _cheepRepository;
+	public required ChirpDBContext _context;
+	public required SqlConnection _connection;
 
 	private readonly MsSqlContainer _msSqlContainer = new MsSqlBuilder().Build();
 
@@ -39,7 +39,37 @@ public class CheepRepositoryUnitTests : IAsyncLifetime
 		await _connection.DisposeAsync();
 	}
 
-	private protected void Dispose() => _connection.Dispose();
+	[Fact]
+	public void CreateNewCheep_FromNonExistingAuthor_ThrowsException()
+	{
+		// Arrange
+		string email = "email@domain.com";
+		string name = "name";
+		string cheepMessage = "Message";
+
+		CreateCheepDTO cheep = new CreateCheepDTO()
+		{
+			CheepGuid = new Guid(),
+			Text = cheepMessage,
+			Name = name,
+			Email = email
+		};
+
+		Exception? exception = null;
+
+		// Act
+		try
+		{
+			_cheepRepository.CreateNewCheep(cheep);
+		}
+		catch (Exception e)
+		{
+			exception = e;
+		}
+
+		// Assert
+		Assert.NotNull(exception);
+	}
 
 	// BEWARE this test depends on cheeps being sorted by timestamp in descending order
 	[Fact]
@@ -49,17 +79,18 @@ public class CheepRepositoryUnitTests : IAsyncLifetime
 		var author = new Author() { AuthorId = 13, Name = "John Doe", Email = "Johndoe@hotmail.com", Cheeps = new List<Cheep>() };
 		Guid CheepId = new Guid();
 		string text = "Hello world!";
-
+		_context.Authors.Add(author);
+		_context.SaveChanges();
+		
 		// Act
 		_cheepRepository.CreateNewCheep(new CreateCheepDTO
 		{
 			CheepGuid = CheepId,
-			AuthorId = author.AuthorId,
 			Name = author.Name,
 			Email = author.Email,
 			Text = text
 		});
-
+		
 		var cheeps = _cheepRepository.GetCheeps(1);
 		CheepDTO cheep = cheeps.First();
 
@@ -68,7 +99,7 @@ public class CheepRepositoryUnitTests : IAsyncLifetime
 		Assert.Equal("John Doe", cheep.AuthorName);
 	}
 
-	[Fact]
+    [Fact]
 	public void GetCheeps_SingleCheep_CheepNotNull()
 	{
 		// Arrange
