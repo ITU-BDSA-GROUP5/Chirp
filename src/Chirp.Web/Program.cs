@@ -5,6 +5,7 @@ using Microsoft.Identity.Web;
 using Microsoft.Identity.Web.UI;
 using Microsoft.AspNetCore.Authentication.OpenIdConnect;
 using Microsoft.IdentityModel.Protocols.OpenIdConnect;
+using FluentValidation.AspNetCore;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -50,6 +51,9 @@ builder.Services.AddRazorPages(options =>
 	options.Conventions.AllowAnonymousToFolder("/Shared");
 	options.Conventions.AllowAnonymousToFolder("/Public");
 }).AddMicrosoftIdentityUI();
+
+//Configure fluent validation - see Andrew Lock 2023 chapter 32.4.2
+builder.Services.AddFluentValidationAutoValidation(x => x.DisableDataAnnotationsValidation = true);
 
 var app = builder.Build();
 
