@@ -59,4 +59,10 @@ public class PublicModel : PageModel
 
 		return Redirect("/");
 	}
+
+	public IActionResult OnPostFollow()
+	{
+		AuthorRepository.FollowAuthor(User.Identity?.Name ?? throw new Exception("Name is null!"), Request.Form["followeeName"]);
+		return Redirect("/");
+	}
 }

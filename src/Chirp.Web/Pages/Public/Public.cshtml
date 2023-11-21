@@ -33,7 +33,9 @@
 						<strong>
 							<a href="/@cheep.AuthorName">@cheep.AuthorName</a>
 							@if (User.Identity?.IsAuthenticated == true && cheep.AuthorName != User.Identity.Name){
-								<a href="/" onclick="">Follow</a>
+								<form asp-page-handler="Follow" method="post">
+								<input type="submit" value="Follow">
+								</form>
 								
 							}
 						</strong>
