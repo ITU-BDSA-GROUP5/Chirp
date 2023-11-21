@@ -7,9 +7,9 @@ namespace Chirp.Infrastructure.Tests
 {
 	public class AuthorRepositoryUnitTests : IAsyncLifetime
 	{
-		private IAuthorRepository? _authorRepository;
-		private ChirpDBContext? _context;
-		private SqlConnection? _connection;
+		public required IAuthorRepository _authorRepository;
+		public required ChirpDBContext _context;
+		public required SqlConnection _connection;
 
 		private readonly MsSqlContainer _msSqlContainer = new MsSqlBuilder().Build();
 
