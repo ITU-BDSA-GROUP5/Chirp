@@ -49,12 +49,11 @@ public class PublicModel : PageModel
 
 		if (AuthorRepository.GetAuthorByEmail(email).SingleOrDefault() == null)
 		{
-			AuthorRepository.CreateNewAuthor(new Guid(), name, email);
+			AuthorRepository.CreateNewAuthor(name, email);
 		}
 
 		CreateCheepDTO cheep = new CreateCheepDTO()
 		{
-			CheepGuid = new Guid(),
 			Text = CheepMessage,
 			Name = name,
 			Email = email
