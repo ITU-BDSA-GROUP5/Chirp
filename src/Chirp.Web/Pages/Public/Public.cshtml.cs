@@ -1,4 +1,4 @@
-﻿using System.Security.Claims;
+using System.Security.Claims;
 using System.Security.Cryptography.Xml;
 using Chirp.Core;
 using Microsoft.AspNetCore.Mvc;
