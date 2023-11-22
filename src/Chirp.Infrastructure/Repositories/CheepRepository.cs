@@ -20,7 +20,6 @@ namespace Chirp.Infrastructure.Repositories
 
 			_context.Cheeps.Add(new Cheep
 			{
-				CheepId = GetHumanReadableId(cheep.CheepGuid),
 				AuthorId = author.AuthorId,
 				Author = author,
 				Text = cheep.Text,
@@ -28,8 +27,6 @@ namespace Chirp.Infrastructure.Repositories
 			});
 			_context.SaveChanges();
 		}
-
-		private int GetHumanReadableId(Guid id) { return id.GetHashCode(); }
 
 		public List<CheepDTO> GetCheeps(int page)
 		{
