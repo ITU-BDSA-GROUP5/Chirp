@@ -12,6 +12,8 @@ public class PublicModel : PageModel
 	private readonly ICheepRepository CheepRepository;
 	public required List<CheepDTO> Cheeps { get; set; }
 
+	public required List<AuthorDTO> Following { get; set; }
+
 	[BindProperty]
 	public string? CheepMessage { get; set; }
 
@@ -26,7 +28,8 @@ public class PublicModel : PageModel
 	public ActionResult OnGet([FromQuery(Name = "page")] int page = 1)
 	{
 		Cheeps = CheepRepository.GetCheeps(page);
-
+		string name = (User.Identity?.Name) ?? throw new Exception("Name is null!");
+		Following = AuthorRepository.GetFollowers(name);
 		return Page();
 	}
 	public IActionResult OnPost()
@@ -60,9 +63,20 @@ public class PublicModel : PageModel
 		return Redirect("/");
 	}
 
-	public IActionResult OnPostFollow()
+	public IActionResult OnPostFollow(string followeeName, string followerName)
 	{
-		AuthorRepository.FollowAuthor(User.Identity?.Name ?? throw new Exception("Name is null!"), Request.Form["followeeName"]);
+		AuthorRepository.FollowAuthor(followerName ?? throw new Exception("Name is null!"), followeeName);
 		return Redirect("/");
+	}
+
+	public IActionResult OnPostUnfollow(string followeeName, string followerName)
+	{
+		AuthorRepository.UnfollowAuthor(followerName ?? throw new Exception("Name is null!"), followeeName);
+		return Redirect("/");
+	}
+
+	public AuthorDTO test(string authorName)
+	{
+		return AuthorRepository.GetAuthorByName(authorName).SingleOrDefault() ?? throw new Exception("Author is null!");
 	}
 }
