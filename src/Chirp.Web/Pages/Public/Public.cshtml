@@ -13,7 +13,8 @@
 	{
 		<div class="cheepbox">
 			<h3>What's on your mind @(User.Identity.Name)?</h3>
-			@if(Model.EmptyCheep){
+			@if (Model.EmptyCheep)
+			{
 				<p>Your cheep is empty :(</p>
 			}
 			<form method="post">
@@ -44,4 +45,5 @@
 	{
 		<em>There are no cheeps so far.</em>
 	}
+	@await Html.PartialAsync("_PageNavigation")
 </div>

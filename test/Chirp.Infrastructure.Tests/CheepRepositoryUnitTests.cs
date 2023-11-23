@@ -2,42 +2,42 @@ namespace Chirp.Infrastructure.Tests;
 
 using Chirp.Core;
 using Chirp.Infrastructure.Repositories;
-using Microsoft.Data.Sqlite;
+using Microsoft.Data.SqlClient;
+using Testcontainers.MsSql;
 using Microsoft.EntityFrameworkCore;
-using Xunit.Sdk;
 
-public class CheepRepositoryUnitTests
+public class CheepRepositoryUnitTests : IAsyncLifetime
 {
-	private readonly ICheepRepository _cheepRepository;
-	private readonly SqliteConnection _connection;
-	private readonly ChirpDBContext _context;
+	public required ICheepRepository _cheepRepository;
+	public required ChirpDBContext _context;
+	public required SqlConnection _connection;
 
-	public CheepRepositoryUnitTests()
-	{
-		// Adapted from: https://learn.microsoft.com/en-us/ef/core/testing/testing-without-the-database#sqlite-in-memory
+	private readonly MsSqlContainer _msSqlContainer = new MsSqlBuilder().Build();
 
-		// Create and open a connection. This creates the SQLite in-memory database, which will persist until the connection is closed
-		// at the end of the test (see Dispose below).
-		_connection = new SqliteConnection("Filename=:memory:");
-		_connection.Open();
-
-
-		// These options will be used by the context instances in this test suite, including the connection opened above.
+	// From IAsyncLifetime
+	public async Task InitializeAsync()
+	{	
+		await _msSqlContainer.StartAsync();
+		_connection = new SqlConnection(_msSqlContainer.GetConnectionString());
+		await _connection.OpenAsync();
 		var contextOptions = new DbContextOptionsBuilder<ChirpDBContext>()
-			.UseSqlite(_connection)
+			.UseSqlServer(_connection)
 			.Options;
 
 		// Create the schema and seed some data
-		var context = new ChirpDBContext(contextOptions);
+		_context = new ChirpDBContext(contextOptions);
 
-		context.Database.EnsureCreated();
-		DbInitializer.SeedDatabase(context);
+		_context.Database.EnsureCreated();
+		DbInitializer.SeedDatabase(_context);
 
-		_cheepRepository = new CheepRepository(context);
-		_context = context;
+		_cheepRepository = new CheepRepository(_context);
 	}
 
-	private protected void Dispose() => _connection.Dispose();
+	public async Task DisposeAsync()
+	{
+		await _msSqlContainer.DisposeAsync();
+		await _connection.DisposeAsync();
+	}
 
 	[Fact]
 	public void CreateNewCheep_FromNonExistingAuthor_ThrowsException()
@@ -49,7 +49,6 @@ public class CheepRepositoryUnitTests
 
 		CreateCheepDTO cheep = new CreateCheepDTO()
 		{
-			CheepGuid = new Guid(),
 			Text = cheepMessage,
 			Name = name,
 			Email = email
@@ -68,7 +67,7 @@ public class CheepRepositoryUnitTests
 		}
 
 		// Assert
-		Assert.NotEqual(null, exception);
+		Assert.NotNull(exception);
 	}
 
 	// BEWARE this test depends on cheeps being sorted by timestamp in descending order
@@ -76,8 +75,7 @@ public class CheepRepositoryUnitTests
 	public void CreateNewCheep_WithValues_ExistsInDatabase()
 	{
 		// Arrange
-		var author = new Author() { AuthorId = 13, Name = "John Doe", Email = "Johndoe@hotmail.com", Cheeps = new List<Cheep>() };
-		Guid CheepId = new Guid();
+		var author = new Author() { Name = "John Doe", Email = "Johndoe@hotmail.com", Cheeps = new List<Cheep>() };
 		string text = "Hello world!";
 		_context.Authors.Add(author);
 		_context.SaveChanges();
@@ -85,7 +83,6 @@ public class CheepRepositoryUnitTests
 		// Act
 		_cheepRepository.CreateNewCheep(new CreateCheepDTO
 		{
-			CheepGuid = CheepId,
 			Name = author.Name,
 			Email = author.Email,
 			Text = text

@@ -1,0 +1,23 @@
+@using System.Security.Principal
+@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
+<div>
+	@if (Model.PageNumber <= 1)
+	{
+		@:Previous
+	}
+	else
+	{
+		<a href=@(Model.PageUrl + "?Page=" + (Model.PageNumber - 1))>Previous</a>
+	}
+
+	@Model.PageNumber
+
+	@if (Model.PageNumber >= Model.LastPageNumber)
+	{
+		@:Next
+	}
+	else
+	{
+		<a href=@(Model.PageUrl + "?Page=" + (Model.PageNumber + 1))>Next</a>
+	}
+</div>
