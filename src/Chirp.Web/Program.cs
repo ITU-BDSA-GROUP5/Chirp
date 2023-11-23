@@ -55,8 +55,7 @@ builder.Services.AddRazorPages(options =>
 
 //Configure fluent validation - see Andrew Lock 2023 chapter 32.4.2
 //TODO: ADD ALL VALIDATORS. AND THE LINE BELOW DOES NOT WORK AS IT SHOULD (OR THE ERROR IS TO WELL HIDDEN)
-builder.Services.AddScoped<IValidator<CheepDTO>, CheepDTOValidator>();
-builder.Services.AddFluentValidationAutoValidation(x => x.DisableDataAnnotationsValidation = true);
+builder.Services.AddScoped<IValidator<CreateCheepDTO>, CreateCheepDTOValidator>();
 
 var app = builder.Build();
 
