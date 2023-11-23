@@ -29,7 +29,7 @@ public class PublicModel : PageModel
 	{
 		Cheeps = CheepRepository.GetCheeps(page);
 		string name = (User.Identity?.Name) ?? throw new Exception("Name is null!");
-		Following = AuthorRepository.GetFollowers(name);
+		Following = AuthorRepository.GetFollowing(name);
 		return Page();
 	}
 	public IActionResult OnPost()
@@ -65,20 +65,20 @@ public class PublicModel : PageModel
 
 	public IActionResult OnPostFollow(string followeeName, string followerName)
 	{
-		Console.WriteLine("FOLLOW!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
+		string name = (User.Identity?.Name) ?? throw new Exception("Name is null!");
+
+		if (AuthorRepository.GetAuthorByName(name).SingleOrDefault() == null)
+		{
+			AuthorRepository.CreateNewAuthor(new Guid(), name, name + "@gmail.com");
+		}
+
 		AuthorRepository.FollowAuthor(followerName ?? throw new Exception("Name is null!"), followeeName);
 		return Redirect("/");
 	}
 
 	public IActionResult OnPostUnfollow(string followeeName, string followerName)
 	{
-		Console.WriteLine("UNFOLLOW?????????????????????????????????????????");
 		AuthorRepository.UnfollowAuthor(followerName ?? throw new Exception("Name is null!"), followeeName);
 		return Redirect("/");
-	}
-
-	public AuthorDTO test(string authorName)
-	{
-		return AuthorRepository.GetAuthorByName(authorName).SingleOrDefault() ?? throw new Exception("Author is null!");
 	}
 }

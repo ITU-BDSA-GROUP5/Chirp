@@ -36,7 +36,7 @@
 							@if (User.Identity?.IsAuthenticated == true && cheep.AuthorName != User.Identity.Name)
 							{
 								// check if the user is already following the author
-								@if (Model.Following.Contains(Model.test(cheep.AuthorName)))
+								@if (Model.Following.Select(f => f.Name).Contains(cheep.AuthorName))
 								{
 									<form asp-page-handler="Unfollow" asp-route-followeeName="@cheep.AuthorName"
 										asp-route-followerName="@User.Identity.Name" method="post">
@@ -45,6 +45,7 @@
 								}
 								else
 								{
+									<span>@Model.Following.FirstOrDefault() THIS</span>
 									<form asp-page-handler="Follow" asp-route-followeeName="@cheep.AuthorName"
 										asp-route-followerName="@User.Identity.Name" method="post">
 										<input type="submit" value="Follow">

@@ -49,11 +49,11 @@ namespace Chirp.Infrastructure.Repositories
 				.ToList();
 		}
 
-		public List<AuthorDTO> GetFollowers(string authorname)
+		public List<AuthorDTO> GetFollowing(string authorname)
 		{
 			return _context.Authors
 				.Where(a => a.Name == authorname)
-				.SelectMany(a => a.Followers)
+				.SelectMany(a => a.Following)
 				.OrderByDescending(a => a.AuthorId)
 				.Select(a => new AuthorDTO
 				{
@@ -94,8 +94,8 @@ namespace Chirp.Infrastructure.Repositories
 				Console.WriteLine("Either follower or followee does not exist. No new follow was made");
 				return;
 			}
-			follower.Following.Remove(followee);
 			followee.Followers.Remove(follower);
+			follower.Following.Remove(followee);
 			_context.SaveChanges();
 		}
 	}

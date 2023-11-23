@@ -5,5 +5,5 @@ public interface IAuthorRepository
 	public void CreateNewAuthor(Guid id, string name, string email);
 	public void FollowAuthor(string followerName, string followeeName);
 	public void UnfollowAuthor(string followerName, string followeeName);
-	public List<AuthorDTO> GetFollowers(string authorname);
+	public List<AuthorDTO> GetFollowing(string authorname);
 }
