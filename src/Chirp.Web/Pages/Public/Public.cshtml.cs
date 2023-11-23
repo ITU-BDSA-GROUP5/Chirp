@@ -1,4 +1,6 @@
 ﻿using Chirp.Core;
+using FluentValidation;
+using FluentValidation.Results;
 using Microsoft.AspNetCore.Http.Extensions;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
@@ -9,6 +11,7 @@ public class PublicModel : PageModel
 {
 	private readonly IAuthorRepository AuthorRepository;
 	private readonly ICheepRepository CheepRepository;
+	private readonly IValidator<CreateCheepDTO> CheepValidator;
 	public required List<CheepDTO> Cheeps { get; set; }
 
 	[BindProperty]
@@ -19,10 +22,11 @@ public class PublicModel : PageModel
 	public int LastPageNumber { get; set; }
 	public string? PageUrl { get; set; }
 
-	public PublicModel(IAuthorRepository authorRepository, ICheepRepository cheepRepository)
+	public PublicModel(IAuthorRepository authorRepository, ICheepRepository cheepRepository, IValidator<CreateCheepDTO> _cheepValidator)
 	{
 		AuthorRepository = authorRepository;
 		CheepRepository = cheepRepository;
+		CheepValidator = _cheepValidator;
 	}
 
 	public ActionResult OnGet([FromQuery(Name = "page")] int page = 1)
@@ -34,7 +38,7 @@ public class PublicModel : PageModel
 
 		return Page();
 	}
-	public IActionResult OnPost()
+	public async Task<IActionResult> OnPost()
 	{
 		Console.WriteLine("OnPost called!");
 
@@ -59,7 +63,16 @@ public class PublicModel : PageModel
 			Email = email
 		};
 
-		CheepRepository.CreateNewCheep(cheep);
+		ValidationResult validation = await CheepValidator.ValidateAsync(cheep);
+
+		if (validation.IsValid)
+		{
+			CheepRepository.CreateNewCheep(cheep);
+		}
+		else
+		{
+			throw new Exception("Cheep is too long!");
+		}
 
 		return Redirect("/");
 	}

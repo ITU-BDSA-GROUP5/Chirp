@@ -2,6 +2,8 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.Http.Extensions;
+using FluentValidation;
+using FluentValidation.Results;
 
 namespace Chirp.Web.Pages;
 
@@ -9,6 +11,7 @@ public class UserTimelineModel : PageModel
 {
 	private readonly IAuthorRepository AuthorRepository;
 	private readonly ICheepRepository CheepRepository;
+	private readonly IValidator<CreateCheepDTO> CheepValidator;
 	public required List<CheepDTO> Cheeps { get; set; }
 
 	public int PageNumber { get; set; }
@@ -18,10 +21,11 @@ public class UserTimelineModel : PageModel
 	[BindProperty]
 	public string? CheepMessage { get; set; }
 
-	public UserTimelineModel(IAuthorRepository authorRepository, ICheepRepository cheepRepository)
+	public UserTimelineModel(IAuthorRepository authorRepository, ICheepRepository cheepRepository, IValidator<CreateCheepDTO> _cheepValidator)
 	{
 		AuthorRepository = authorRepository;
 		CheepRepository = cheepRepository;
+		CheepValidator = _cheepValidator;
 	}
 
 	public ActionResult OnGet(string author, [FromQuery(Name = "page")] int page = 1)
@@ -35,7 +39,7 @@ public class UserTimelineModel : PageModel
 		return Page();
 	}
 
-	public IActionResult OnPost()
+	public async Task<IActionResult> OnPost()
 	{
 		Console.WriteLine("OnPost called!");
 
@@ -59,7 +63,16 @@ public class UserTimelineModel : PageModel
 			Email = email
 		};
 
-		CheepRepository.CreateNewCheep(cheep);
+		ValidationResult validation = await CheepValidator.ValidateAsync(cheep);
+
+		if (validation.IsValid)
+		{
+			CheepRepository.CreateNewCheep(cheep);
+		}
+		else
+		{
+			throw new Exception("Cheep is too long!");
+		}
 
 		return Redirect("/");
 	}
