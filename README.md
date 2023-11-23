@@ -2,9 +2,8 @@
 
 The following packages use the MIT License:
 
-- Microsoft.Data.Sqlite
 - Microsoft.EntityFrameworkCore.design
-- Microsoft.EntityFrameworkCore.Sqlite
+- Microsoft.EntityFrameworkCore.SqlServer
 
 ## MIT License
 
