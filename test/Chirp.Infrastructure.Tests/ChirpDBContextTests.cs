@@ -3,10 +3,10 @@ public class ChirpDBContextTests
 	[Fact]
 	public void Cheep_PropertyTest()
 	{
-		int cheepId = 1;
+		Guid cheepId = new Guid();
 		string text = "test";
 		var date = DateTime.Now;
-		int authorId = 1;
+		Guid authorId = new Guid();
 
 		var author = new Author
 		{
@@ -34,7 +34,7 @@ public class ChirpDBContextTests
 	[Fact]
 	public void Author_PropertyTest()
 	{
-		int authorId = 1;
+		Guid authorId = new Guid();
 		string email = "email@domain.dk";
 		string name = "name";
 		var cheepList = new List<Cheep>();
