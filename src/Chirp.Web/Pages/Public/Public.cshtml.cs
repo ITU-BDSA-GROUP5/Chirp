@@ -65,12 +65,14 @@ public class PublicModel : PageModel
 
 	public IActionResult OnPostFollow(string followeeName, string followerName)
 	{
+		Console.WriteLine("FOLLOW!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
 		AuthorRepository.FollowAuthor(followerName ?? throw new Exception("Name is null!"), followeeName);
 		return Redirect("/");
 	}
 
 	public IActionResult OnPostUnfollow(string followeeName, string followerName)
 	{
+		Console.WriteLine("UNFOLLOW?????????????????????????????????????????");
 		AuthorRepository.UnfollowAuthor(followerName ?? throw new Exception("Name is null!"), followeeName);
 		return Redirect("/");
 	}
