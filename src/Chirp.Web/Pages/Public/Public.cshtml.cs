@@ -68,7 +68,7 @@ public class PublicModel : PageModel
 			CheepValidator.ValidateAndThrow(cheep);
 
 			CheepRepository.CreateNewCheep(cheep);
-			CheepMessage = "";
+			CheepMessage = null;
 		}
 		catch (Exception e)
 		{
