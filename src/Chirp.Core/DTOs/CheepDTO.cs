@@ -1,5 +1,3 @@
-using FluentValidation;
-
 public class CheepDTO
 {
 	public required string AuthorName { get; set; }

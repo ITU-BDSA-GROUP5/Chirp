@@ -5,7 +5,6 @@ using Microsoft.Identity.Web;
 using Microsoft.Identity.Web.UI;
 using Microsoft.AspNetCore.Authentication.OpenIdConnect;
 using Microsoft.IdentityModel.Protocols.OpenIdConnect;
-using FluentValidation.AspNetCore;
 using FluentValidation;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -53,8 +52,7 @@ builder.Services.AddRazorPages(options =>
 	options.Conventions.AllowAnonymousToFolder("/Public");
 }).AddMicrosoftIdentityUI();
 
-//Configure fluent validation - see Andrew Lock 2023 chapter 32.4.2
-//TODO: ADD ALL VALIDATORS. AND THE LINE BELOW DOES NOT WORK AS IT SHOULD (OR THE ERROR IS TO WELL HIDDEN)
+//Configure fluent validation for CreateCheepDTOs
 builder.Services.AddScoped<IValidator<CreateCheepDTO>, CreateCheepDTOValidator>();
 
 var app = builder.Build();
