@@ -1,6 +1,5 @@
 ﻿using Chirp.Core;
 using FluentValidation;
-using FluentValidation.Results;
 using Microsoft.AspNetCore.Http.Extensions;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
@@ -17,7 +16,8 @@ public class PublicModel : PageModel
 	[BindProperty]
 	public string? CheepMessage { get; set; }
 
-	public bool EmptyCheep { get; set; }
+	public bool InvalidCheep { get; set; }
+	public string? ErrorMessage { get; set; }
 	public int PageNumber { get; set; }
 	public int LastPageNumber { get; set; }
 	public string? PageUrl { get; set; }
@@ -38,42 +38,44 @@ public class PublicModel : PageModel
 
 		return Page();
 	}
-	public async Task<IActionResult> OnPost()
+
+	public IActionResult OnPost()
 	{
-		Console.WriteLine("OnPost called!");
-
-		if (CheepMessage == null)
+		InvalidCheep = false;
+		//Console.WriteLine("OnPost called!");
+		try
 		{
-			EmptyCheep = true;
-			return OnGet();
-		}
+			if (CheepMessage == null)
+			{
+				throw new Exception("Cheep is empty!");
+			}
 
-		string email = User.Claims.Where(a => a.Type == "emails").Select(e => e.Value).Single();
-		string name = (User.Identity?.Name) ?? throw new Exception("Name is null!");
+			string email = User.Claims.Where(a => a.Type == "emails").Select(e => e.Value).Single();
+			string name = (User.Identity?.Name) ?? throw new Exception("Error in getting username!");
 
-		if (AuthorRepository.GetAuthorByEmail(email).SingleOrDefault() == null)
-		{
-			AuthorRepository.CreateNewAuthor(name, email);
-		}
+			if (AuthorRepository.GetAuthorByEmail(email).SingleOrDefault() == null)
+			{
+				AuthorRepository.CreateNewAuthor(name, email);
+			}
 
-		CreateCheepDTO cheep = new CreateCheepDTO()
-		{
-			Text = CheepMessage,
-			Name = name,
-			Email = email
-		};
+			CreateCheepDTO cheep = new CreateCheepDTO()
+			{
+				Text = CheepMessage,
+				Name = name,
+				Email = email
+			};
 
-		ValidationResult validation = await CheepValidator.ValidateAsync(cheep);
+			CheepValidator.ValidateAndThrow(cheep);
 
-		if (validation.IsValid)
-		{
 			CheepRepository.CreateNewCheep(cheep);
+			CheepMessage = "";
 		}
-		else
+		catch (Exception e)
 		{
-			throw new Exception("Cheep is too long!");
+			ErrorMessage = e.Message;
+			InvalidCheep = true;
 		}
 
-		return Redirect("/");
+		return OnGet();
 	}
 }

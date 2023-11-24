@@ -41,7 +41,7 @@ public class UserTimelineModel : PageModel
 
 	public async Task<IActionResult> OnPost()
 	{
-		Console.WriteLine("OnPost called!");
+		//Console.WriteLine("OnPost called!");
 
 		if (CheepMessage == null)
 		{
