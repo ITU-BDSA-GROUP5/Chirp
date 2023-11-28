@@ -20,7 +20,6 @@ namespace Chirp.Infrastructure.Repositories
 
 			_context.Cheeps.Add(new Cheep
 			{
-				CheepId = GetHumanReadableId(cheep.CheepGuid),
 				AuthorId = author.AuthorId,
 				Author = author,
 				Text = cheep.Text,
@@ -28,8 +27,6 @@ namespace Chirp.Infrastructure.Repositories
 			});
 			_context.SaveChanges();
 		}
-
-		private int GetHumanReadableId(Guid id) { return id.GetHashCode(); }
 
 		public List<CheepDTO> GetCheeps(int page)
 		{
@@ -46,6 +43,21 @@ namespace Chirp.Infrastructure.Repositories
 				.ToList();
 		}
 
+		public int GetPageAmount()
+		{
+			return (int)Math.Ceiling((double)_context.Cheeps
+			.Select(c => c)
+			.Count() / pageSize);
+		}
+		public int GetPageAmount(string author)
+		{
+			return (int)Math.Ceiling(
+				(double)GetCheepsFromAuthor(author)
+				.Count / pageSize
+			);
+		}
+
+		// Method gets a subset of all cheeps from the author
 		public List<CheepDTO> GetCheepsFromAuthor(int page, string author)
 		{
 			return _context.Cheeps
@@ -53,6 +65,21 @@ namespace Chirp.Infrastructure.Repositories
 				.OrderByDescending(c => c.TimeStamp)
 				.Skip((page - 1) * pageSize)
 				.Take(pageSize)
+				.Select(c => new CheepDTO
+				{
+					AuthorName = c.Author.Name,
+					Message = c.Text,
+					TimeStamp = c.TimeStamp.ToString("yyyy-MM-dd H:mm:ss")
+				})
+				.ToList();
+		}
+
+		// Method gets all cheeps from the author
+		private List<CheepDTO> GetCheepsFromAuthor(string author)
+		{
+			return _context.Cheeps
+				.Where(c => c.Author.Name == author)
+				.OrderByDescending(c => c.TimeStamp)
 				.Select(c => new CheepDTO
 				{
 					AuthorName = c.Author.Name,

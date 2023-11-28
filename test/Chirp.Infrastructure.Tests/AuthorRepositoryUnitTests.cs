@@ -1,27 +1,26 @@
 using Chirp.Infrastructure.Repositories;
-using Microsoft.Data.Sqlite;
+using Microsoft.Data.SqlClient;
+using Testcontainers.MsSql;
 using Microsoft.EntityFrameworkCore;
 
 namespace Chirp.Infrastructure.Tests
 {
-	public class AuthorRepositoryUnitTests
+	public class AuthorRepositoryUnitTests : IAsyncLifetime
 	{
-		private readonly IAuthorRepository _authorRepository;
-		private readonly SqliteConnection _connection;
-		private readonly ChirpDBContext _context;
+		public required IAuthorRepository _authorRepository;
+		public required ChirpDBContext _context;
+		public required SqlConnection _connection;
 
-		public AuthorRepositoryUnitTests()
-		{
-			// Adapted from: https://learn.microsoft.com/en-us/ef/core/testing/testing-without-the-database#sqlite-in-memory
+		private readonly MsSqlContainer _msSqlContainer = new MsSqlBuilder().Build();
 
-			// Create and open a connection. This creates the SQLite in-memory database, which will persist until the connection is closed
-			// at the end of the test (see Dispose below).
-			_connection = new SqliteConnection("Filename=:memory:");
-			_connection.Open();
-
-			// These options will be used by the context instances in this test suite, including the connection opened above.
+		// From IAsyncLifetime
+		public async Task InitializeAsync()
+		{	
+			await _msSqlContainer.StartAsync();
+			_connection = new SqlConnection(_msSqlContainer.GetConnectionString());
+			await _connection.OpenAsync();
 			var contextOptions = new DbContextOptionsBuilder<ChirpDBContext>()
-				.UseSqlite(_connection)
+				.UseSqlServer(_connection)
 				.Options;
 
 			// Create the schema and seed some data
@@ -33,16 +32,21 @@ namespace Chirp.Infrastructure.Tests
 			_authorRepository = new AuthorRepository(_context);
 		}
 
+		public async Task DisposeAsync()
+		{
+			await _msSqlContainer.DisposeAsync();
+			await _connection.DisposeAsync();
+		}
+
 		[Fact]
 		public void CreateNewAuthor_SingleInDatabase()
 		{
             // Arrange
-            Guid id = new Guid();
             string name = "Alice";
             string email = "Alice@itu.dk";
 
             // Act
-            _authorRepository.CreateNewAuthor(id, name, email);
+            _authorRepository.CreateNewAuthor(name, email);
             var authorAlice = _context.Authors.Where(c => c.Name == "Alice");
 
 			// Assert
@@ -54,12 +58,11 @@ namespace Chirp.Infrastructure.Tests
 		public void CreateNewAuthor_WithValues_ExistsInDatabase()
 		{
 			// Arrange
-			Guid id = new Guid();
 			string name = "John Doe";
 			string email = "JohnDoe@itu.dk";
 
 			// Act
-			_authorRepository.CreateNewAuthor(id, name, email);
+			_authorRepository.CreateNewAuthor(name, email);
 
 			var authors = _authorRepository.GetAuthorByName("John Doe");
 			AuthorDTO author = authors.First();

@@ -9,7 +9,7 @@ namespace Chirp.Infrastructure.Repositories
 			_context = context;
 		}
 
-		public void CreateNewAuthor(Guid id, string name, string email)
+		public void CreateNewAuthor(string name, string email)
 		{
 			var existing = GetAuthorByEmail(email);
 			if (existing.Any())
@@ -17,11 +17,9 @@ namespace Chirp.Infrastructure.Repositories
 				Console.WriteLine("Author " + email + " already exists. No new author was made");
 				return;
 			}
-			_context.Authors.Add(new Author { AuthorId = GetHumanReadableId(id), Name = name, Email = email, Cheeps = new List<Cheep>() });
+			_context.Authors.Add(new Author { Name = name, Email = email, Cheeps = new List<Cheep>() });
 			_context.SaveChanges();
 		}
-
-		private int GetHumanReadableId(Guid id) { return id.GetHashCode(); }
 
 		public List<AuthorDTO> GetAuthorByEmail(string email)
 		{
