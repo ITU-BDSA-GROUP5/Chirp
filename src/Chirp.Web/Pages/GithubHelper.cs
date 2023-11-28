@@ -19,31 +19,21 @@ public class GithubHelper
 			// https://docs.github.com/en/rest/overview/resources-in-the-rest-api?apiVersion=2022-11-28#user-agent-required
 			requestMessage.Headers.Add("User-Agent", username);
 
-			try {
-				HttpResponseMessage response = await HttpClient.SendAsync(requestMessage);
+			HttpResponseMessage response = await HttpClient.SendAsync(requestMessage);
 				
-				if (response.IsSuccessStatusCode)
-				{
-					var emailsJson = await response.Content.ReadAsStringAsync();
-                    var emails = JsonSerializer.Deserialize<List<EmailInfo>>(emailsJson);
-                    var primaryEmail = emails?
-                        .Where(e => e.primary == true)
-                        .Select(e => e.email)
-                        .SingleOrDefault();
-
-					return primaryEmail ?? "";
-				}
-				else
-				{
-					Console.WriteLine($"An error occured getting user email: Error code {response.StatusCode}");
-					return "";
-				}
-			} 
-			catch (Exception e)
+			if (!response.IsSuccessStatusCode)
 			{
-				Console.WriteLine($"An error occured ${e.Message}");
-				return "";
+				throw new Exception($"An error occured getting user email: Error code {response.StatusCode}");
 			}
+			
+			var emailsJson = await response.Content.ReadAsStringAsync();
+			var emails = JsonSerializer.Deserialize<List<EmailInfo>>(emailsJson);
+			var primaryEmail = emails?
+				.Where(e => e.primary == true)
+				.Select(e => e.email)
+				.SingleOrDefault();
+
+			return primaryEmail ?? throw new Exception("Error reading email or no primary email");
 		}
 	}
 

@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.Http.Extensions;
+using FluentValidation;
 
 namespace Chirp.Web.Pages;
 
@@ -9,19 +10,24 @@ public class UserTimelineModel : PageModel
 {
 	private readonly IAuthorRepository AuthorRepository;
 	private readonly ICheepRepository CheepRepository;
+	private readonly IValidator<CreateCheepDTO> CheepValidator;
 	public required List<CheepDTO> Cheeps { get; set; }
+
+	[BindProperty]
+	public string? CheepMessage { get; set; }
+	public bool InvalidCheep { get; set; }
+	public string? ErrorMessage { get; set; }
 
 	public int PageNumber { get; set; }
 	public int LastPageNumber { get; set; }
 	public string? PageUrl { get; set; }
 
-	[BindProperty]
-	public string? CheepMessage { get; set; }
 
-	public UserTimelineModel(IAuthorRepository authorRepository, ICheepRepository cheepRepository)
+	public UserTimelineModel(IAuthorRepository authorRepository, ICheepRepository cheepRepository, IValidator<CreateCheepDTO> _cheepValidator)
 	{
 		AuthorRepository = authorRepository;
 		CheepRepository = cheepRepository;
+		CheepValidator = _cheepValidator;
 	}
 
 	public ActionResult OnGet(string author, [FromQuery(Name = "page")] int page = 1)
@@ -37,37 +43,47 @@ public class UserTimelineModel : PageModel
 
 	public async Task<IActionResult> OnPost()
 	{
-		Console.WriteLine("OnPost called!");
-
-		if (CheepMessage == null)
+		InvalidCheep = false;
+		//Console.WriteLine("OnPost called!");
+		try
 		{
+			if (CheepMessage == null)
+			{
+				throw new Exception("Cheep is empty!");
+			}
+
+			string name = (User.Identity?.Name) ?? throw new Exception("Error in getting username");
+			AuthorDTO? user = AuthorRepository.GetAuthorByName(name).FirstOrDefault();
+
+			if (user == null)
+			{
+				string token = User.Claims.Where(a => a.Type == "idp_access_token").Select(e => e.Value).SingleOrDefault()
+					?? throw new Exception("Github token not found");
+                
+				string email = await GithubHelper.GetUserEmailGithub(token, name);
+
+				AuthorRepository.CreateNewAuthor(name, email);
+				user = AuthorRepository.GetAuthorByName(name).First();
+			}
+
+			CreateCheepDTO cheep = new ()
+			{
+				Text = CheepMessage,
+				Name = user.Name,
+				Email = user.Email
+			};
+
+			CheepValidator.ValidateAndThrow(cheep);
+
+			CheepRepository.CreateNewCheep(cheep);
 			return Redirect("/");
 		}
-
-		string name = (User.Identity?.Name) ?? throw new Exception("Name is null!");
-		string email = "";
-		
-		string? token = User.Claims.Where(a => a.Type == "idp_access_token").Select(e => e.Value).SingleOrDefault();
-
-		if (token != null)
+		catch (Exception e)
 		{
-			email = await GithubHelper.GetUserEmailGithub(token, name);
+			ErrorMessage = e.Message;
+			InvalidCheep = true;
 		}
 
-		if (AuthorRepository.GetAuthorByEmail(email).SingleOrDefault() == null)
-		{
-			AuthorRepository.CreateNewAuthor(name, email);
-		}
-
-		CreateCheepDTO cheep = new CreateCheepDTO()
-		{
-			Text = CheepMessage,
-			Name = name,
-			Email = email
-		};
-
-		CheepRepository.CreateNewCheep(cheep);
-
-		return Redirect("/");
+		return OnGet(HttpContext.GetRouteValue("author")?.ToString()!);
 	}
 }
