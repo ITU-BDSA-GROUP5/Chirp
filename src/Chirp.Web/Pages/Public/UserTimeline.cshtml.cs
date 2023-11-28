@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.Http.Extensions;
 using FluentValidation;
+using System.Security.Claims;
 
 namespace Chirp.Web.Pages;
 
@@ -57,7 +58,7 @@ public class UserTimelineModel : PageModel
 
 			if (user == null)
 			{
-				string token = User.Claims.Where(a => a.Type == "idp_access_token").Select(e => e.Value).SingleOrDefault()
+				string token = User.FindFirst("idp_access_token")?.Value
 					?? throw new Exception("Github token not found");
                 
 				string email = await GithubHelper.GetUserEmailGithub(token, name);
