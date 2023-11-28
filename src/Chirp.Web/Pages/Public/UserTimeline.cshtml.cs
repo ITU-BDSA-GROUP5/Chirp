@@ -3,7 +3,6 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.Http.Extensions;
 using FluentValidation;
-using System.Security.Claims;
 
 namespace Chirp.Web.Pages;
 
@@ -60,14 +59,14 @@ public class UserTimelineModel : PageModel
 			{
 				string token = User.FindFirst("idp_access_token")?.Value
 					?? throw new Exception("Github token not found");
-                
+
 				string email = await GithubHelper.GetUserEmailGithub(token, name);
 
 				AuthorRepository.CreateNewAuthor(name, email);
 				user = AuthorRepository.GetAuthorByName(name).First();
 			}
 
-			CreateCheepDTO cheep = new ()
+			CreateCheepDTO cheep = new()
 			{
 				Text = CheepMessage,
 				Name = user.Name,
