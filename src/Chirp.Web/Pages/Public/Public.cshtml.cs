@@ -87,7 +87,7 @@ public class PublicModel : PageModel
 	{
 		string name = (User.Identity?.Name) ?? throw new Exception("Name is null!");
 
-		if (AuthorRepository.GetAuthorByName(name).SingleOrDefault() == null)
+		if (AuthorRepository.GetAuthorByName(name).FirstOrDefault() == null)
 		{
 			AuthorRepository.CreateNewAuthor(name, name + "@gmail.com");
 		}
