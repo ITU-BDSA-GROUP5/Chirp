@@ -35,7 +35,7 @@ public class UserTimelineModel : PageModel
 		return Page();
 	}
 
-	public IActionResult OnPost()
+	public async Task<IActionResult> OnPost()
 	{
 		Console.WriteLine("OnPost called!");
 
@@ -44,8 +44,15 @@ public class UserTimelineModel : PageModel
 			return Redirect("/");
 		}
 
-		string email = User.Claims.Where(a => a.Type == "emails").Select(e => e.Value).Single();
 		string name = (User.Identity?.Name) ?? throw new Exception("Name is null!");
+		string email = "";
+		
+		string? token = User.Claims.Where(a => a.Type == "idp_access_token").Select(e => e.Value).SingleOrDefault();
+
+		if (token != null)
+		{
+			email = await GithubHelper.GetUserEmailGithub(token, name);
+		}
 
 		if (AuthorRepository.GetAuthorByEmail(email).SingleOrDefault() == null)
 		{
