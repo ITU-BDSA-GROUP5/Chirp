@@ -41,7 +41,6 @@ public class PublicModel : PageModel
 	public async Task<IActionResult> OnPost()
 	{
 		InvalidCheep = false;
-		//Console.WriteLine("OnPost called!");
 		try
 		{
 			if (CheepMessage == null)
@@ -50,20 +49,20 @@ public class PublicModel : PageModel
 			}
 
 			string name = (User.Identity?.Name) ?? throw new Exception("Error in getting username");
-			AuthorDTO? user = AuthorRepository.GetAuthorByName(name).FirstOrDefault();
+			AuthorDTO? user = AuthorRepository.GetAuthorByName(name);
 
 			if (user == null)
 			{
 				string token = User.FindFirst("idp_access_token")?.Value
 					?? throw new Exception("Github token not found");
-                
+
 				string email = await GithubHelper.GetUserEmailGithub(token, name);
 
 				AuthorRepository.CreateNewAuthor(name, email);
-				user = AuthorRepository.GetAuthorByName(name).First();
+				user = AuthorRepository.GetAuthorByName(name) ?? throw new Exception("Error when getting user with name: " + name);
 			}
 
-			CreateCheepDTO cheep = new ()
+			CreateCheepDTO cheep = new CreateCheepDTO()
 			{
 				Text = CheepMessage,
 				Name = user.Name,

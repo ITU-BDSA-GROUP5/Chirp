@@ -1,6 +1,6 @@
 public interface IAuthorRepository
 {
-	public List<AuthorDTO> GetAuthorByName(string name);
-	public List<AuthorDTO> GetAuthorByEmail(string email);
+	public AuthorDTO? GetAuthorByName(string name);
+	public AuthorDTO? GetAuthorByEmail(string email);
 	public void CreateNewAuthor(string name, string email);
 }
