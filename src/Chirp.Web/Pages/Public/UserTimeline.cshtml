@@ -14,6 +14,10 @@
 	{
 		<div class="cheepbox">
 			<h3>What's on your mind @(User.Identity.Name)?</h3>
+			@if (Model.InvalidCheep)
+			{
+				<p>@Model.ErrorMessage</p>
+			}
 			<form method="post">
 				<input style="float: left" type="text" asp-for="CheepMessage">
 				<input type="submit" value="Share">

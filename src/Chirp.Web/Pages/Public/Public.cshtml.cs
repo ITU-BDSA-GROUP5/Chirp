@@ -1,4 +1,5 @@
 ﻿using Chirp.Core;
+using FluentValidation;
 using Microsoft.AspNetCore.Http.Extensions;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
@@ -9,20 +10,23 @@ public class PublicModel : PageModel
 {
 	private readonly IAuthorRepository AuthorRepository;
 	private readonly ICheepRepository CheepRepository;
+	private readonly IValidator<CreateCheepDTO> CheepValidator;
 	public required List<CheepDTO> Cheeps { get; set; }
 
 	[BindProperty]
 	public string? CheepMessage { get; set; }
 
-	public bool EmptyCheep { get; set; }
+	public bool InvalidCheep { get; set; }
+	public string? ErrorMessage { get; set; }
 	public int PageNumber { get; set; }
 	public int LastPageNumber { get; set; }
 	public string? PageUrl { get; set; }
 
-	public PublicModel(IAuthorRepository authorRepository, ICheepRepository cheepRepository)
+	public PublicModel(IAuthorRepository authorRepository, ICheepRepository cheepRepository, IValidator<CreateCheepDTO> _cheepValidator)
 	{
 		AuthorRepository = authorRepository;
 		CheepRepository = cheepRepository;
+		CheepValidator = _cheepValidator;
 	}
 
 	public ActionResult OnGet([FromQuery(Name = "page")] int page = 1)
@@ -34,33 +38,44 @@ public class PublicModel : PageModel
 
 		return Page();
 	}
+
 	public IActionResult OnPost()
 	{
-		Console.WriteLine("OnPost called!");
-
-		if (CheepMessage == null)
+		InvalidCheep = false;
+		//Console.WriteLine("OnPost called!");
+		try
 		{
-			EmptyCheep = true;
-			return OnGet();
+			if (CheepMessage == null)
+			{
+				throw new Exception("Cheep is empty!");
+			}
+
+			string email = User.Claims.Where(a => a.Type == "emails").Select(e => e.Value).Single();
+			string name = (User.Identity?.Name) ?? throw new Exception("Error in getting username!");
+
+			if (AuthorRepository.GetAuthorByEmail(email).SingleOrDefault() == null)
+			{
+				AuthorRepository.CreateNewAuthor(name, email);
+			}
+
+			CreateCheepDTO cheep = new CreateCheepDTO()
+			{
+				Text = CheepMessage,
+				Name = name,
+				Email = email
+			};
+
+			CheepValidator.ValidateAndThrow(cheep);
+
+			CheepRepository.CreateNewCheep(cheep);
+			CheepMessage = null;
+		}
+		catch (Exception e)
+		{
+			ErrorMessage = e.Message;
+			InvalidCheep = true;
 		}
 
-		string email = User.Claims.Where(a => a.Type == "emails").Select(e => e.Value).Single();
-		string name = (User.Identity?.Name) ?? throw new Exception("Name is null!");
-
-		if (AuthorRepository.GetAuthorByEmail(email).SingleOrDefault() == null)
-		{
-			AuthorRepository.CreateNewAuthor(name, email);
-		}
-
-		CreateCheepDTO cheep = new CreateCheepDTO()
-		{
-			Text = CheepMessage,
-			Name = name,
-			Email = email
-		};
-
-		CheepRepository.CreateNewCheep(cheep);
-
-		return Redirect("/");
+		return OnGet();
 	}
 }
