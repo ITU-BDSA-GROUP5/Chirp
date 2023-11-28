@@ -12,6 +12,7 @@ public class UserTimelineModel : PageModel
 	private readonly ICheepRepository CheepRepository;
 	private readonly IValidator<CreateCheepDTO> CheepValidator;
 	public required List<CheepDTO> Cheeps { get; set; }
+	public required List<AuthorDTO> Following { get; set; }
 
 	[BindProperty]
 	public string? CheepMessage { get; set; }
@@ -33,7 +34,8 @@ public class UserTimelineModel : PageModel
 	public ActionResult OnGet(string author, [FromQuery(Name = "page")] int page = 1)
 	{
 		Cheeps = CheepRepository.GetCheepsFromAuthor(page, author);
-
+		string name = (User.Identity?.Name) ?? throw new Exception("Name is null!");
+		Following = AuthorRepository.GetFollowing(name);
 		PageNumber = page;
 		LastPageNumber = CheepRepository.GetPageAmount(author);
 		PageUrl = HttpContext.Request.GetEncodedUrl().Split("?")[0];

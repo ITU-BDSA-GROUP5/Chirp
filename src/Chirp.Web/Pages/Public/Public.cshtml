@@ -45,7 +45,6 @@
 								}
 								else
 								{
-									<span>@Model.Following.FirstOrDefault() THIS</span>
 									<form asp-page-handler="Follow" asp-route-followeeName="@cheep.AuthorName"
 										asp-route-followerName="@User.Identity.Name" method="post">
 										<input type="submit" value="Follow">
