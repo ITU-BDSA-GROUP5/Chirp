@@ -42,11 +42,11 @@ namespace Chirp.Infrastructure.Migrations
 
             modelBuilder.Entity("AuthorAuthor", b =>
                 {
-                    b.Property<int>("FollowersAuthorId")
-                        .HasColumnType("int");
+                    b.Property<Guid>("FollowersAuthorId")
+                        .HasColumnType("uniqueidentifier");
 
-                    b.Property<int>("FollowingAuthorId")
-                        .HasColumnType("int");
+                    b.Property<Guid>("FollowingAuthorId")
+                        .HasColumnType("uniqueidentifier");
 
                     b.HasKey("FollowersAuthorId", "FollowingAuthorId");
 

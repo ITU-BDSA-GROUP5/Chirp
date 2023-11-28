@@ -1,3 +1,5 @@
+﻿using Microsoft.EntityFrameworkCore;
+
 namespace Chirp.Infrastructure.Repositories
 {
 	public class AuthorRepository : IAuthorRepository
@@ -76,25 +78,32 @@ namespace Chirp.Infrastructure.Repositories
 			}
 			follower.Following.Add(followee);
 			followee.Followers.Add(follower);
+			Console.WriteLine(follower.Following.Count);
+			Console.WriteLine(followee.Followers.Count);
 			_context.SaveChanges();
 		}
 
-		public void UnfollowAuthor(string followerName, string followeeName)
+		public async Task UnfollowAuthor(string followerName, string followeeName)
 		{
-			var follower = _context.Authors
+			var follower = await _context.Authors
+				.Include(a => a.Following)
 				.Where(a => a.Name == followerName)
-				.FirstOrDefault();
-			var followee = _context.Authors
+				.FirstOrDefaultAsync();
+			var followee = await _context.Authors
+				.Include(a => a.Followers)
 				.Where(a => a.Name == followeeName)
-				.FirstOrDefault();
+				.FirstOrDefaultAsync();
 			if (follower == null || followee == null)
 			{
 				Console.WriteLine("Either follower or followee does not exist. No new follow was made");
 				return;
 			}
+			Console.WriteLine("Unfollowed " + followee + " from " + follower);
+			Console.WriteLine(follower.Following.Count);
+			Console.WriteLine(followee.Followers.Count);
 			followee.Followers.Remove(follower);
 			follower.Following.Remove(followee);
-			_context.SaveChanges();
+			await _context.SaveChangesAsync();
 		}
 	}
 }

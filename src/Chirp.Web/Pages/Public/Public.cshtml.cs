@@ -96,9 +96,9 @@ public class PublicModel : PageModel
 		return Redirect("/");
 	}
 
-	public IActionResult OnPostUnfollow(string followeeName, string followerName)
+	public async Task<IActionResult> OnPostUnfollow(string followeeName, string followerName)
 	{
-		AuthorRepository.UnfollowAuthor(followerName ?? throw new Exception("Name is null!"), followeeName);
+		await AuthorRepository.UnfollowAuthor(followerName ?? throw new Exception("Name is null!"), followeeName);
 		return Redirect("/");
 	}
 }
