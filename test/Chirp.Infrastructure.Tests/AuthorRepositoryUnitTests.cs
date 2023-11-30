@@ -15,7 +15,7 @@ namespace Chirp.Infrastructure.Tests
 
 		// From IAsyncLifetime
 		public async Task InitializeAsync()
-		{	
+		{
 			await _msSqlContainer.StartAsync();
 			_connection = new SqlConnection(_msSqlContainer.GetConnectionString());
 			await _connection.OpenAsync();
@@ -41,17 +41,17 @@ namespace Chirp.Infrastructure.Tests
 		[Fact]
 		public void CreateNewAuthor_SingleInDatabase()
 		{
-            // Arrange
-            string name = "Alice";
-            string email = "Alice@itu.dk";
+			// Arrange
+			string name = "Alice";
+			string email = "Alice@itu.dk";
 
-            // Act
-            _authorRepository.CreateNewAuthor(name, email);
-            var authorAlice = _context.Authors.Where(c => c.Name == "Alice");
+			// Act
+			_authorRepository.CreateNewAuthor(name, email);
+			var authorAlice = _context.Authors.Where(c => c.Name == "Alice");
 
 			// Assert
 			Assert.Single(authorAlice);
-        }
+		}
 
 
 		[Fact]
@@ -64,10 +64,10 @@ namespace Chirp.Infrastructure.Tests
 			// Act
 			_authorRepository.CreateNewAuthor(name, email);
 
-			var authors = _authorRepository.GetAuthorByName("John Doe");
-			AuthorDTO author = authors.First();
+			AuthorDTO? author = _authorRepository.GetAuthorByName("John Doe");
 
 			// Assert
+			Assert.NotNull(author);
 			Assert.Equal(name, author.Name);
 			Assert.Equal(email, author.Email);
 		}
@@ -79,11 +79,11 @@ namespace Chirp.Infrastructure.Tests
 			string email = "Roger+Histand@hotmail.com";
 
 			// Act
-			var authors = _authorRepository.GetAuthorByEmail(email);
+			AuthorDTO? author = _authorRepository.GetAuthorByEmail(email);
 
 			// Assert
-			Assert.NotNull(authors);
-			Assert.Equal(email, authors.First().Email);
+			Assert.NotNull(author);
+			Assert.Equal(email, author.Email);
 		}
 
 		[Fact]
@@ -93,11 +93,45 @@ namespace Chirp.Infrastructure.Tests
 			string name = "Roger Histand";
 
 			// Act
-			var authors = _authorRepository.GetAuthorByName(name);
+			AuthorDTO? author = _authorRepository.GetAuthorByName(name);
 
 			// Assert
-			Assert.NotNull(authors);
-			Assert.Equal(name, authors.First().Name);
+			Assert.NotNull(author);
+			Assert.Equal(name, author.Name);
+		}
+
+		[Fact]
+		public void Author_has_unique_name()
+		{
+			string name = "unique name";
+			string email = "";
+			_authorRepository.CreateNewAuthor(name, email);
+			try
+			{
+				_authorRepository.CreateNewAuthor(name, email);
+			}
+			catch (Exception)
+			{
+				return; // Test passed
+			}
+			Assert.Fail();
+		}
+
+		[Fact]
+		public void Author_has_unique_email()
+		{
+			string name = "";
+			string email = "unique email";
+			_authorRepository.CreateNewAuthor(name, email);
+			try
+			{
+				_authorRepository.CreateNewAuthor(name, email);
+			}
+			catch (Exception)
+			{
+				return; // Test passed
+			}
+			Assert.Fail();
 		}
 	}
 }
