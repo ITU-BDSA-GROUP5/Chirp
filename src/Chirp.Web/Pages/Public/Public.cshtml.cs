@@ -33,9 +33,13 @@ public class PublicModel : PageModel
 
 	public ActionResult OnGet([FromQuery(Name = "page")] int page = 1)
 	{
+		if (User.Identity != null && User.Identity.IsAuthenticated)
+		{
+			string name = (User.Identity?.Name) ?? throw new Exception("Name is null!");
+			Following = AuthorRepository.GetFollowing(name);
+		}
+		
 		Cheeps = CheepRepository.GetCheeps(page);
-		string name = (User.Identity?.Name) ?? throw new Exception("Name is null!");
-		Following = AuthorRepository.GetFollowing(name);
 		PageNumber = page;
 		LastPageNumber = CheepRepository.GetPageAmount();
 		PageUrl = HttpContext.Request.GetEncodedUrl().Split("?")[0];

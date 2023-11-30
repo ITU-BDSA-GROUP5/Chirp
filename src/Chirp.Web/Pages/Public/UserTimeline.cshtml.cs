@@ -33,15 +33,13 @@ public class UserTimelineModel : PageModel
 
 	public ActionResult OnGet(string author, [FromQuery(Name = "page")] int page = 1)
 	{
-		string name = (User.Identity?.Name) ?? throw new Exception("Name is null!");
-		Following = AuthorRepository.GetFollowing(name);
-		if (name == author)
+		// if user is logged in we want to see if they are viewing their own timeline or somebody elses
+		if (User.Identity != null && User.Identity.IsAuthenticated)
 		{
-			Cheeps = CheepRepository.GetCheepsFromAuthorAndFollowings(page, author, Following.Select(a => a.Name).ToList());
-		}else
-		{
-			Cheeps = CheepRepository.GetCheepsFromAuthor(page, author);
+			LoadTimelineSpecificCheeps(author, page);
 		}
+
+		Cheeps = CheepRepository.GetCheepsFromAuthor(page, author);
 		PageNumber = page;
 		LastPageNumber = CheepRepository.GetPageAmount(author);
 		PageUrl = HttpContext.Request.GetEncodedUrl().Split("?")[0];
@@ -106,5 +104,18 @@ public class UserTimelineModel : PageModel
 	{
 		await AuthorRepository.UnfollowAuthor(followerName ?? throw new Exception("Name is null!"), followeeName);
 		return Redirect("/");
+	}
+
+	private void LoadTimelineSpecificCheeps(string author, int page)
+	{
+		string name = (User.Identity?.Name) ?? throw new Exception("Name is null!");
+		Following = AuthorRepository.GetFollowing(name);
+		if (name == author)
+		{
+			Cheeps = CheepRepository.GetCheepsFromAuthorAndFollowings(page, author, Following.Select(a => a.Name).ToList());
+		}else
+		{
+			Cheeps = CheepRepository.GetCheepsFromAuthor(page, author);
+		}
 	}
 }
