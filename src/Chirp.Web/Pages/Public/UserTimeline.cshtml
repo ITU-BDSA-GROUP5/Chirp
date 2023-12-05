@@ -34,6 +34,25 @@
 					<p class="wrap">
 						<strong>
 							<a href="/@cheep.AuthorName">@cheep.AuthorName</a>
+							 @* make sure user is logged in and can't follow themselves *@
+							@if (User.Identity?.IsAuthenticated == true && cheep.AuthorName != User.Identity.Name)
+							{
+								// check if the user is already following the author
+								@if (Model.Following.Select(f => f.Name).Contains(cheep.AuthorName))
+								{
+									<form asp-page-handler="Unfollow" asp-route-followeeName="@cheep.AuthorName"
+										asp-route-followerName="@User.Identity.Name" method="post">
+										<input type="submit" value="Unfollow">
+									</form>
+								}
+								else
+								{
+									<form asp-page-handler="Follow" asp-route-followeeName="@cheep.AuthorName"
+										asp-route-followerName="@User.Identity.Name" method="post">
+										<input type="submit" value="Follow">
+									</form>
+								}
+							}
 						</strong>
 						@cheep.Message
 						<small>&mdash; @cheep.TimeStamp</small>

@@ -1,4 +1,4 @@
-﻿using Chirp.Core;
+using Chirp.Core;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.Http.Extensions;
@@ -12,6 +12,7 @@ public class UserTimelineModel : PageModel
 	private readonly ICheepRepository CheepRepository;
 	private readonly IValidator<CreateCheepDTO> CheepValidator;
 	public required List<CheepDTO> Cheeps { get; set; }
+	public required List<AuthorDTO> Following { get; set; }
 
 	[BindProperty]
 	public string? CheepMessage { get; set; }
@@ -32,8 +33,13 @@ public class UserTimelineModel : PageModel
 
 	public ActionResult OnGet(string author, [FromQuery(Name = "page")] int page = 1)
 	{
-		Cheeps = CheepRepository.GetCheepsFromAuthor(page, author);
+		// if user is logged in we want to see if they are viewing their own timeline or somebody elses
+		if (User.Identity != null && User.Identity.IsAuthenticated)
+		{
+			LoadTimelineSpecificCheeps(author, page);
+		}
 
+		Cheeps = CheepRepository.GetCheepsFromAuthor(page, author);
 		PageNumber = page;
 		LastPageNumber = CheepRepository.GetPageAmount(author);
 		PageUrl = HttpContext.Request.GetEncodedUrl().Split("?")[0];
@@ -85,5 +91,37 @@ public class UserTimelineModel : PageModel
 		}
 
 		return OnGet(HttpContext.GetRouteValue("author")?.ToString()!);
+	}
+
+		public IActionResult OnPostFollow(string followeeName, string followerName)
+	{
+		string name = (User.Identity?.Name) ?? throw new Exception("Name is null!");
+
+		if (AuthorRepository.GetAuthorByName(name).FirstOrDefault() == null)
+		{
+			AuthorRepository.CreateNewAuthor(name, name + "@gmail.com");
+		}
+
+		AuthorRepository.FollowAuthor(followerName ?? throw new Exception("Name is null!"), followeeName);
+		return Redirect("/");
+	}
+
+	public async Task<IActionResult> OnPostUnfollow(string followeeName, string followerName)
+	{
+		await AuthorRepository.UnfollowAuthor(followerName ?? throw new Exception("Name is null!"), followeeName);
+		return Redirect("/");
+	}
+
+	private void LoadTimelineSpecificCheeps(string author, int page)
+	{
+		string name = (User.Identity?.Name) ?? throw new Exception("Name is null!");
+		Following = AuthorRepository.GetFollowing(name);
+		if (name == author)
+		{
+			Cheeps = CheepRepository.GetCheepsFromAuthorAndFollowings(page, author, Following.Select(a => a.Name).ToList());
+		}else
+		{
+			Cheeps = CheepRepository.GetCheepsFromAuthor(page, author);
+		}
 	}
 }
