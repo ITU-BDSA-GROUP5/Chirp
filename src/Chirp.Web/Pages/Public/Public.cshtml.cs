@@ -46,8 +46,7 @@ public class PublicModel : PageModel
 
 		return Page();
 	}
-
-	public IActionResult OnPost()
+	public async Task<IActionResult> OnPost()
 	{
 		InvalidCheep = false;
 		//Console.WriteLine("OnPost called!");
@@ -58,19 +57,25 @@ public class PublicModel : PageModel
 				throw new Exception("Cheep is empty!");
 			}
 
-			string email = User.Claims.Where(a => a.Type == "emails").Select(e => e.Value).Single();
-			string name = (User.Identity?.Name) ?? throw new Exception("Error in getting username!");
+			string name = (User.Identity?.Name) ?? throw new Exception("Error in getting username");
+			AuthorDTO? user = AuthorRepository.GetAuthorByName(name).FirstOrDefault();
 
-			if (AuthorRepository.GetAuthorByEmail(email).SingleOrDefault() == null)
+			if (user == null)
 			{
+				string token = User.FindFirst("idp_access_token")?.Value
+					?? throw new Exception("Github token not found");
+                
+				string email = await GithubHelper.GetUserEmailGithub(token, name);
+
 				AuthorRepository.CreateNewAuthor(name, email);
+				user = AuthorRepository.GetAuthorByName(name).First();
 			}
 
-			CreateCheepDTO cheep = new CreateCheepDTO()
+			CreateCheepDTO cheep = new ()
 			{
 				Text = CheepMessage,
-				Name = name,
-				Email = email
+				Name = user.Name,
+				Email = user.Email
 			};
 
 			CheepValidator.ValidateAndThrow(cheep);
