@@ -13,40 +13,39 @@ namespace Chirp.Infrastructure.Repositories
 
 		public void CreateNewAuthor(string name, string email)
 		{
-			var existing = GetAuthorByEmail(email);
-			if (existing.Any())
+			try
 			{
-				Console.WriteLine("Author " + email + " already exists. No new author was made");
-				return;
+				_context.Authors.Add(new Author { Name = name, Email = email, Cheeps = new List<Cheep>() });
+				_context.SaveChanges();
 			}
-			_context.Authors.Add(new Author { Name = name, Email = email, Cheeps = new List<Cheep>() });
-			_context.SaveChanges();
+			catch (Exception)
+			{
+				throw new Exception("Error when creating new author");
+			}
 		}
 
-		public List<AuthorDTO> GetAuthorByEmail(string email)
+		public AuthorDTO? GetAuthorByEmail(string email)
 		{
 			return _context.Authors
 				.Where(a => a.Email == email)
-				.OrderByDescending(a => a.AuthorId)
 				.Select(a => new AuthorDTO
 				{
 					Name = a.Name,
 					Email = a.Email
 				})
-				.ToList();
+				.SingleOrDefault();
 		}
 
-		public List<AuthorDTO> GetAuthorByName(string name)
+		public AuthorDTO? GetAuthorByName(string name)
 		{
 			return _context.Authors
 				.Where(a => a.Name == name)
-				.OrderByDescending(a => a.AuthorId)
 				.Select(a => new AuthorDTO
 				{
 					Name = a.Name,
 					Email = a.Email
 				})
-				.ToList();
+				.SingleOrDefault();
 		}
 
 		public List<AuthorDTO> GetFollowing(string authorname)
