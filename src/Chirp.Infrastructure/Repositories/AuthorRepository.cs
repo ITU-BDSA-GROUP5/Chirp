@@ -1,4 +1,6 @@
-﻿namespace Chirp.Infrastructure.Repositories
+﻿using Microsoft.EntityFrameworkCore;
+
+namespace Chirp.Infrastructure.Repositories
 {
 	public class AuthorRepository : IAuthorRepository
 	{
@@ -45,6 +47,11 @@
 					Email = a.Email
 				})
 				.ToList();
+		}
+
+		public void DeleteAuthorByName(string name)
+		{
+			_context.Authors.Where(author => author.Name == name).ExecuteDelete();
 		}
 	}
 }

@@ -47,6 +47,7 @@ namespace MyApp.Namespace
         public ActionResult OnPostDelete()
         {
             System.Console.WriteLine("IT HAS BEEN CLICKED!!!!!!!!!");
+            AuthorRepository.DeleteAuthorByName(User.Identity?.Name!);
             return Redirect("/");
         }
     }
