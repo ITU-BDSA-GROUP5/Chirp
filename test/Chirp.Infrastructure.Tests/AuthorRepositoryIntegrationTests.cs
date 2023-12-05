@@ -39,14 +39,114 @@ namespace Chirp.Infrastructure.Tests
 		}
 
         [Fact]
-        public void GetFollowing_AfterFollowAuthor_ReturnsFollowing()
+        public async Task GetFollowing_AfterFollowAuthor_ReturnsFollowing()
         {
             // Arrange
-            var authorToFollow = _authorRepository.GetAuthorByName("Ramus");
-            var authorAsFollowee = _authorRepository.GetAuthorByName("Helge");
+            var authorFollower = _authorRepository.GetAuthorByName("Rasmus");
+            var authorFollowee = _authorRepository.GetAuthorByName("Helge");
+
+            if (authorFollower == null || authorFollowee == null)
+            {
+                Assert.Fail("Authors not found");
+            }
 
             // Act
-            //_authorRepository.FollowAuthor(authorToFollow, authorAsFollowee)
+            await _authorRepository.FollowAuthor(authorFollower.Name, authorFollowee.Name);
+            List<AuthorDTO> authorFollowers = _authorRepository.GetFollowing(authorFollower.Name);
+
+            // Assert
+            Assert.Single(authorFollowers);
+        }
+
+        [Fact]
+        public async Task GetFollowing_AfterUnfollowAuthor_ReturnsEmptyList()
+        {
+            // Arrange
+            var authorFollower = _authorRepository.GetAuthorByName("Rasmus");
+            var authorFollowee = _authorRepository.GetAuthorByName("Helge");
+
+            if (authorFollower == null || authorFollowee == null)
+            {
+                Assert.Fail("Authors not found");
+            }
+
+            // Act
+            await _authorRepository.FollowAuthor(authorFollower.Name, authorFollowee.Name);
+            await _authorRepository.UnfollowAuthor(authorFollower.Name, authorFollowee.Name);
+            List<AuthorDTO> authorFollowers = _authorRepository.GetFollowing(authorFollower.Name);
+
+            // Assert
+            Assert.Empty(authorFollowers);
+        }
+
+        [Fact]
+        public async Task GetFollowing_AfterFollowingSameAuthorTwice_ReturnsSingleFollower()
+        {
+            // Arrange
+            var authorFollower = _authorRepository.GetAuthorByName("Rasmus");
+            var authorFollowee = _authorRepository.GetAuthorByName("Helge");
+
+            if (authorFollower == null || authorFollowee == null)
+            {
+                Assert.Fail("Authors not found");
+            }
+
+            // Act
+            await _authorRepository.FollowAuthor(authorFollower.Name, authorFollowee.Name);
+            await _authorRepository.FollowAuthor(authorFollower.Name, authorFollowee.Name);
+            List<AuthorDTO> authorFollowers = _authorRepository.GetFollowing(authorFollower.Name);
+
+            // Assert
+            Assert.Single(authorFollowers);
+        }
+
+        [Fact]
+        public async Task UnfollowAuthor_AuthorNotFollowing_ThrowsNoException()
+        {
+            // Arrange
+            var authorFollower = _authorRepository.GetAuthorByName("Rasmus");
+            var authorFollowee = _authorRepository.GetAuthorByName("Helge");
+
+            if (authorFollower == null || authorFollowee == null)
+            {
+                Assert.Fail("Authors not found");
+            }
+
+            // Act
+            try {
+                await _authorRepository.UnfollowAuthor(authorFollower.Name, authorFollowee.Name);
+            } catch (Exception e)
+            {
+                // Assert
+                Assert.Fail(e.Message);
+            }
+
+            return;
+        }
+
+        [Fact]
+        public async Task FollowAuthor_NonExistantAuthor_Fails()
+        {
+            // Arrange
+            var authorNotInDatabase = "this_user_does_not_exist";
+
+            // Assert
+            await Assert.ThrowsAsync<InvalidOperationException>(
+                async () => await _authorRepository.FollowAuthor(authorNotInDatabase, authorNotInDatabase)
+            );
+        }
+
+        [Fact]
+        public void GetFollowing_NonExistantAuthor_ReturnsEmptyList()
+        {
+            // Arrange
+            var authorNotInDatabase = "this_user_does_not_exist";
+
+            // Act
+            var followers = _authorRepository.GetFollowing(authorNotInDatabase);
+
+            // Assert
+            Assert.Empty(followers);
         }
     }
 }
