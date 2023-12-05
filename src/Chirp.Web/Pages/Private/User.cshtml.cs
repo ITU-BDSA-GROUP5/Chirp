@@ -37,11 +37,17 @@ namespace MyApp.Namespace
 
                 string token = User.FindFirst("idp_access_token")?.Value
                     ?? throw new Exception("Github token not found");
-                    
+
                 Mail = await GithubHelper.GetUserEmailGithub(token, name);
             }
 
             return Page();
+        }
+
+        public ActionResult OnPostDelete()
+        {
+            System.Console.WriteLine("IT HAS BEEN CLICKED!!!!!!!!!");
+            return Redirect("/");
         }
     }
 }

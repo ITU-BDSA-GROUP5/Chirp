@@ -1,5 +1,6 @@
 ﻿@page "/user/info"
 @model MyApp.Namespace.UserModel
+@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
 @{
     ViewData["Title"] = "Chirp!";
     Layout = "Shared/_Layout";
@@ -8,7 +9,9 @@
 <div>
     <h2>See your info!</h2>
 
-    <button class="noReturn">Forget me!</button>
+    <form asp-page-handler="Delete">
+        <button class="noReturn" type="submit">Forget me!</button>
+    </form>
     <p>Username: @(User.Identity?.Name)</p>
     <p>E-mail: @(Model.Mail)</p>
     <p>INDSÆT DEL MED FOLLOWEES</p>
