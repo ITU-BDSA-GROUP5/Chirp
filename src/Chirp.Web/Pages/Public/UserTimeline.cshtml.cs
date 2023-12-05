@@ -37,9 +37,10 @@ public class UserTimelineModel : PageModel
 		if (User.Identity != null && User.Identity.IsAuthenticated)
 		{
 			LoadTimelineSpecificCheeps(author, page);
+		}else{
+			Cheeps = CheepRepository.GetCheepsFromAuthor(page, author);
 		}
 
-		Cheeps = CheepRepository.GetCheepsFromAuthor(page, author);
 		PageNumber = page;
 		LastPageNumber = CheepRepository.GetPageAmount(author);
 		PageUrl = HttpContext.Request.GetEncodedUrl().Split("?")[0];
