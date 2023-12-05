@@ -2,6 +2,7 @@ using Chirp.Core;
 using Microsoft.AspNetCore.Http.Extensions;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
+using Microsoft.Extensions.Caching.Memory;
 
 namespace MyApp.Namespace
 {
@@ -44,9 +45,9 @@ namespace MyApp.Namespace
             return Page();
         }
 
+        //This deletes the user and associated cheeps from the database. Note that it does not log out or change anything azure and cookie related
         public ActionResult OnPostDelete()
         {
-            System.Console.WriteLine("IT HAS BEEN CLICKED!!!!!!!!!");
             AuthorRepository.DeleteAuthorByName(User.Identity?.Name!);
             return Redirect("/");
         }
