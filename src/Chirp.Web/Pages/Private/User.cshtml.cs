@@ -52,5 +52,11 @@ namespace MyApp.Namespace
 			AuthorRepository.DeleteAuthorByName(User.Identity?.Name!);
 			return Redirect("/");
 		}
+
+		public async Task<IActionResult> OnPostUnfollow(string followeeName, string followerName)
+		{
+			await AuthorRepository.UnfollowAuthor(followerName ?? throw new Exception("Name is null!"), followeeName);
+			return Redirect(PageUrl ?? "/");
+		}
 	}
 }
