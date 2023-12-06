@@ -1,3 +1,4 @@
+using System.ComponentModel;
 using Chirp.Core;
 using Microsoft.EntityFrameworkCore;
 namespace Chirp.Infrastructure.Repositories
@@ -95,38 +96,34 @@ namespace Chirp.Infrastructure.Repositories
 
 		public async Task LikeCheep(Guid cheepId, string author)
 		{
-			var authorModel = _context.Authors
+			var authorModel = await _context.Authors
 				.Where(a => a.Name == author)
 				.FirstAsync();
 
-			var cheepModel = _context.Cheeps
+			var cheepModel = await _context.Cheeps
 				.Where(c => c.CheepId == cheepId)
 				.FirstAsync();
-			
-			await Task.WhenAll(authorModel, cheepModel);
 
-			authorModel.Result.LikedCheeps.Add(cheepModel.Result);
-			cheepModel.Result.LikedBy.Add(authorModel.Result);
+			authorModel.LikedCheeps.Add(cheepModel);
+			cheepModel.LikedBy.Add(authorModel);
 
 			await _context.SaveChangesAsync();
 		}
 
 		public async Task UnlikeCheep(Guid cheepId, string author)
 		{
-			var authorModel = _context.Authors
+			var authorModel = await _context.Authors
 				.Where(a => a.Name == author)
 				.Include(a => a.LikedCheeps)
 				.FirstAsync();
 
-			var cheepModel = _context.Cheeps
+			var cheepModel = await _context.Cheeps
 				.Where(c => c.CheepId == cheepId)
 				.Include(c => c.LikedBy)
 				.FirstAsync();
-			
-			await Task.WhenAll(authorModel, cheepModel);
 
-			authorModel.Result.LikedCheeps.Remove(cheepModel.Result);
-			cheepModel.Result.LikedBy.Remove(authorModel.Result);
+			authorModel.LikedCheeps.Remove(cheepModel);
+			cheepModel.LikedBy.Remove(authorModel);
 
 			await _context.SaveChangesAsync();
 		}
