@@ -134,4 +134,36 @@ public class CheepRepositoryUnitTests : IAsyncLifetime
 		// Assert
 		Assert.Equal(pageSize, publicTimelineCheepCount);
 	}
+
+	[Fact]
+	public async Task LikeCheep_AuthorStoresLikedCheep_ListWithSingleCheep()
+	{
+		// Arrange
+		var authorLikingName = "Helge";
+		
+		// Get author and a cheep we assume is in the dataset
+		var authorWithCheepToLike = await _context.Authors
+			.Where(a => a.Name == "Helge")
+			.FirstAsync();
+		
+		var cheepDTO = authorWithCheepToLike.Cheeps
+			.Select(c => new CheepDTO() {
+				Id = c.CheepId,
+				AuthorName = c.Author.Name,
+				TimeStamp = c.TimeStamp.ToString(),
+				Message = c.Text
+			})
+			.First();
+	
+		// Act
+		await _cheepRepository.LikeCheep(cheepDTO, authorLikingName);
+	
+		var authorLiking = await _context.Authors
+			.Where(a => a.Name == authorLikingName)
+			.Include(a => a.LikedCheeps)
+			.FirstAsync();
+
+		// Assert
+		Assert.Single(authorLiking.LikedCheeps);
+	}
 }
