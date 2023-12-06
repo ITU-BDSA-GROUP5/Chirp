@@ -1,4 +1,5 @@
 using Chirp.Core;
+using Microsoft.EntityFrameworkCore;
 namespace Chirp.Infrastructure.Repositories
 {
 
@@ -36,6 +37,7 @@ namespace Chirp.Infrastructure.Repositories
 				.Take(pageSize)
 				.Select(c => new CheepDTO
 				{
+					Id = c.CheepId,
 					AuthorName = c.Author.Name,
 					Message = c.Text,
 					TimeStamp = c.TimeStamp.ToString("yyyy-MM-dd H:mm:ss")
@@ -67,6 +69,7 @@ namespace Chirp.Infrastructure.Repositories
 				.Take(pageSize)
 				.Select(c => new CheepDTO
 				{
+					Id = c.CheepId,
 					AuthorName = c.Author.Name,
 					Message = c.Text,
 					TimeStamp = c.TimeStamp.ToString("yyyy-MM-dd H:mm:ss")
@@ -82,6 +85,7 @@ namespace Chirp.Infrastructure.Repositories
 				.OrderByDescending(c => c.TimeStamp)
 				.Select(c => new CheepDTO
 				{
+					Id = c.CheepId,
 					AuthorName = c.Author.Name,
 					Message = c.Text,
 					TimeStamp = c.TimeStamp.ToString("yyyy-MM-dd H:mm:ss")
@@ -98,6 +102,7 @@ namespace Chirp.Infrastructure.Repositories
 				.Take(pageSize)
 				.Select(c => new CheepDTO
 				{
+					Id = c.CheepId,
 					AuthorName = c.Author.Name,
 					Message = c.Text,
 					TimeStamp = c.TimeStamp.ToString("yyyy-MM-dd H:mm:ss")
