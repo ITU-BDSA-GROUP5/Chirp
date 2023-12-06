@@ -5,4 +5,5 @@ public class Cheep
 	public Guid AuthorId { get; set; }
 	public required string Text { get; set; }
 	public DateTime TimeStamp { get; set; }
+	public List<Author> LikedBy { get; set; } = new();
 }
