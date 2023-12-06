@@ -11,7 +11,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Chirp.Infrastructure.Migrations
 {
     [DbContext(typeof(ChirpDBContext))]
-    [Migration("20231206194657_AddLikedCheeps")]
+    [Migration("20231206220944_AddLikedCheeps")]
     partial class AddLikedCheeps
     {
         /// <inheritdoc />
@@ -138,7 +138,7 @@ namespace Chirp.Infrastructure.Migrations
                     b.HasOne("Author", "Author")
                         .WithMany("Cheeps")
                         .HasForeignKey("AuthorId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.Navigation("Author");

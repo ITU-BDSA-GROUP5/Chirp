@@ -18,7 +18,8 @@ public class ChirpDBContext : DbContext
 		modelBuilder.Entity<Author>()
 			.HasMany(a => a.Cheeps)
 			.WithOne(c => c.Author)
-			.HasForeignKey(c => c.AuthorId);
+			.HasForeignKey(c => c.AuthorId)
+			.OnDelete(DeleteBehavior.Restrict);
 		
 		modelBuilder.Entity<Author>()
 			.HasMany(a => a.LikedCheeps)

@@ -11,6 +11,10 @@ namespace Chirp.Infrastructure.Migrations
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
         {
+            migrationBuilder.DropForeignKey(
+                name: "FK_Cheeps_Authors_AuthorId",
+                table: "Cheeps");
+
             migrationBuilder.CreateTable(
                 name: "AuthorLikedCheeps",
                 columns: table => new
@@ -39,13 +43,33 @@ namespace Chirp.Infrastructure.Migrations
                 name: "IX_AuthorLikedCheeps_LikedCheepsCheepId",
                 table: "AuthorLikedCheeps",
                 column: "LikedCheepsCheepId");
+
+            migrationBuilder.AddForeignKey(
+                name: "FK_Cheeps_Authors_AuthorId",
+                table: "Cheeps",
+                column: "AuthorId",
+                principalTable: "Authors",
+                principalColumn: "AuthorId",
+                onDelete: ReferentialAction.Restrict);
         }
 
         /// <inheritdoc />
         protected override void Down(MigrationBuilder migrationBuilder)
         {
+            migrationBuilder.DropForeignKey(
+                name: "FK_Cheeps_Authors_AuthorId",
+                table: "Cheeps");
+
             migrationBuilder.DropTable(
                 name: "AuthorLikedCheeps");
+
+            migrationBuilder.AddForeignKey(
+                name: "FK_Cheeps_Authors_AuthorId",
+                table: "Cheeps",
+                column: "AuthorId",
+                principalTable: "Authors",
+                principalColumn: "AuthorId",
+                onDelete: ReferentialAction.Cascade);
         }
     }
 }

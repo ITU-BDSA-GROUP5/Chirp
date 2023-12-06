@@ -135,7 +135,7 @@ namespace Chirp.Infrastructure.Migrations
                     b.HasOne("Author", "Author")
                         .WithMany("Cheeps")
                         .HasForeignKey("AuthorId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.Navigation("Author");
