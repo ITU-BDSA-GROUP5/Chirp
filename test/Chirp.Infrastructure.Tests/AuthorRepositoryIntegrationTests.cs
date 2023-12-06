@@ -15,7 +15,7 @@ namespace Chirp.Infrastructure.Tests
 
 		// From IAsyncLifetime
 		public async Task InitializeAsync()
-		{	
+		{
 			await _msSqlContainer.StartAsync();
 			_connection = new SqlConnection(_msSqlContainer.GetConnectionString());
 			await _connection.OpenAsync();
@@ -38,115 +38,139 @@ namespace Chirp.Infrastructure.Tests
 			await _connection.DisposeAsync();
 		}
 
-        [Fact]
-        public async Task GetFollowing_AfterFollowAuthor_ReturnsFollowing()
-        {
-            // Arrange
-            var authorFollower = _authorRepository.GetAuthorByName("Rasmus");
-            var authorFollowee = _authorRepository.GetAuthorByName("Helge");
+		[Fact]
+		public async Task GetFollowing_AfterFollowAuthor_ReturnsFollowing()
+		{
+			// Arrange
+			var authorFollower = _authorRepository.GetAuthorByName("Rasmus");
+			var authorFollowee = _authorRepository.GetAuthorByName("Helge");
 
-            if (authorFollower == null || authorFollowee == null)
-            {
-                Assert.Fail("Authors not found");
-            }
+			if (authorFollower == null || authorFollowee == null)
+			{
+				Assert.Fail("Authors not found");
+			}
 
-            // Act
-            await _authorRepository.FollowAuthor(authorFollower.Name, authorFollowee.Name);
-            List<AuthorDTO> authorFollowers = _authorRepository.GetFollowing(authorFollower.Name);
+			// Act
+			await _authorRepository.FollowAuthor(authorFollower.Name, authorFollowee.Name);
+			List<AuthorDTO> authorFollowers = _authorRepository.GetFollowing(authorFollower.Name);
 
-            // Assert
-            Assert.Single(authorFollowers);
-        }
+			// Assert
+			Assert.Single(authorFollowers);
+		}
 
-        [Fact]
-        public async Task GetFollowing_AfterUnfollowAuthor_ReturnsEmptyList()
-        {
-            // Arrange
-            var authorFollower = _authorRepository.GetAuthorByName("Rasmus");
-            var authorFollowee = _authorRepository.GetAuthorByName("Helge");
+		[Fact]
+		public async Task GetFollowing_AfterUnfollowAuthor_ReturnsEmptyList()
+		{
+			// Arrange
+			var authorFollower = _authorRepository.GetAuthorByName("Rasmus");
+			var authorFollowee = _authorRepository.GetAuthorByName("Helge");
 
-            if (authorFollower == null || authorFollowee == null)
-            {
-                Assert.Fail("Authors not found");
-            }
+			if (authorFollower == null || authorFollowee == null)
+			{
+				Assert.Fail("Authors not found");
+			}
 
-            // Act
-            await _authorRepository.FollowAuthor(authorFollower.Name, authorFollowee.Name);
-            await _authorRepository.UnfollowAuthor(authorFollower.Name, authorFollowee.Name);
-            List<AuthorDTO> authorFollowers = _authorRepository.GetFollowing(authorFollower.Name);
+			// Act
+			await _authorRepository.FollowAuthor(authorFollower.Name, authorFollowee.Name);
+			await _authorRepository.UnfollowAuthor(authorFollower.Name, authorFollowee.Name);
+			List<AuthorDTO> authorFollowers = _authorRepository.GetFollowing(authorFollower.Name);
 
-            // Assert
-            Assert.Empty(authorFollowers);
-        }
+			// Assert
+			Assert.Empty(authorFollowers);
+		}
 
-        [Fact]
-        public async Task GetFollowing_AfterFollowingSameAuthorTwice_ReturnsSingleFollower()
-        {
-            // Arrange
-            var authorFollower = _authorRepository.GetAuthorByName("Rasmus");
-            var authorFollowee = _authorRepository.GetAuthorByName("Helge");
+		[Fact]
+		public async Task GetFollowing_AfterFollowingSameAuthorTwice_ReturnsSingleFollower()
+		{
+			// Arrange
+			var authorFollower = _authorRepository.GetAuthorByName("Rasmus");
+			var authorFollowee = _authorRepository.GetAuthorByName("Helge");
 
-            if (authorFollower == null || authorFollowee == null)
-            {
-                Assert.Fail("Authors not found");
-            }
+			if (authorFollower == null || authorFollowee == null)
+			{
+				Assert.Fail("Authors not found");
+			}
 
-            // Act
-            await _authorRepository.FollowAuthor(authorFollower.Name, authorFollowee.Name);
-            await _authorRepository.FollowAuthor(authorFollower.Name, authorFollowee.Name);
-            List<AuthorDTO> authorFollowers = _authorRepository.GetFollowing(authorFollower.Name);
+			// Act
+			await _authorRepository.FollowAuthor(authorFollower.Name, authorFollowee.Name);
+			await _authorRepository.FollowAuthor(authorFollower.Name, authorFollowee.Name);
+			List<AuthorDTO> authorFollowers = _authorRepository.GetFollowing(authorFollower.Name);
 
-            // Assert
-            Assert.Single(authorFollowers);
-        }
+			// Assert
+			Assert.Single(authorFollowers);
+		}
 
-        [Fact]
-        public async Task UnfollowAuthor_AuthorNotFollowing_ThrowsNoException()
-        {
-            // Arrange
-            var authorFollower = _authorRepository.GetAuthorByName("Rasmus");
-            var authorFollowee = _authorRepository.GetAuthorByName("Helge");
+		[Fact]
+		public async Task UnfollowAuthor_AuthorNotFollowing_ThrowsNoException()
+		{
+			// Arrange
+			var authorFollower = _authorRepository.GetAuthorByName("Rasmus");
+			var authorFollowee = _authorRepository.GetAuthorByName("Helge");
 
-            if (authorFollower == null || authorFollowee == null)
-            {
-                Assert.Fail("Authors not found");
-            }
+			if (authorFollower == null || authorFollowee == null)
+			{
+				Assert.Fail("Authors not found");
+			}
 
-            // Act
-            try {
-                await _authorRepository.UnfollowAuthor(authorFollower.Name, authorFollowee.Name);
-            } catch (Exception e)
-            {
-                // Assert
-                Assert.Fail(e.Message);
-            }
+			// Act
+			try
+			{
+				await _authorRepository.UnfollowAuthor(authorFollower.Name, authorFollowee.Name);
+			}
+			catch (Exception e)
+			{
+				// Assert
+				Assert.Fail(e.Message);
+			}
 
-            return;
-        }
+			return;
+		}
 
-        [Fact]
-        public async Task FollowAuthor_NonExistantAuthor_Fails()
-        {
-            // Arrange
-            var authorNotInDatabase = "this_user_does_not_exist";
+		[Fact]
+		public async Task FollowAuthor_NonExistantAuthor_Fails()
+		{
+			// Arrange
+			var authorNotInDatabase = "this_user_does_not_exist";
 
-            // Assert
-            await Assert.ThrowsAsync<InvalidOperationException>(
-                async () => await _authorRepository.FollowAuthor(authorNotInDatabase, authorNotInDatabase)
-            );
-        }
+			// Assert
+			await Assert.ThrowsAsync<InvalidOperationException>(
+				async () => await _authorRepository.FollowAuthor(authorNotInDatabase, authorNotInDatabase)
+			);
+		}
 
-        [Fact]
-        public void GetFollowing_NonExistantAuthor_ReturnsEmptyList()
-        {
-            // Arrange
-            var authorNotInDatabase = "this_user_does_not_exist";
+		[Fact]
+		public void GetFollowing_NonExistantAuthor_ReturnsEmptyList()
+		{
+			// Arrange
+			var authorNotInDatabase = "this_user_does_not_exist";
 
-            // Act
-            var followers = _authorRepository.GetFollowing(authorNotInDatabase);
+			// Act
+			var followers = _authorRepository.GetFollowing(authorNotInDatabase);
 
-            // Assert
-            Assert.Empty(followers);
-        }
-    }
+			// Assert
+			Assert.Empty(followers);
+		}
+
+		[Fact]
+		public async Task GetFollowing_MultipleAuthors_ReturnsListWithMultipleItems()
+		{
+			// Arrange
+			var authorFollower = _authorRepository.GetAuthorByName("Rasmus");
+			var authorFollowee2 = _authorRepository.GetAuthorByName("Jacqualine Gilcoine");
+			var authorFollowee = _authorRepository.GetAuthorByName("Helge");
+
+			if (authorFollower == null || authorFollowee2 == null || authorFollowee == null)
+			{
+				Assert.Fail("Authors not found");
+			}
+
+			// Act
+			await _authorRepository.FollowAuthor(authorFollower.Name, authorFollowee.Name);
+			await _authorRepository.FollowAuthor(authorFollower.Name, authorFollowee2.Name);
+			List<AuthorDTO> authorFollows = _authorRepository.GetFollowing(authorFollower.Name);
+
+			// Assert
+			Assert.Equal(2, authorFollows.Count);
+		}
+	}
 }
