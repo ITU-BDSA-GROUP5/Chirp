@@ -11,7 +11,7 @@
     <h2>See your info!</h2>
 
     <form asp-page-handler="Delete">
-        <button class="noReturn" type="submit">Forget me!</button>
+        <button class="danger" type="submit">Forget me!</button>
     </form>
     <p>Username: @(User.Identity?.Name)</p>
     <p>E-mail: @(Model.Mail)</p>

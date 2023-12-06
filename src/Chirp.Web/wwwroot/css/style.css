@@ -231,7 +231,7 @@ li.topic {
   min-height: 20px;
 }
 
-button.noReturn {
+button.danger {
   color: #ffffff;
   background-color: red;
 }
