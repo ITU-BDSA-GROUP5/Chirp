@@ -92,6 +92,25 @@ namespace Chirp.Infrastructure.Repositories
 				})
 				.ToList();
 		}
+
+		public async Task LikeCheep(CheepDTO cheep, string author)
+		{
+			var authorModel = _context.Authors
+				.Where(a => a.Name == author)
+				.FirstAsync();
+
+			var cheepModel = _context.Cheeps
+				.Where(c => c.CheepId == cheep.Id)
+				.FirstAsync();
+			
+			await Task.WhenAll(authorModel, cheepModel);
+
+			authorModel.Result.LikedCheeps.Add(cheepModel.Result);
+			cheepModel.Result.LikedBy.Add(authorModel.Result);
+
+			await _context.SaveChangesAsync();
+		}
+
 		public List<CheepDTO> GetCheepsFromAuthorAndFollowings(int page, string author, List<string> following)
 		{
 			following.Add(author);
