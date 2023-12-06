@@ -11,6 +11,7 @@ namespace MyApp.Namespace
         private readonly IAuthorRepository AuthorRepository;
         private readonly ICheepRepository CheepRepository;
         public required List<CheepDTO> Cheeps { get; set; }
+        public required List<AuthorDTO> Followees { get; set; }
 
         public int PageNumber { get; set; }
         public int LastPageNumber { get; set; }
@@ -34,6 +35,7 @@ namespace MyApp.Namespace
                 Cheeps = CheepRepository.GetCheepsFromAuthor(page, name);
                 PageNumber = page;
                 LastPageNumber = CheepRepository.GetPageAmount(name);
+                Followees = AuthorRepository.GetFollowing(name);
                 PageUrl = HttpContext.Request.GetEncodedUrl().Split("?")[0];
 
                 string token = User.FindFirst("idp_access_token")?.Value
