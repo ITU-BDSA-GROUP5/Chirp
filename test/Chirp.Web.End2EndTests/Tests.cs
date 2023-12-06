@@ -1,20 +1,28 @@
 namespace Chirp.Web.End2EndTests;
 
-// [Parallelizable(ParallelScope.Self)]
+[Parallelizable(ParallelScope.Self)]
 [TestFixture]
 public class CreateCheepTests : PageTest
 {
     bool isSetup = false;
+
+    BrowserTypeLaunchOptions browserTypeLaunchOptions = new BrowserTypeLaunchOptions
+    {
+        Headless = false,
+    };
+
+    BrowserNewContextOptions browserNewContextOptions = new BrowserNewContextOptions
+    {
+        IgnoreHTTPSErrors = true,
+        StorageStatePath = "state.json"
+    };
 
     [SetUp]
     public async Task SetUp()
     {
         if (isSetup) return;
 
-        await using var browser = await Playwright.Chromium.LaunchAsync(new BrowserTypeLaunchOptions
-        {
-            Headless = false
-        });
+        await using var browser = await Playwright.Chromium.LaunchAsync(browserTypeLaunchOptions);
 
         var context = await browser.NewContextAsync(new BrowserNewContextOptions
         {
@@ -40,16 +48,9 @@ public class CreateCheepTests : PageTest
     [Test]
     public async Task AuthenticatedUserCanCreateCheepFromPublicTimeline()
     {
-        await using var browser = await Playwright.Chromium.LaunchAsync(new BrowserTypeLaunchOptions
-        {
-            Headless = false,
-        });
+        await using var browser = await Playwright.Chromium.LaunchAsync(browserTypeLaunchOptions);
 
-        var context = await browser.NewContextAsync(new BrowserNewContextOptions
-        {
-            IgnoreHTTPSErrors = true,
-            StorageStatePath = "state.json"
-        });
+        var context = await browser.NewContextAsync(browserNewContextOptions);
 
         var page = await context.NewPageAsync();
 
@@ -69,22 +70,13 @@ public class CreateCheepTests : PageTest
     [Test]
     public async Task AuthenticatedUserCanCreateCheepFromPrivateTimeline()
     {
-        await using var browser = await Playwright.Chromium.LaunchAsync(new BrowserTypeLaunchOptions
-        {
-            Headless = false
-        });
+        await using var browser = await Playwright.Chromium.LaunchAsync(browserTypeLaunchOptions);
 
-        var context = await browser.NewContextAsync(new BrowserNewContextOptions
-        {
-            IgnoreHTTPSErrors = true,
-            StorageStatePath = "state.json"
-        });
+        var context = await browser.NewContextAsync(browserNewContextOptions);
 
         var page = await context.NewPageAsync();
 
         await page.GotoAsync("https://localhost:7102/");
-
-        //await page.GetByRole(AriaRole.Link, new() { Name = "login" }).ClickAsync();
 
         await page.WaitForURLAsync("https://localhost:7102/", new PageWaitForURLOptions() { Timeout = 0 });
 
