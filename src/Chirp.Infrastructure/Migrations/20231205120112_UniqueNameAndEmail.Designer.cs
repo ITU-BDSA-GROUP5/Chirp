@@ -11,15 +11,15 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Chirp.Infrastructure.Migrations
 {
     [DbContext(typeof(ChirpDBContext))]
-    [Migration("20231123171423_InitialCreate")]
-    partial class InitialCreate
+    [Migration("20231205120112_UniqueNameAndEmail")]
+    partial class UniqueNameAndEmail
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "7.0.13")
+                .HasAnnotation("ProductVersion", "7.0.14")
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
@@ -32,15 +32,36 @@ namespace Chirp.Infrastructure.Migrations
 
                     b.Property<string>("Email")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("Name")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(450)");
 
                     b.HasKey("AuthorId");
 
-                    b.ToTable("Authors", (string)null);
+                    b.HasIndex("Email")
+                        .IsUnique();
+
+                    b.HasIndex("Name")
+                        .IsUnique();
+
+                    b.ToTable("Authors");
+                });
+
+            modelBuilder.Entity("AuthorAuthor", b =>
+                {
+                    b.Property<Guid>("FollowersAuthorId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid>("FollowingAuthorId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.HasKey("FollowersAuthorId", "FollowingAuthorId");
+
+                    b.HasIndex("FollowingAuthorId");
+
+                    b.ToTable("AuthorAuthor");
                 });
 
             modelBuilder.Entity("Cheep", b =>
@@ -65,6 +86,21 @@ namespace Chirp.Infrastructure.Migrations
                     b.HasIndex("AuthorId");
 
                     b.ToTable("Cheeps", (string)null);
+                });
+
+            modelBuilder.Entity("AuthorAuthor", b =>
+                {
+                    b.HasOne("Author", null)
+                        .WithMany()
+                        .HasForeignKey("FollowersAuthorId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Author", null)
+                        .WithMany()
+                        .HasForeignKey("FollowingAuthorId")
+                        .OnDelete(DeleteBehavior.ClientCascade)
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("Cheep", b =>

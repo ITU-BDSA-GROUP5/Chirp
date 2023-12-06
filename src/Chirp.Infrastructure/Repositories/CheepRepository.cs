@@ -88,5 +88,21 @@ namespace Chirp.Infrastructure.Repositories
 				})
 				.ToList();
 		}
+		public List<CheepDTO> GetCheepsFromAuthorAndFollowings(int page, string author, List<string> following)
+		{
+			following.Add(author);
+			return _context.Cheeps
+				.Where(c => following.Contains(c.Author.Name))
+				.OrderByDescending(c => c.TimeStamp)
+				.Skip((page - 1) * pageSize)
+				.Take(pageSize)
+				.Select(c => new CheepDTO
+				{
+					AuthorName = c.Author.Name,
+					Message = c.Text,
+					TimeStamp = c.TimeStamp.ToString("yyyy-MM-dd H:mm:ss")
+				})
+				.ToList();
+		}
 	}
 }

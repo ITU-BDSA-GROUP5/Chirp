@@ -13,6 +13,8 @@ public class PublicModel : PageModel
 	private readonly IValidator<CreateCheepDTO> CheepValidator;
 	public required List<CheepDTO> Cheeps { get; set; }
 
+	public required List<AuthorDTO> Following { get; set; }
+
 	[BindProperty]
 	public string? CheepMessage { get; set; }
 
@@ -31,6 +33,12 @@ public class PublicModel : PageModel
 
 	public ActionResult OnGet([FromQuery(Name = "page")] int page = 1)
 	{
+		if (User.Identity != null && User.Identity.IsAuthenticated)
+		{
+			string name = (User.Identity?.Name) ?? throw new Exception("Name is null!");
+			Following = AuthorRepository.GetFollowing(name);
+		}
+
 		Cheeps = CheepRepository.GetCheeps(page);
 		PageNumber = page;
 		LastPageNumber = CheepRepository.GetPageAmount();
@@ -41,7 +49,6 @@ public class PublicModel : PageModel
 	public async Task<IActionResult> OnPost()
 	{
 		InvalidCheep = false;
-		//Console.WriteLine("OnPost called!");
 		try
 		{
 			if (CheepMessage == null)
@@ -50,20 +57,20 @@ public class PublicModel : PageModel
 			}
 
 			string name = (User.Identity?.Name) ?? throw new Exception("Error in getting username");
-			AuthorDTO? user = AuthorRepository.GetAuthorByName(name).FirstOrDefault();
+			AuthorDTO? user = AuthorRepository.GetAuthorByName(name);
 
 			if (user == null)
 			{
 				string token = User.FindFirst("idp_access_token")?.Value
 					?? throw new Exception("Github token not found");
-                
+
 				string email = await GithubHelper.GetUserEmailGithub(token, name);
 
 				AuthorRepository.CreateNewAuthor(name, email);
-				user = AuthorRepository.GetAuthorByName(name).First();
+				user = AuthorRepository.GetAuthorByName(name) ?? throw new Exception("Error when getting user with name: " + name);
 			}
 
-			CreateCheepDTO cheep = new ()
+			CreateCheepDTO cheep = new CreateCheepDTO()
 			{
 				Text = CheepMessage,
 				Name = user.Name,
@@ -82,5 +89,28 @@ public class PublicModel : PageModel
 		}
 
 		return OnGet();
+	}
+
+	public async Task<IActionResult> OnPostFollow(string followeeName, string followerName)
+	{
+		string name = (User.Identity?.Name) ?? throw new Exception("Name is null!");
+
+		if (AuthorRepository.GetAuthorByName(name) == null)
+		{
+			string token = User.FindFirst("idp_access_token")?.Value
+					?? throw new Exception("Github token not found");
+			string email = await GithubHelper.GetUserEmailGithub(token, name);
+
+			AuthorRepository.CreateNewAuthor(name, email);
+		}
+
+		AuthorRepository.FollowAuthor(followerName ?? throw new Exception("Name is null!"), followeeName);
+		return Redirect("/");
+	}
+
+	public async Task<IActionResult> OnPostUnfollow(string followeeName, string followerName)
+	{
+		await AuthorRepository.UnfollowAuthor(followerName ?? throw new Exception("Name is null!"), followeeName);
+		return Redirect("/");
 	}
 }
