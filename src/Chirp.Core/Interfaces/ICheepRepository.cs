@@ -6,7 +6,7 @@ public interface ICheepRepository
 	public int GetPageAmount(string author);
 	public List<CheepDTO> GetCheepsFromAuthor(int page, string author);
 	public void CreateNewCheep(CreateCheepDTO createCheepDTO);
-	public Task LikeCheep(CheepDTO cheep, string author);
+	public Task LikeCheep(Guid cheepId, string author);
 
 	public List<CheepDTO> GetCheepsFromAuthorAndFollowings(int page, string author, List<String> following);
 }

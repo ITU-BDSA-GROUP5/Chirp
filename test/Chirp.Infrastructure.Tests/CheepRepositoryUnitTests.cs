@@ -146,17 +146,12 @@ public class CheepRepositoryUnitTests : IAsyncLifetime
 			.Where(a => a.Name == "Helge")
 			.FirstAsync();
 		
-		var cheepDTO = authorWithCheepToLike.Cheeps
-			.Select(c => new CheepDTO() {
-				Id = c.CheepId,
-				AuthorName = c.Author.Name,
-				TimeStamp = c.TimeStamp.ToString(),
-				Message = c.Text
-			})
-			.First();
+		var cheepToLike = authorWithCheepToLike.Cheeps
+			.First()
+			.CheepId;
 	
 		// Act
-		await _cheepRepository.LikeCheep(cheepDTO, authorLikingName);
+		await _cheepRepository.LikeCheep(cheepToLike, authorLikingName);
 	
 		var authorLiking = await _context.Authors
 			.Where(a => a.Name == authorLikingName)

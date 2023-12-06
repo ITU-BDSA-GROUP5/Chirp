@@ -93,14 +93,14 @@ namespace Chirp.Infrastructure.Repositories
 				.ToList();
 		}
 
-		public async Task LikeCheep(CheepDTO cheep, string author)
+		public async Task LikeCheep(Guid cheepId, string author)
 		{
 			var authorModel = _context.Authors
 				.Where(a => a.Name == author)
 				.FirstAsync();
 
 			var cheepModel = _context.Cheeps
-				.Where(c => c.CheepId == cheep.Id)
+				.Where(c => c.CheepId == cheepId)
 				.FirstAsync();
 			
 			await Task.WhenAll(authorModel, cheepModel);
