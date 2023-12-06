@@ -136,14 +136,14 @@ public class CheepRepositoryUnitTests : IAsyncLifetime
 	}
 
 	[Fact]
-	public async Task LikeCheep_AuthorStoresLikedCheep_ListWithSingleCheep()
+	public async Task LikeCheep_AuthorStoresLikedCheep_ReturnsListWithSingleCheep()
 	{
 		// Arrange
 		var authorLikingName = "Helge";
 		
 		// Get author and a cheep we assume is in the dataset
 		var authorWithCheepToLike = await _context.Authors
-			.Where(a => a.Name == "Helge")
+			.Where(a => a.Name == "Rasmus")
 			.FirstAsync();
 		
 		var cheepToLike = authorWithCheepToLike.Cheeps
@@ -160,5 +160,33 @@ public class CheepRepositoryUnitTests : IAsyncLifetime
 
 		// Assert
 		Assert.Single(authorLiking.LikedCheeps);
+	}
+
+	[Fact]
+	public async Task UnlikeCheep_AuthorDoesNotStoreCheepAsLiked_ReturnsEmptyList()
+	{
+		// Arrange
+		var authorUnlikingName = "Helge";
+		
+		// Get author and a cheep we assume is in the dataset
+		var authorWithCheepToLike = await _context.Authors
+			.Where(a => a.Name == "Rasmus")
+			.FirstAsync();
+		
+		var cheepToLike = authorWithCheepToLike.Cheeps
+			.First()
+			.CheepId;
+	
+		// Act
+		await _cheepRepository.LikeCheep(cheepToLike, authorUnlikingName);
+		await _cheepRepository.UnlikeCheep(cheepToLike, authorUnlikingName);
+	
+		var authorUnliking = await _context.Authors
+			.Where(a => a.Name == authorUnlikingName)
+			.Include(a => a.LikedCheeps)
+			.FirstAsync();
+
+		// Assert
+		Assert.Empty(authorUnliking.LikedCheeps);
 	}
 }
