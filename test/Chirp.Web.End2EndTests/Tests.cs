@@ -46,6 +46,7 @@ public class CreateCheepTests : PageTest
     }
 
     [Test]
+    [Category("End2End")]
     public async Task AuthenticatedUserCanCreateCheepFromPublicTimeline()
     {
         await using var browser = await Playwright.Chromium.LaunchAsync(browserTypeLaunchOptions);
@@ -68,6 +69,7 @@ public class CreateCheepTests : PageTest
     }
 
     [Test]
+    [Category("End2End")]
     public async Task AuthenticatedUserCanCreateCheepFromPrivateTimeline()
     {
         await using var browser = await Playwright.Chromium.LaunchAsync(browserTypeLaunchOptions);
