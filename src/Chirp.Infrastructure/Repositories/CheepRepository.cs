@@ -111,6 +111,26 @@ namespace Chirp.Infrastructure.Repositories
 			await _context.SaveChangesAsync();
 		}
 
+		public async Task UnlikeCheep(Guid cheepId, string author)
+		{
+			var authorModel = _context.Authors
+				.Where(a => a.Name == author)
+				.Include(a => a.LikedCheeps)
+				.FirstAsync();
+
+			var cheepModel = _context.Cheeps
+				.Where(c => c.CheepId == cheepId)
+				.Include(c => c.LikedBy)
+				.FirstAsync();
+			
+			await Task.WhenAll(authorModel, cheepModel);
+
+			authorModel.Result.LikedCheeps.Remove(cheepModel.Result);
+			cheepModel.Result.LikedBy.Remove(authorModel.Result);
+
+			await _context.SaveChangesAsync();
+		}
+
 		public List<CheepDTO> GetCheepsFromAuthorAndFollowings(int page, string author, List<string> following)
 		{
 			following.Add(author);
