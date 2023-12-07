@@ -13,6 +13,7 @@ public class UserTimelineModel : PageModel
 	private readonly IValidator<CreateCheepDTO> CheepValidator;
 	public required List<CheepDTO> Cheeps { get; set; }
 	public required List<AuthorDTO> Following { get; set; }
+	public int followerCount { get; set; }
 
 	[BindProperty]
 	public string? CheepMessage { get; set; }
@@ -29,7 +30,11 @@ public class UserTimelineModel : PageModel
 		AuthorRepository = authorRepository;
 		CheepRepository = cheepRepository;
 		CheepValidator = _cheepValidator;
-	}
+
+        string name = (User.Identity?.Name) ?? throw new Exception("Name is null!");
+        int followercount = AuthorRepository.GetFollowing(name).Count;
+		followerCount = followercount;
+    }
 
 	public ActionResult OnGet(string author, [FromQuery(Name = "page")] int page = 1)
 	{
@@ -112,6 +117,13 @@ public class UserTimelineModel : PageModel
 		await AuthorRepository.UnfollowAuthor(followerName ?? throw new Exception("Name is null!"), followeeName);
 		return Redirect("/");
 	}
+
+	//public int OnPostFollowercount()
+	//{
+ //       string name = (User.Identity?.Name) ?? throw new Exception("Name is null!");
+ //       int followercount = AuthorRepository.GetFollowing(name).Count;
+	//	return followercount;
+	//}
 
 	private void LoadTimelineSpecificCheeps(string author, int page)
 	{
