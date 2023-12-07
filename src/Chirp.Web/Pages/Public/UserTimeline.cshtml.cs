@@ -38,8 +38,11 @@ public class UserTimelineModel : PageModel
 		{
 			LoadTimelineSpecificCheeps(author, page);
 		}
+		else
+		{
+			Cheeps = CheepRepository.GetCheepsFromAuthor(page, author);
+		}
 
-		Cheeps = CheepRepository.GetCheepsFromAuthor(page, author);
 		PageNumber = page;
 		LastPageNumber = CheepRepository.GetPageAmount(author);
 		PageUrl = HttpContext.Request.GetEncodedUrl().Split("?")[0];
@@ -103,13 +106,13 @@ public class UserTimelineModel : PageModel
 		}
 
 		AuthorRepository.FollowAuthor(followerName ?? throw new Exception("Name is null!"), followeeName);
-		return Redirect("/");
+		return Redirect(PageUrl ?? "/");
 	}
 
 	public IActionResult OnPostUnfollow(string followeeName, string followerName)
 	{
 		AuthorRepository.UnfollowAuthor(followerName ?? throw new Exception("Name is null!"), followeeName);
-		return Redirect("/");
+		return Redirect(PageUrl ?? "/");
 	}
 
 	private void LoadTimelineSpecificCheeps(string author, int page)

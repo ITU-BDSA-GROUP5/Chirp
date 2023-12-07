@@ -91,13 +91,17 @@ public class PublicModel : PageModel
 		return OnGet();
 	}
 
-	public IActionResult OnPostFollow(string followeeName, string followerName)
+	public async Task<IActionResult> OnPostFollow(string followeeName, string followerName)
 	{
 		string name = (User.Identity?.Name) ?? throw new Exception("Name is null!");
 
 		if (AuthorRepository.GetAuthorByName(name) == null)
 		{
-			AuthorRepository.CreateNewAuthor(name, name + "@gmail.com");
+			string token = User.FindFirst("idp_access_token")?.Value
+					?? throw new Exception("Github token not found");
+			string email = await GithubHelper.GetUserEmailGithub(token, name);
+
+			AuthorRepository.CreateNewAuthor(name, email);
 		}
 
 		AuthorRepository.FollowAuthor(followerName ?? throw new Exception("Name is null!"), followeeName);
@@ -107,6 +111,6 @@ public class PublicModel : PageModel
 	public IActionResult OnPostUnfollow(string followeeName, string followerName)
 	{
 		AuthorRepository.UnfollowAuthor(followerName ?? throw new Exception("Name is null!"), followeeName);
-		return Redirect("/");
+		return Redirect(PageUrl ?? "/");
 	}
 }

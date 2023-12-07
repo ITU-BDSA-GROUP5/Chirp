@@ -72,13 +72,10 @@ namespace Chirp.Infrastructure.Repositories
 				.FirstOrDefault();
 			if (follower == null || followee == null)
 			{
-				Console.WriteLine("Either follower or followee does not exist. No new follow was made");
-				return;
+				throw new InvalidOperationException("Either follower or followee does not exist. No new follow could be made.");
 			}
 			follower.Following.Add(followee);
 			followee.Followers.Add(follower);
-			Console.WriteLine(follower.Following.Count);
-			Console.WriteLine(followee.Followers.Count);
 			_context.SaveChanges();
 		}
 
@@ -103,6 +100,11 @@ namespace Chirp.Infrastructure.Repositories
 			followee.Followers.Remove(follower);
 			follower.Following.Remove(followee);
 			_context.SaveChanges();
+		}
+
+		public void DeleteAuthorByName(string name)
+		{
+			_context.Authors.Where(author => author.Name == name).ExecuteDelete();
 		}
 	}
 }
