@@ -57,8 +57,6 @@ public class CreateCheepTests : PageTest
 
         await page.GotoAsync("https://localhost:7102/");
 
-        await page.WaitForURLAsync("https://localhost:7102/", new PageWaitForURLOptions() { Timeout = 0 });
-
         await page.Locator("#CheepMessage").ClickAsync();
 
         await page.Locator("#CheepMessage").FillAsync("Testing public timeline");
@@ -76,5 +74,30 @@ public class CreateCheepTests : PageTest
         await page.GetByRole(AriaRole.Button, new() { Name = "Share" }).ClickAsync();
 
         await Expect(page.Locator("#messagelist")).ToContainTextAsync("Testing private timeline");
+    }
+
+    [Test]
+    [Category("End2End")]
+    public async Task AuthenticatedUserCanFollowAndUnfollowUser()
+    {
+        await using var browser = await Playwright.Chromium.LaunchAsync(browserTypeLaunchOptions);
+
+        var context = await browser.NewContextAsync(browserNewContextOptions);
+
+        var page = await context.NewPageAsync();
+
+        await page.GotoAsync("https://localhost:7102/");
+
+        await page.Locator("li").Filter(new() { HasText = "Jacqualine Gilcoine Follow Starbuck now is what we hear the worst. — 2023-08-01 13:17:" }).GetByRole(AriaRole.Button).ClickAsync();
+
+        await Expect(page.Locator("#messagelist")).ToContainTextAsync("Unfollow");
+
+        await page.GetByRole(AriaRole.Link, new() { Name = "my timeline" }).ClickAsync();
+
+        await Expect(page.Locator("#messagelist")).ToContainTextAsync("Jacqualine Gilcoine");
+
+        await page.Locator("li").Filter(new() { HasText = "Jacqualine Gilcoine Unfollow Starbuck now is what we hear the worst. — 2023-08-01 13:17:" }).GetByRole(AriaRole.Button).ClickAsync();
+
+        await Expect(page.Locator("#messagelist")).ToContainTextAsync("Follow");
     }
 }
