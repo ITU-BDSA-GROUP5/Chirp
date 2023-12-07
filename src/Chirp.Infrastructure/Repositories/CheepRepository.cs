@@ -34,6 +34,7 @@ namespace Chirp.Infrastructure.Repositories
 		{
 			return _context.Cheeps
 				.OrderByDescending(c => c.TimeStamp)
+				.Include(c => c.LikedBy)
 				.Skip((page - 1) * pageSize)
 				.Take(pageSize)
 				.Select(c => new CheepDTO
@@ -41,7 +42,8 @@ namespace Chirp.Infrastructure.Repositories
 					Id = c.CheepId,
 					AuthorName = c.Author.Name,
 					Message = c.Text,
-					TimeStamp = c.TimeStamp.ToString("yyyy-MM-dd H:mm:ss")
+					TimeStamp = c.TimeStamp.ToString("yyyy-MM-dd H:mm:ss"),
+					Likes = c.LikedBy.Select(a => a.Name).ToList()
 				})
 				.ToList();
 		}
@@ -65,6 +67,7 @@ namespace Chirp.Infrastructure.Repositories
 		{
 			return _context.Cheeps
 				.Where(c => c.Author.Name == author)
+				.Include(c => c.LikedBy)
 				.OrderByDescending(c => c.TimeStamp)
 				.Skip((page - 1) * pageSize)
 				.Take(pageSize)
@@ -73,7 +76,8 @@ namespace Chirp.Infrastructure.Repositories
 					Id = c.CheepId,
 					AuthorName = c.Author.Name,
 					Message = c.Text,
-					TimeStamp = c.TimeStamp.ToString("yyyy-MM-dd H:mm:ss")
+					TimeStamp = c.TimeStamp.ToString("yyyy-MM-dd H:mm:ss"),
+					Likes = c.LikedBy.Select(a => a.Name).ToList()
 				})
 				.ToList();
 		}
@@ -83,13 +87,15 @@ namespace Chirp.Infrastructure.Repositories
 		{
 			return _context.Cheeps
 				.Where(c => c.Author.Name == author)
+				.Include(c => c.LikedBy)
 				.OrderByDescending(c => c.TimeStamp)
 				.Select(c => new CheepDTO
 				{
 					Id = c.CheepId,
 					AuthorName = c.Author.Name,
 					Message = c.Text,
-					TimeStamp = c.TimeStamp.ToString("yyyy-MM-dd H:mm:ss")
+					TimeStamp = c.TimeStamp.ToString("yyyy-MM-dd H:mm:ss"),
+					Likes = c.LikedBy.Select(a => a.Name).ToList()
 				})
 				.ToList();
 		}
@@ -133,6 +139,7 @@ namespace Chirp.Infrastructure.Repositories
 			following.Add(author);
 			return _context.Cheeps
 				.Where(c => following.Contains(c.Author.Name))
+				.Include(c => c.LikedBy)
 				.OrderByDescending(c => c.TimeStamp)
 				.Skip((page - 1) * pageSize)
 				.Take(pageSize)
@@ -141,7 +148,8 @@ namespace Chirp.Infrastructure.Repositories
 					Id = c.CheepId,
 					AuthorName = c.Author.Name,
 					Message = c.Text,
-					TimeStamp = c.TimeStamp.ToString("yyyy-MM-dd H:mm:ss")
+					TimeStamp = c.TimeStamp.ToString("yyyy-MM-dd H:mm:ss"),
+					Likes = c.LikedBy.Select(a => a.Name).ToList()
 				})
 				.ToList();
 		}
