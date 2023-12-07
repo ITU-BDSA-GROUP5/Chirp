@@ -6,4 +6,6 @@ public interface IAuthorRepository
 	public void FollowAuthor(string followerName, string followeeName);
 	public Task UnfollowAuthor(string followerName, string followeeName);
 	public List<AuthorDTO> GetFollowing(string authorname);
+	public List<AuthorDTO> GetFollowers(string authorname);
+
 }

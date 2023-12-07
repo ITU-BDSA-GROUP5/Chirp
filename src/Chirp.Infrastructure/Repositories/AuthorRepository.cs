@@ -62,6 +62,20 @@ namespace Chirp.Infrastructure.Repositories
 				.ToList();
 		}
 
+		public List<AuthorDTO> GetFollowers(string authorname)
+		{
+			return _context.Authors
+				.Where(a => a.Name == authorname)
+				.SelectMany(a => a.Followers)
+				.OrderByDescending(a => a.AuthorId)
+				.Select(a => new AuthorDTO
+				{
+					Name = a.Name,
+					Email = a.Email
+				})
+				.ToList();
+		}
+
 		public void FollowAuthor(string followerName, string followeeName)
 		{
 			var follower = _context.Authors

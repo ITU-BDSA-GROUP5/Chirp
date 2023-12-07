@@ -38,7 +38,7 @@ public class UserTimelineModel : PageModel
 		if (User.Identity != null && User.Identity.IsAuthenticated)
 		{
 			LoadTimelineSpecificCheeps(author, page);
-			int followercount = AuthorRepository.GetFollowing(author).Count;
+			int followercount = AuthorRepository.GetFollowers(author).Count;
 			followerCount = followercount;
 		}
 		else
