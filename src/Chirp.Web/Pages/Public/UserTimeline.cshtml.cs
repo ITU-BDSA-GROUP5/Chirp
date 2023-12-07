@@ -106,9 +106,9 @@ public class UserTimelineModel : PageModel
 		return Redirect("/");
 	}
 
-	public async Task<IActionResult> OnPostUnfollow(string followeeName, string followerName)
+	public IActionResult OnPostUnfollow(string followeeName, string followerName)
 	{
-		await AuthorRepository.UnfollowAuthor(followerName ?? throw new Exception("Name is null!"), followeeName);
+		AuthorRepository.UnfollowAuthor(followerName ?? throw new Exception("Name is null!"), followeeName);
 		return Redirect("/");
 	}
 

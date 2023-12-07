@@ -39,7 +39,7 @@ namespace Chirp.Infrastructure.Tests
 		}
 
 		[Fact]
-		public async Task GetFollowing_AfterFollowAuthor_ReturnsFollowing()
+		public void GetFollowing_AfterFollowAuthor_ReturnsFollowing()
 		{
 			// Arrange
 			var authorFollower = _authorRepository.GetAuthorByName("Rasmus");
@@ -51,7 +51,7 @@ namespace Chirp.Infrastructure.Tests
 			}
 
 			// Act
-			await _authorRepository.FollowAuthor(authorFollower.Name, authorFollowee.Name);
+			_authorRepository.FollowAuthor(authorFollower.Name, authorFollowee.Name);
 			List<AuthorDTO> authorFollowers = _authorRepository.GetFollowing(authorFollower.Name);
 
 			// Assert
@@ -59,7 +59,7 @@ namespace Chirp.Infrastructure.Tests
 		}
 
 		[Fact]
-		public async Task GetFollowing_AfterUnfollowAuthor_ReturnsEmptyList()
+		public void GetFollowing_AfterUnfollowAuthor_ReturnsEmptyList()
 		{
 			// Arrange
 			var authorFollower = _authorRepository.GetAuthorByName("Rasmus");
@@ -71,8 +71,8 @@ namespace Chirp.Infrastructure.Tests
 			}
 
 			// Act
-			await _authorRepository.FollowAuthor(authorFollower.Name, authorFollowee.Name);
-			await _authorRepository.UnfollowAuthor(authorFollower.Name, authorFollowee.Name);
+			_authorRepository.FollowAuthor(authorFollower.Name, authorFollowee.Name);
+			_authorRepository.UnfollowAuthor(authorFollower.Name, authorFollowee.Name);
 			List<AuthorDTO> authorFollowers = _authorRepository.GetFollowing(authorFollower.Name);
 
 			// Assert
@@ -80,7 +80,7 @@ namespace Chirp.Infrastructure.Tests
 		}
 
 		[Fact]
-		public async Task GetFollowing_AfterFollowingSameAuthorTwice_ReturnsSingleFollower()
+		public void GetFollowing_AfterFollowingSameAuthorTwice_ReturnsSingleFollower()
 		{
 			// Arrange
 			var authorFollower = _authorRepository.GetAuthorByName("Rasmus");
@@ -92,8 +92,8 @@ namespace Chirp.Infrastructure.Tests
 			}
 
 			// Act
-			await _authorRepository.FollowAuthor(authorFollower.Name, authorFollowee.Name);
-			await _authorRepository.FollowAuthor(authorFollower.Name, authorFollowee.Name);
+			_authorRepository.FollowAuthor(authorFollower.Name, authorFollowee.Name);
+			_authorRepository.FollowAuthor(authorFollower.Name, authorFollowee.Name);
 			List<AuthorDTO> authorFollowers = _authorRepository.GetFollowing(authorFollower.Name);
 
 			// Assert
@@ -101,7 +101,7 @@ namespace Chirp.Infrastructure.Tests
 		}
 
 		[Fact]
-		public async Task UnfollowAuthor_AuthorNotFollowing_ThrowsNoException()
+		public void UnfollowAuthor_AuthorNotFollowing_ThrowsNoException()
 		{
 			// Arrange
 			var authorFollower = _authorRepository.GetAuthorByName("Rasmus");
@@ -115,7 +115,7 @@ namespace Chirp.Infrastructure.Tests
 			// Act
 			try
 			{
-				await _authorRepository.UnfollowAuthor(authorFollower.Name, authorFollowee.Name);
+				_authorRepository.UnfollowAuthor(authorFollower.Name, authorFollowee.Name);
 			}
 			catch (Exception e)
 			{
@@ -127,14 +127,14 @@ namespace Chirp.Infrastructure.Tests
 		}
 
 		[Fact]
-		public async Task FollowAuthor_NonExistantAuthor_Fails()
+		public void FollowAuthor_NonExistantAuthor_Fails()
 		{
 			// Arrange
 			var authorNotInDatabase = "this_user_does_not_exist";
 
 			// Assert
-			await Assert.ThrowsAsync<InvalidOperationException>(
-				async () => await _authorRepository.FollowAuthor(authorNotInDatabase, authorNotInDatabase)
+			Assert.Throws<InvalidOperationException>(
+				() => _authorRepository.FollowAuthor(authorNotInDatabase, authorNotInDatabase)
 			);
 		}
 
@@ -152,7 +152,7 @@ namespace Chirp.Infrastructure.Tests
 		}
 
 		[Fact]
-		public async Task GetFollowing_MultipleAuthors_ReturnsListWithMultipleItems()
+		public void GetFollowing_MultipleAuthors_ReturnsListWithMultipleItems()
 		{
 			// Arrange
 			var authorFollower = _authorRepository.GetAuthorByName("Rasmus");
@@ -165,8 +165,8 @@ namespace Chirp.Infrastructure.Tests
 			}
 
 			// Act
-			await _authorRepository.FollowAuthor(authorFollower.Name, authorFollowee.Name);
-			await _authorRepository.FollowAuthor(authorFollower.Name, authorFollowee2.Name);
+			_authorRepository.FollowAuthor(authorFollower.Name, authorFollowee.Name);
+			_authorRepository.FollowAuthor(authorFollower.Name, authorFollowee2.Name);
 			List<AuthorDTO> authorFollows = _authorRepository.GetFollowing(authorFollower.Name);
 
 			// Assert

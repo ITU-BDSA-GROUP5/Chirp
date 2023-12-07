@@ -62,32 +62,47 @@ namespace Chirp.Infrastructure.Repositories
 				.ToList();
 		}
 
-		public async Task FollowAuthor(string followerName, string followeeName)
+		public void FollowAuthor(string followerName, string followeeName)
 		{
-			var follower = await _context.Authors
+			var follower = _context.Authors
 				.Where(a => a.Name == followerName)
-				.FirstAsync();
-			var followee = await _context.Authors
+				.FirstOrDefault();
+			var followee = _context.Authors
 				.Where(a => a.Name == followeeName)
-				.FirstAsync();
+				.FirstOrDefault();
+			if (follower == null || followee == null)
+			{
+				Console.WriteLine("Either follower or followee does not exist. No new follow was made");
+				return;
+			}
 			follower.Following.Add(followee);
 			followee.Followers.Add(follower);
-			await _context.SaveChangesAsync();
+			Console.WriteLine(follower.Following.Count);
+			Console.WriteLine(followee.Followers.Count);
+			_context.SaveChanges();
 		}
 
-		public async Task UnfollowAuthor(string followerName, string followeeName)
+		public void UnfollowAuthor(string followerName, string followeeName)
 		{
-			var follower = await _context.Authors
+			var follower = _context.Authors
 				.Include(a => a.Following)
 				.Where(a => a.Name == followerName)
-				.FirstAsync();
-			var followee = await _context.Authors
+				.FirstOrDefault();
+			var followee = _context.Authors
 				.Include(a => a.Followers)
 				.Where(a => a.Name == followeeName)
-				.FirstAsync();
+				.FirstOrDefault();
+			if (follower == null || followee == null)
+			{
+				Console.WriteLine("Either follower or followee does not exist. No new follow was made");
+				return;
+			}
+			Console.WriteLine("Unfollowed " + followee + " from " + follower);
+			Console.WriteLine(follower.Following.Count);
+			Console.WriteLine(followee.Followers.Count);
 			followee.Followers.Remove(follower);
 			follower.Following.Remove(followee);
-			await _context.SaveChangesAsync();
+			_context.SaveChanges();
 		}
 	}
 }
