@@ -107,7 +107,7 @@ public class PublicModel : PageModel
 			ErrorMessage = e.Message;
 		}
 
-		return Redirect("/");
+		return OnGet();
 	}
 
 	public async Task<IActionResult> OnPostUnlike(Guid cheep)
@@ -125,7 +125,7 @@ public class PublicModel : PageModel
 			ErrorMessage = e.Message;
 		}
 		
-		return Redirect("/");
+		return OnGet();
 	}
 
 	public async Task<IActionResult> OnPostFollow(string followeeName, string followerName)
