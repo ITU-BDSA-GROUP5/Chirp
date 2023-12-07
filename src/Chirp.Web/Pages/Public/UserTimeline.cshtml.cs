@@ -30,10 +30,6 @@ public class UserTimelineModel : PageModel
 		AuthorRepository = authorRepository;
 		CheepRepository = cheepRepository;
 		CheepValidator = _cheepValidator;
-
-        string name = (User.Identity?.Name) ?? throw new Exception("Name is null!");
-        int followercount = AuthorRepository.GetFollowing(name).Count;
-		followerCount = followercount;
     }
 
 	public ActionResult OnGet(string author, [FromQuery(Name = "page")] int page = 1)
@@ -42,7 +38,11 @@ public class UserTimelineModel : PageModel
 		if (User.Identity != null && User.Identity.IsAuthenticated)
 		{
 			LoadTimelineSpecificCheeps(author, page);
-		}else{
+			int followercount = AuthorRepository.GetFollowing(author).Count;
+			followerCount = followercount;
+		}
+		else
+		{
 			Cheeps = CheepRepository.GetCheepsFromAuthor(page, author);
 		}
 
