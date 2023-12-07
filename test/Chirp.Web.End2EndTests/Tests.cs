@@ -47,7 +47,7 @@ public class CreateCheepTests : PageTest
 
     [Test]
     [Category("End2End")]
-    public async Task AuthenticatedUserCanCreateCheepFromPublicTimeline()
+    public async Task AuthenticatedUserCanCreateCheepFromPublicAndPrivateTimeline()
     {
         await using var browser = await Playwright.Chromium.LaunchAsync(browserTypeLaunchOptions);
 
@@ -66,21 +66,6 @@ public class CreateCheepTests : PageTest
         await page.GetByRole(AriaRole.Button, new() { Name = "Share" }).ClickAsync();
 
         await Expect(page.Locator("#messagelist")).ToContainTextAsync("Testing public timeline");
-    }
-
-    [Test]
-    [Category("End2End")]
-    public async Task AuthenticatedUserCanCreateCheepFromPrivateTimeline()
-    {
-        await using var browser = await Playwright.Chromium.LaunchAsync(browserTypeLaunchOptions);
-
-        var context = await browser.NewContextAsync(browserNewContextOptions);
-
-        var page = await context.NewPageAsync();
-
-        await page.GotoAsync("https://localhost:7102/");
-
-        await page.WaitForURLAsync("https://localhost:7102/", new PageWaitForURLOptions() { Timeout = 0 });
 
         await page.GetByRole(AriaRole.Link, new() { Name = "my timeline" }).ClickAsync();
 
