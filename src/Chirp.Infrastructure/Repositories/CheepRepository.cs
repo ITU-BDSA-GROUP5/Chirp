@@ -100,38 +100,38 @@ namespace Chirp.Infrastructure.Repositories
 				.ToList();
 		}
 
-		public async Task LikeCheep(Guid cheepId, string author)
+		public void LikeCheep(Guid cheepId, string author)
 		{
-			var authorModel = await _context.Authors
+			var authorModel = _context.Authors
 				.Where(a => a.Name == author)
-				.FirstAsync();
+				.First();
 
-			var cheepModel = await _context.Cheeps
+			var cheepModel = _context.Cheeps
 				.Where(c => c.CheepId == cheepId)
-				.FirstAsync();
+				.First();
 
 			authorModel.LikedCheeps.Add(cheepModel);
 			cheepModel.LikedBy.Add(authorModel);
 
-			await _context.SaveChangesAsync();
+			_context.SaveChanges();
 		}
 
-		public async Task UnlikeCheep(Guid cheepId, string author)
+		public void UnlikeCheep(Guid cheepId, string author)
 		{
-			var authorModel = await _context.Authors
+			var authorModel = _context.Authors
 				.Where(a => a.Name == author)
 				.Include(a => a.LikedCheeps)
-				.FirstAsync();
+				.First();
 
-			var cheepModel = await _context.Cheeps
+			var cheepModel = _context.Cheeps
 				.Where(c => c.CheepId == cheepId)
 				.Include(c => c.LikedBy)
-				.FirstAsync();
+				.First();
 
 			authorModel.LikedCheeps.Remove(cheepModel);
 			cheepModel.LikedBy.Remove(authorModel);
 
-			await _context.SaveChangesAsync();
+			_context.SaveChanges();
 		}
 
 		public List<CheepDTO> GetCheepsFromAuthorAndFollowings(int page, string author, List<string> following)
