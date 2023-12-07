@@ -55,6 +55,22 @@
 							}
 						</strong>
 						@cheep.Message
+						@if (User.Identity?.IsAuthenticated == true && User.Identity.Name != null)
+						{
+							@if (cheep.Likes.Contains(User.Identity.Name))
+							{
+								<form asp-page-handler="Unlike" asp-route-cheep="@cheep.Id" method="post">
+									<input type="submit" value="Unlike">
+								</form>
+							}
+							else
+							{
+								<form asp-page-handler="Like" asp-route-cheep="@cheep.Id" method="post">
+									<input type="submit" value="Like">
+								</form>
+							}
+
+						}
 						<small>&mdash; @cheep.TimeStamp</small>
 					</p>
 				</li>

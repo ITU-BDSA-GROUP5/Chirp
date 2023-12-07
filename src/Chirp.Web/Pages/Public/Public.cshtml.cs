@@ -1,4 +1,5 @@
-﻿﻿using Chirp.Core;
+﻿﻿using System.Security.Cryptography;
+using Chirp.Core;
 using FluentValidation;
 using Microsoft.AspNetCore.Http.Extensions;
 using Microsoft.AspNetCore.Mvc;
@@ -89,6 +90,42 @@ public class PublicModel : PageModel
 		}
 
 		return OnGet();
+	}
+
+	public async Task<IActionResult> OnPostLike(Guid cheep)
+	{
+		if (User.Identity == null || !User.Identity.IsAuthenticated || User.Identity.Name == null)
+		{
+			return Unauthorized();
+		}
+
+		try {
+			await CheepRepository.LikeCheep(cheep, User.Identity.Name);
+		} 
+		catch (Exception e)
+		{
+			ErrorMessage = e.Message;
+		}
+
+		return Redirect("/");
+	}
+
+	public async Task<IActionResult> OnPostUnlike(Guid cheep)
+	{
+		if (User.Identity == null || !User.Identity.IsAuthenticated || User.Identity.Name == null)
+		{
+			return Unauthorized();
+		}
+
+		try {
+			await CheepRepository.UnlikeCheep(cheep, User.Identity.Name);
+		} 
+		catch (Exception e)
+		{
+			ErrorMessage = e.Message;
+		}
+		
+		return Redirect("/");
 	}
 
 	public async Task<IActionResult> OnPostFollow(string followeeName, string followerName)
