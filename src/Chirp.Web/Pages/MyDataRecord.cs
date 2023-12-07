@@ -1,0 +1,1 @@
+public record MyDataRecord(List<CheepDTO> Cheeps, List<AuthorDTO> Followees);

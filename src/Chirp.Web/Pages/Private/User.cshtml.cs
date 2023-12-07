@@ -1,4 +1,5 @@
 using Chirp.Core;
+using System.Text.Json;
 using Microsoft.AspNetCore.Http.Extensions;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
@@ -51,6 +52,27 @@ namespace MyApp.Namespace
 		{
 			AuthorRepository.DeleteAuthorByName(User.Identity?.Name!);
 			return Redirect("/");
+		}
+
+		public ActionResult OnPostDownload()
+		{
+			string? name = User.Identity?.Name;
+
+			if (name != null)
+			{
+				Cheeps = CheepRepository.GetCheepsFromAuthor(name);
+				Followees = AuthorRepository.GetFollowing(name);
+
+				MyDataRecord myData = new MyDataRecord(Cheeps, Followees);
+
+				string json = JsonSerializer.Serialize(myData);
+
+				return File(System.Text.Encoding.UTF8.GetBytes(json), "text/json", "My_Chirp_Data.json");
+			}
+			else
+			{
+				return Redirect("/");
+			}
 		}
 
 		public async Task<IActionResult> OnPostUnfollow(string followeeName, string followerName)

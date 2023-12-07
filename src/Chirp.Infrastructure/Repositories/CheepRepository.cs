@@ -75,7 +75,7 @@ namespace Chirp.Infrastructure.Repositories
 		}
 
 		// Method gets all cheeps from the author
-		private List<CheepDTO> GetCheepsFromAuthor(string author)
+		public List<CheepDTO> GetCheepsFromAuthor(string author)
 		{
 			return _context.Cheeps
 				.Where(c => c.Author.Name == author)
