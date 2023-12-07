@@ -245,3 +245,8 @@ div.likes {
   text-align: center;
   align-items: center;
 }
+
+button.danger {
+  color: #ffffff;
+  background-color: red;
+}
