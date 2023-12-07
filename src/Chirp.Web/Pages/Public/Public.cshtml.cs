@@ -92,7 +92,7 @@ public class PublicModel : PageModel
 		return OnGet();
 	}
 
-	public async Task<IActionResult> OnPostLike(Guid cheep)
+	public IActionResult OnPostLike(Guid cheep)
 	{
 		if (User.Identity == null || !User.Identity.IsAuthenticated || User.Identity.Name == null)
 		{
@@ -100,7 +100,7 @@ public class PublicModel : PageModel
 		}
 
 		try {
-			await CheepRepository.LikeCheep(cheep, User.Identity.Name);
+			CheepRepository.LikeCheep(cheep, User.Identity.Name);
 		} 
 		catch (Exception e)
 		{
@@ -110,7 +110,7 @@ public class PublicModel : PageModel
 		return OnGet();
 	}
 
-	public async Task<IActionResult> OnPostUnlike(Guid cheep)
+	public IActionResult OnPostUnlike(Guid cheep)
 	{
 		if (User.Identity == null || !User.Identity.IsAuthenticated || User.Identity.Name == null)
 		{
@@ -118,7 +118,7 @@ public class PublicModel : PageModel
 		}
 
 		try {
-			await CheepRepository.UnlikeCheep(cheep, User.Identity.Name);
+			CheepRepository.UnlikeCheep(cheep, User.Identity.Name);
 		} 
 		catch (Exception e)
 		{

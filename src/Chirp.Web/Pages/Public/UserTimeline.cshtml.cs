@@ -96,7 +96,7 @@ public class UserTimelineModel : PageModel
 		return OnGet(HttpContext.GetRouteValue("author")?.ToString()!);
 	}
 
-	public async Task<IActionResult> OnPostLike(Guid cheep)
+	public IActionResult OnPostLike(Guid cheep)
 	{
 		if (User.Identity == null || !User.Identity.IsAuthenticated || User.Identity.Name == null)
 		{
@@ -104,7 +104,7 @@ public class UserTimelineModel : PageModel
 		}
 
 		try {
-			await CheepRepository.LikeCheep(cheep, User.Identity.Name);
+			CheepRepository.LikeCheep(cheep, User.Identity.Name);
 		} 
 		catch (Exception e)
 		{
@@ -114,7 +114,7 @@ public class UserTimelineModel : PageModel
 		return OnGet(HttpContext.GetRouteValue("author")?.ToString()!);
 	}
 
-	public async Task<IActionResult> OnPostUnlike(Guid cheep)
+	public IActionResult OnPostUnlike(Guid cheep)
 	{
 		if (User.Identity == null || !User.Identity.IsAuthenticated || User.Identity.Name == null)
 		{
@@ -122,7 +122,7 @@ public class UserTimelineModel : PageModel
 		}
 
 		try {
-			await CheepRepository.UnlikeCheep(cheep, User.Identity.Name);
+			CheepRepository.UnlikeCheep(cheep, User.Identity.Name);
 		} 
 		catch (Exception e)
 		{
