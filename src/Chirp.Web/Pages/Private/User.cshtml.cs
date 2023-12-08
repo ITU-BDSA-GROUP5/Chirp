@@ -15,6 +15,7 @@ namespace MyApp.Namespace
 
 		public int PageNumber { get; set; }
 		public int LastPageNumber { get; set; }
+		public string? ErrorMessage { get; set; }
 		public string? PageUrl { get; set; }
 
 		public string? Mail { get; set; }
@@ -54,24 +55,27 @@ namespace MyApp.Namespace
 			return Redirect("/");
 		}
 
-		public ActionResult OnPostDownload()
+		public async Task<ActionResult> OnPostDownload()
 		{
 			string? name = User.Identity?.Name;
-
 			if (name != null)
 			{
-				Cheeps = CheepRepository.GetCheepsFromAuthor(name);
-				Followees = AuthorRepository.GetFollowing(name);
+				List<CheepDTO> cheeps = CheepRepository.GetCheepsFromAuthor(name);
+				List<string> followeeNames = AuthorRepository.GetFollowing(name).Select(a => a.Name).ToList();
 
-				MyDataRecord myData = new MyDataRecord(Cheeps, Followees);
+				string token = User.FindFirst("idp_access_token")?.Value
+					?? throw new Exception("Github token not found");
+				string mail = await GithubHelper.GetUserEmailGithub(token, name);
 
-				string json = JsonSerializer.Serialize(myData);
+				MyDataRecord myData = new MyDataRecord(name, mail, cheeps, followeeNames);
+				string myDataJson = JsonSerializer.Serialize(myData);
 
-				return File(System.Text.Encoding.UTF8.GetBytes(json), "text/json", "My_Chirp_Data.json");
+				return File(System.Text.Encoding.UTF8.GetBytes(myDataJson), "text/json", "My_Chirp_Data.json");
 			}
 			else
 			{
-				return Redirect("/");
+				ErrorMessage = "Name is null!";
+				return await OnGet();
 			}
 		}
 

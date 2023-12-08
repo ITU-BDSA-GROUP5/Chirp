@@ -14,9 +14,16 @@
         <button class="danger" type="submit">Forget me!</button>
     </form>
 	<br>
+
+	@if (Model.ErrorMessage != null)
+	{
+		<p>@Model.ErrorMessage</p>
+	}
+	
     <form asp-page-handler="Download">
         <button type="submit">Download my data</button>
     </form>
+
 	
     <p>Username: @(User.Identity?.Name)</p>
     <p>E-mail: @(Model.Mail)</p>

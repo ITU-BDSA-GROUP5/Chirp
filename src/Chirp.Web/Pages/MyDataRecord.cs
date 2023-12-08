@@ -1,1 +1,1 @@
-public record MyDataRecord(List<CheepDTO> Cheeps, List<AuthorDTO> Followees);
+public record MyDataRecord(string Name, string Email, List<CheepDTO> Cheeps, List<string> Followees);
