@@ -111,6 +111,6 @@ public class PublicModel : PageModel
 	public async Task<IActionResult> OnPostUnfollow(string followeeName, string followerName)
 	{
 		await AuthorRepository.UnfollowAuthor(followerName ?? throw new Exception("Name is null!"), followeeName);
-		return Redirect("/");
+		return Redirect(PageUrl ?? "/");
 	}
 }
