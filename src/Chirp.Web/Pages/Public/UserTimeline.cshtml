@@ -13,7 +13,14 @@
 	@if (User.Identity?.IsAuthenticated == true)
 	{
 		<div>
-			<h3>@Model.followerCount   Followers</h3>
+			@if (Model.FollowerCount == 1)
+			{
+				<h3>@Model.FollowerCount   Follower</h3>
+			}
+			else
+			{
+				<h3>@Model.FollowerCount   Followers</h3>
+			}
 		</div>
 
 		<div class="cheepbox">
