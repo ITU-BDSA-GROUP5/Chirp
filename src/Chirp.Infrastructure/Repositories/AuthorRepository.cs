@@ -62,6 +62,20 @@ namespace Chirp.Infrastructure.Repositories
 				.ToList();
 		}
 
+		public List<AuthorDTO> GetFollowers(string authorname)
+		{
+			return _context.Authors
+				.Where(a => a.Name == authorname)
+				.SelectMany(a => a.Followers)
+				.OrderByDescending(a => a.AuthorId)
+				.Select(a => new AuthorDTO
+				{
+					Name = a.Name,
+					Email = a.Email
+				})
+				.ToList();
+		}
+
 		public void FollowAuthor(string followerName, string followeeName)
 		{
 			var follower = _context.Authors
@@ -72,26 +86,23 @@ namespace Chirp.Infrastructure.Repositories
 				.FirstOrDefault();
 			if (follower == null || followee == null)
 			{
-				Console.WriteLine("Either follower or followee does not exist. No new follow was made");
-				return;
+				throw new InvalidOperationException("Either follower or followee does not exist. No new follow could be made.");
 			}
 			follower.Following.Add(followee);
 			followee.Followers.Add(follower);
-			Console.WriteLine(follower.Following.Count);
-			Console.WriteLine(followee.Followers.Count);
 			_context.SaveChanges();
 		}
 
-		public async Task UnfollowAuthor(string followerName, string followeeName)
+		public void UnfollowAuthor(string followerName, string followeeName)
 		{
-			var follower = await _context.Authors
+			var follower = _context.Authors
 				.Include(a => a.Following)
 				.Where(a => a.Name == followerName)
-				.FirstOrDefaultAsync();
-			var followee = await _context.Authors
+				.FirstOrDefault();
+			var followee = _context.Authors
 				.Include(a => a.Followers)
 				.Where(a => a.Name == followeeName)
-				.FirstOrDefaultAsync();
+				.FirstOrDefault();
 			if (follower == null || followee == null)
 			{
 				Console.WriteLine("Either follower or followee does not exist. No new follow was made");
@@ -102,7 +113,7 @@ namespace Chirp.Infrastructure.Repositories
 			Console.WriteLine(followee.Followers.Count);
 			followee.Followers.Remove(follower);
 			follower.Following.Remove(followee);
-			await _context.SaveChangesAsync();
+			_context.SaveChanges();
 		}
 
 		public void DeleteAuthorByName(string name)
