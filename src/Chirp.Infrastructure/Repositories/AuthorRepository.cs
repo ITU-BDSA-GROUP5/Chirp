@@ -118,5 +118,10 @@ namespace Chirp.Infrastructure.Repositories
 			follower.Following.Remove(followee);
 			await _context.SaveChangesAsync();
 		}
+
+		public void DeleteAuthorByName(string name)
+		{
+			_context.Authors.Where(author => author.Name == name).ExecuteDelete();
+		}
 	}
 }

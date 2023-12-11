@@ -38,6 +38,7 @@ public class UserTimelineModel : PageModel
 		if (User.Identity != null && User.Identity.IsAuthenticated)
 		{
 			LoadTimelineSpecificCheeps(author, page);
+
 			int followercount = AuthorRepository.GetFollowers(author).Count;
 			FollowerCount = followercount;
 		}
@@ -109,13 +110,13 @@ public class UserTimelineModel : PageModel
 		}
 
 		AuthorRepository.FollowAuthor(followerName ?? throw new Exception("Name is null!"), followeeName);
-		return Redirect("/");
+		return Redirect(PageUrl ?? "/");
 	}
 
 	public async Task<IActionResult> OnPostUnfollow(string followeeName, string followerName)
 	{
 		await AuthorRepository.UnfollowAuthor(followerName ?? throw new Exception("Name is null!"), followeeName);
-		return Redirect("/");
+		return Redirect(PageUrl ?? "/");
 	}
 
 	private void LoadTimelineSpecificCheeps(string author, int page)

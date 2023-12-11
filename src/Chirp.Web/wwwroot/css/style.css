@@ -230,3 +230,8 @@ li.topic {
   -webkit-border-radius: 5px;
   min-height: 20px;
 }
+
+button.danger {
+  color: #ffffff;
+  background-color: red;
+}
