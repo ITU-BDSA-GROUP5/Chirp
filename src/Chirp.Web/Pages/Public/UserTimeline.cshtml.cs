@@ -13,6 +13,7 @@ public class UserTimelineModel : PageModel
 	private readonly IValidator<CreateCheepDTO> CheepValidator;
 	public required List<CheepDTO> Cheeps { get; set; }
 	public required List<AuthorDTO> Following { get; set; }
+	public int FollowerCount { get; set; }
 
 	[BindProperty]
 	public string? CheepMessage { get; set; }
@@ -29,7 +30,7 @@ public class UserTimelineModel : PageModel
 		AuthorRepository = authorRepository;
 		CheepRepository = cheepRepository;
 		CheepValidator = _cheepValidator;
-	}
+    }
 
 	public ActionResult OnGet(string author, [FromQuery(Name = "page")] int page = 1)
 	{
@@ -37,6 +38,8 @@ public class UserTimelineModel : PageModel
 		if (User.Identity != null && User.Identity.IsAuthenticated)
 		{
 			LoadTimelineSpecificCheeps(author, page);
+
+			FollowerCount = AuthorRepository.GetFollowers(author).Count;
 		}
 		else
 		{
