@@ -39,8 +39,7 @@ public class UserTimelineModel : PageModel
 		{
 			LoadTimelineSpecificCheeps(author, page);
 
-			int followercount = AuthorRepository.GetFollowers(author).Count;
-			FollowerCount = followercount;
+			FollowerCount = AuthorRepository.GetFollowers(author).Count;
 		}
 		else
 		{
