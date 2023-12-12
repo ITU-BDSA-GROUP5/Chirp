@@ -10,6 +10,14 @@
 </head>
 
 <body>
+
+	@if (Context.Request.Cookies["Music"] != null) //Adapted from https://stackoverflow.com/questions/45451980/accessing-a-cookie-value-in-an-asp-net-core-mvc-razor-view
+	{
+		<audio loop autoplay>
+			<source src="~/sound/bg.mp3" type="audio/mpeg" data-transcodekey="mp3" />
+		</audio>
+	}
+
 	<div class=page>
 		<h1><img src="/images/icon1.png" alt="Icon1" />Chirp!</h1>
 		@await Html.PartialAsync("_LoginPartial")

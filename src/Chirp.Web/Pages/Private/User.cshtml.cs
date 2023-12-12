@@ -1,6 +1,7 @@
 using Chirp.Core;
 using System.Text.Json;
 using Microsoft.AspNetCore.Http.Extensions;
+using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 
@@ -82,6 +83,20 @@ namespace MyApp.Namespace
 		public IActionResult OnPostUnfollow(string followeeName, string followerName)
 		{
 			AuthorRepository.UnfollowAuthor(followerName ?? throw new Exception("Name is null!"), followeeName);
+			return Redirect(PageUrl ?? "/");
+		}
+
+		public IActionResult OnPostToggleMusic()
+		{
+			if (Request.Cookies["Music"] == "enabled")
+			{
+				Response.Cookies.Delete("Music");
+			}
+			else
+			{
+				Response.Cookies.Append("Music", "enabled");
+			}
+
 			return Redirect(PageUrl ?? "/");
 		}
 	}

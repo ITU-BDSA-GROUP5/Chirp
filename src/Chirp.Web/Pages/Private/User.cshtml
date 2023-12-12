@@ -27,6 +27,16 @@
 	
     <p>Username: @(User.Identity?.Name)</p>
     <p>E-mail: @(Model.Mail)</p>
+    <form asp-page-handler="ToggleMusic">
+        @if (Model.Request.Cookies["Music"] != null)
+        {
+            <button type="submit">Turn off the music</button>
+        }
+        else
+        {
+            <button type="submit">Turn on the music</button>
+        }
+    </form>
 
 
     @if (Model.Followees.Any())
