@@ -53,7 +53,7 @@ namespace MyApp.Namespace
 		public ActionResult OnPostDelete()
 		{
 			AuthorRepository.DeleteAuthorByName(User.Identity?.Name!);
-			return Redirect("/");
+			return Redirect("/MicrosoftIdentity/Account/SignOut");
 		}
 
 		public async Task<ActionResult> OnPostDownload()
