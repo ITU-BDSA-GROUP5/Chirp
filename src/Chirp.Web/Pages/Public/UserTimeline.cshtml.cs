@@ -99,6 +99,42 @@ public class UserTimelineModel : PageModel
 		return OnGet(HttpContext.GetRouteValue("author")?.ToString()!);
 	}
 
+	public IActionResult OnPostLike(Guid cheep)
+	{
+		if (User.Identity == null || !User.Identity.IsAuthenticated || User.Identity.Name == null)
+		{
+			return Unauthorized();
+		}
+
+		try {
+			CheepRepository.LikeCheep(cheep, User.Identity.Name);
+		} 
+		catch (Exception e)
+		{
+			ErrorMessage = e.Message;
+		}
+
+		return OnGet(HttpContext.GetRouteValue("author")?.ToString()!);
+	}
+
+	public IActionResult OnPostUnlike(Guid cheep)
+	{
+		if (User.Identity == null || !User.Identity.IsAuthenticated || User.Identity.Name == null)
+		{
+			return Unauthorized();
+		}
+
+		try {
+			CheepRepository.UnlikeCheep(cheep, User.Identity.Name);
+		} 
+		catch (Exception e)
+		{
+			ErrorMessage = e.Message;
+		}
+		
+		return OnGet(HttpContext.GetRouteValue("author")?.ToString()!);
+	}
+
 	public IActionResult OnPostFollow(string followeeName, string followerName)
 	{
 		string name = (User.Identity?.Name) ?? throw new Exception("Name is null!");
