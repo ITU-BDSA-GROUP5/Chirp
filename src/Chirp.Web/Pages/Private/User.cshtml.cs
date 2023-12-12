@@ -53,7 +53,11 @@ namespace MyApp.Namespace
 		public ActionResult OnPostDelete()
 		{
 			AuthorRepository.DeleteAuthorByName(User.Identity?.Name!);
-			return Redirect("/");
+			if (Request.Cookies["Music"] == "enabled")
+			{
+				Response.Cookies.Delete("Music");
+			}
+			return Redirect("/MicrosoftIdentity/Account/SignOut");
 		}
 
 		public async Task<ActionResult> OnPostDownload()
