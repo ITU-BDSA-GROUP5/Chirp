@@ -244,6 +244,21 @@ li.topic {
   min-height: 20px;
 }
 
+input[type="submit"].like {
+  background: transparent;
+  border: none;
+  font-size: 20px;
+  color: black;
+}
+
+div.likes {
+  display: flex;
+  flex-direction: row;
+  justify-content: left;
+  text-align: center;
+  align-items: center;
+}
+
 button.danger {
   color: #ffffff;
   background-color: red;

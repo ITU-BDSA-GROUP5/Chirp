@@ -118,7 +118,19 @@ namespace Chirp.Infrastructure.Repositories
 
 		public void DeleteAuthorByName(string name)
 		{
-			_context.Authors.Where(author => author.Name == name).ExecuteDelete();
+			var authorToDelete = _context.Authors
+				.Where(author => author.Name == name)
+				.Include(author => author.LikedCheeps)
+				.Include(author => author.Cheeps)
+				.First();
+
+			// Remove likes on authors cheeps
+			_context.Cheeps.RemoveRange(authorToDelete.Cheeps);
+
+			_context.Authors.Remove(authorToDelete);
+
+			_context.SaveChanges();
+
 		}
 	}
 }

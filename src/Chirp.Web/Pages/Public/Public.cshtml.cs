@@ -1,4 +1,5 @@
-﻿﻿using Chirp.Core;
+﻿﻿using System.Security.Cryptography;
+using Chirp.Core;
 using FluentValidation;
 using Microsoft.AspNetCore.Http.Extensions;
 using Microsoft.AspNetCore.Mvc;
@@ -88,6 +89,42 @@ public class PublicModel : PageModel
 			InvalidCheep = true;
 		}
 
+		return OnGet();
+	}
+
+	public IActionResult OnPostLike(Guid cheep)
+	{
+		if (User.Identity == null || !User.Identity.IsAuthenticated || User.Identity.Name == null)
+		{
+			return Unauthorized();
+		}
+
+		try {
+			CheepRepository.LikeCheep(cheep, User.Identity.Name);
+		} 
+		catch (Exception e)
+		{
+			ErrorMessage = e.Message;
+		}
+
+		return OnGet();
+	}
+
+	public IActionResult OnPostUnlike(Guid cheep)
+	{
+		if (User.Identity == null || !User.Identity.IsAuthenticated || User.Identity.Name == null)
+		{
+			return Unauthorized();
+		}
+
+		try {
+			CheepRepository.UnlikeCheep(cheep, User.Identity.Name);
+		} 
+		catch (Exception e)
+		{
+			ErrorMessage = e.Message;
+		}
+		
 		return OnGet();
 	}
 
