@@ -12,6 +12,17 @@
 
 	@if (User.Identity?.IsAuthenticated == true)
 	{
+		<div>
+			@if (Model.FollowerCount == 1)
+			{
+				<h3>@Model.FollowerCount   Follower</h3>
+			}
+			else
+			{
+				<h3>@Model.FollowerCount   Followers</h3>
+			}
+		</div>
+
 		<div class="cheepbox">
 			<h3>What's on your mind @(User.Identity.Name)?</h3>
 			@if (Model.InvalidCheep)
