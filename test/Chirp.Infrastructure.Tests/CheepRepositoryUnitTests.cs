@@ -16,7 +16,7 @@ public class CheepRepositoryUnitTests : IAsyncLifetime
 
 	// From IAsyncLifetime
 	public async Task InitializeAsync()
-	{	
+	{
 		await _msSqlContainer.StartAsync();
 		_connection = new SqlConnection(_msSqlContainer.GetConnectionString());
 		await _connection.OpenAsync();
@@ -79,7 +79,7 @@ public class CheepRepositoryUnitTests : IAsyncLifetime
 		string text = "Hello world!";
 		_context.Authors.Add(author);
 		_context.SaveChanges();
-		
+
 		// Act
 		_cheepRepository.CreateNewCheep(new CreateCheepDTO
 		{
@@ -87,7 +87,7 @@ public class CheepRepositoryUnitTests : IAsyncLifetime
 			Email = author.Email,
 			Text = text
 		});
-		
+
 		var cheeps = _cheepRepository.GetCheeps(1);
 		CheepDTO cheep = cheeps.First();
 
@@ -96,7 +96,7 @@ public class CheepRepositoryUnitTests : IAsyncLifetime
 		Assert.Equal("John Doe", cheep.AuthorName);
 	}
 
-    [Fact]
+	[Fact]
 	public void GetCheeps_SingleCheep_CheepNotNull()
 	{
 		// Arrange
@@ -140,19 +140,19 @@ public class CheepRepositoryUnitTests : IAsyncLifetime
 	{
 		// Arrange
 		var authorLikingName = "Helge";
-		
+
 		// Get author and a cheep we assume is in the dataset
 		var authorWithCheepToLike = _context.Authors
 			.Where(a => a.Name == "Rasmus")
 			.First();
-		
+
 		var cheepToLike = authorWithCheepToLike.Cheeps
 			.First()
 			.CheepId;
-	
+
 		// Act
 		_cheepRepository.LikeCheep(cheepToLike, authorLikingName);
-	
+
 		var authorLiking = _context.Authors
 			.Where(a => a.Name == authorLikingName)
 			.Include(a => a.LikedCheeps)
@@ -167,20 +167,20 @@ public class CheepRepositoryUnitTests : IAsyncLifetime
 	{
 		// Arrange
 		var authorUnlikingName = "Helge";
-		
+
 		// Get author and a cheep we assume is in the dataset
 		var authorWithCheepToLike = _context.Authors
 			.Where(a => a.Name == "Rasmus")
 			.First();
-		
+
 		var cheepToLike = authorWithCheepToLike.Cheeps
 			.First()
 			.CheepId;
-	
+
 		// Act
 		_cheepRepository.LikeCheep(cheepToLike, authorUnlikingName);
 		_cheepRepository.UnlikeCheep(cheepToLike, authorUnlikingName);
-	
+
 		var authorUnliking = _context.Authors
 			.Where(a => a.Name == authorUnlikingName)
 			.Include(a => a.LikedCheeps)
@@ -188,5 +188,40 @@ public class CheepRepositoryUnitTests : IAsyncLifetime
 
 		// Assert
 		Assert.Empty(authorUnliking.LikedCheeps);
+	}
+
+	[Fact]
+	public void DeleteCheep_AuthorAmmountOfCheeps_ReturnsOneLessThanAmmountBeforeDelete()
+	{
+		// Arrange
+		var authorname = "Helge";
+
+		// Get author
+		var author = _context.Authors
+			.Where(a => a.Name == authorname)
+			.Include(a => a.Cheeps)
+			.First();
+
+		// Get ammount of cheeps from author
+		var cheepcount = author.Cheeps.Count();
+
+		// Get a cheep from author
+		var cheep = _context.Cheeps
+			.Where(a => a.Author == author)
+			.First();
+
+		// Act
+		_cheepRepository.DeleteCheep(cheep.CheepId);
+
+		// Assert
+		author = _context.Authors
+			.Where(a => a.Name == authorname)
+			.Include(a => a.Cheeps)
+			.First();
+
+		// Get ammount of cheeps from author after cheep has been deleted
+		var cheepcount2 = author.Cheeps.Count();
+
+		Assert.Equal(cheepcount - 1,cheepcount2);
 	}
 }
