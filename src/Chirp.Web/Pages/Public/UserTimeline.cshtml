@@ -64,6 +64,12 @@
 									</form>
 								}
 							}
+							@if (User.Identity?.IsAuthenticated == true && cheep.AuthorName == User.Identity.Name)
+							{
+								<form asp-page-handler="DeleteCheep" method="post">
+									<input type="submit" value="Delete">
+								</form>
+							}
 						</strong>
 						@cheep.Message
 						<small>&mdash; @cheep.TimeStamp</small>

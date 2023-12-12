@@ -28,6 +28,10 @@ namespace Chirp.Infrastructure.Repositories
 			_context.SaveChanges();
 		}
 
+		public void DeleteCheep(Guid Cheepid){
+			
+		}
+
 		public List<CheepDTO> GetCheeps(int page)
 		{
 			return _context.Cheeps
