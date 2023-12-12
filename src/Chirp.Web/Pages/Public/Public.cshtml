@@ -1,6 +1,7 @@
 @page "/"
 @model Chirp.Web.Pages.PublicModel
 @addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
+@using Microsoft.AspNetCore.Http.Extensions
 @{
 	ViewData["Title"] = "Chirp!";
 	Layout = "Shared/_Layout";
@@ -39,14 +40,20 @@
 								@if (Model.Following.Select(f => f.Name).Contains(cheep.AuthorName))
 								{
 									<form asp-page-handler="Unfollow" asp-route-followeeName="@cheep.AuthorName"
-										asp-route-followerName="@User.Identity.Name" method="post">
+										asp-route-followerName="@User.Identity.Name"
+										asp-route-ReturnUrl="@Request.GetEncodedPathAndQuery()"
+										method="post"
+									>
 										<input type="submit" value="Unfollow">
 									</form>
 								}
 								else
 								{
 									<form asp-page-handler="Follow" asp-route-followeeName="@cheep.AuthorName"
-										asp-route-followerName="@User.Identity.Name" method="post">
+										asp-route-followerName="@User.Identity.Name"
+										asp-route-ReturnUrl="@Request.GetEncodedPathAndQuery()"
+										method="post"
+									>
 										<input type="submit" value="Follow">
 									</form>
 								}
@@ -59,13 +66,17 @@
 							<div class="likes">
 								@if (cheep.Likes.Contains(User.Identity.Name))
 								{
-									<form asp-page-handler="Unlike" asp-route-cheep="@cheep.Id" method="post">
+									<form asp-page-handler="Unlike" asp-route-cheep="@cheep.Id"
+										asp-route-ReturnUrl="@Request.GetEncodedPathAndQuery()"
+										method="post">
 										<input type="submit" value="❤️" class="like">
 									</form>
 								}
 								else
 								{
-									<form asp-page-handler="Like" asp-route-cheep="@cheep.Id" method="post">
+									<form asp-page-handler="Like" asp-route-cheep="@cheep.Id"
+										asp-route-ReturnUrl="@Request.GetEncodedPathAndQuery()"
+										method="post">
 										<input type="submit" value="♡" class="like">
 									</form>
 								}
