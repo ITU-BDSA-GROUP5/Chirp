@@ -107,7 +107,7 @@
 							}
                         	@if (User.Identity?.IsAuthenticated == true && cheep.AuthorName == User.Identity.Name)
 							{
-								<form asp-page-handler="DeleteCheep" method="post">
+								<form asp-page-handler="DeleteCheep" asp-route-id="@cheep.Id" method="post">
 									<input class="delete-button" type="submit" value="Delete">
 								</form>
 							}

@@ -168,9 +168,9 @@ public class UserTimelineModel : PageModel
 		}
 	}
 
-	public IActionResult OnPostDeleteCheep()
+	public IActionResult OnPostDeleteCheep(Guid id)
 	{
-		Console.WriteLine("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
-		return Redirect(PageUrl ?? "/");
+		CheepRepository.DeleteCheep(id);
+		return RedirectToPage("UserTimeline");
 	}
 }

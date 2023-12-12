@@ -99,5 +99,11 @@ namespace MyApp.Namespace
 
 			return Redirect(PageUrl ?? "/");
 		}
+
+		public IActionResult OnPostDeleteCheep(Guid id)
+		{
+			CheepRepository.DeleteCheep(id);
+			return RedirectToPage("User");
+		}
 	}
 }
