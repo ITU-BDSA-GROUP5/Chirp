@@ -194,16 +194,16 @@ public class CheepRepositoryUnitTests : IAsyncLifetime
 	public void DeleteCheep_AuthorAmmountOfCheeps_ReturnsOneLessThanAmmountBeforeDelete()
 	{
 		// Arrange
-		var authorname = "Helge";
+		var authorName = "Helge";
 
 		// Get author
 		var author = _context.Authors
-			.Where(a => a.Name == authorname)
+			.Where(a => a.Name == authorName)
 			.Include(a => a.Cheeps)
 			.First();
 
-		// Get ammount of cheeps from author
-		var cheepcount = author.Cheeps.Count();
+		// Get amount of cheeps from author
+		var cheepCount = author.Cheeps.Count;
 
 		// Get a cheep from author
 		var cheep = _context.Cheeps
@@ -215,13 +215,13 @@ public class CheepRepositoryUnitTests : IAsyncLifetime
 
 		// Assert
 		author = _context.Authors
-			.Where(a => a.Name == authorname)
+			.Where(a => a.Name == authorName)
 			.Include(a => a.Cheeps)
 			.First();
 
-		// Get ammount of cheeps from author after cheep has been deleted
-		var cheepcount2 = author.Cheeps.Count();
+		// Amount of cheeps from author after cheep has been deleted
+		var cheepCountAfterDeletion = author.Cheeps.Count;
 
-		Assert.Equal(cheepcount - 1,cheepcount2);
+		Assert.Equal(cheepCount - 1, cheepCountAfterDeletion);
 	}
 }
