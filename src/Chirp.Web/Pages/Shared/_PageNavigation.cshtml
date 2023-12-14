@@ -7,7 +7,7 @@
 	}
 	else
 	{
-		<a href=@(Model.PageUrl + "?Page=" + (Model.PageNumber - 1))>Previous</a>
+		<a href=@("?Page=" + (Model.PageNumber - 1))>Previous</a>
 	}
 
 	@Model.PageNumber
@@ -18,6 +18,6 @@
 	}
 	else
 	{
-		<a href=@(Model.PageUrl + "?Page=" + (Model.PageNumber + 1))>Next</a>
+		<a href=@("?Page=" + (Model.PageNumber + 1))>Next</a>
 	}
 </div>
