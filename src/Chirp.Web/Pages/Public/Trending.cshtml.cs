@@ -1,6 +1,5 @@
 ﻿﻿using Chirp.Core;
 using FluentValidation;
-using Microsoft.AspNetCore.Http.Extensions;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 
@@ -22,7 +21,9 @@ public class TrendingModel : PageModel
 	public string? ErrorMessage { get; set; }
 	public int PageNumber { get; set; }
 	public int LastPageNumber { get; set; }
-	public string? PageUrl { get; set; }
+
+	[BindProperty]
+	public string? ReturnUrl { get; set; }
 
 	public TrendingModel(IAuthorRepository authorRepository, ICheepRepository cheepRepository, IValidator<CreateCheepDTO> _cheepValidator)
 	{
@@ -42,7 +43,6 @@ public class TrendingModel : PageModel
 		Cheeps = CheepRepository.GetMostLikedCheeps(page);
 		PageNumber = page;
 		LastPageNumber = CheepRepository.GetPageAmount();
-		PageUrl = HttpContext.Request.GetEncodedUrl().Split("?")[0];
 
 		return Page();
 	}
@@ -107,7 +107,7 @@ public class TrendingModel : PageModel
 			ErrorMessage = e.Message;
 		}
 
-		return OnGet();
+		return Redirect(ReturnUrl ?? "/");
 	}
 
 	public IActionResult OnPostUnlike(Guid cheep)
@@ -126,7 +126,7 @@ public class TrendingModel : PageModel
 			ErrorMessage = e.Message;
 		}
 
-		return OnGet();
+		return Redirect(ReturnUrl ?? "/");
 	}
 
 	public async Task<IActionResult> OnPostFollow(string followeeName, string followerName)
@@ -143,12 +143,12 @@ public class TrendingModel : PageModel
 		}
 
 		AuthorRepository.FollowAuthor(followerName ?? throw new Exception("Name is null!"), followeeName);
-		return Redirect("/");
+		return Redirect(ReturnUrl ?? "/");
 	}
 
 	public IActionResult OnPostUnfollow(string followeeName, string followerName)
 	{
 		AuthorRepository.UnfollowAuthor(followerName ?? throw new Exception("Name is null!"), followeeName);
-		return Redirect(PageUrl ?? "/");
+		return Redirect(ReturnUrl ?? "/");
 	}
 }
