@@ -209,19 +209,18 @@ public class CheepRepositoryUnitTests : IAsyncLifetime
 			.Select(c => c.CheepId)
 			.First();
 
-		// Like Helge's cheep
+		// Like Helge's cheep twice
 		_cheepRepository.LikeCheep(helgeCheepId, likingAuthor1);
 		_cheepRepository.LikeCheep(helgeCheepId, likingAuthor2);
 
-		// Like Rasmus' cheep
+		// Like Rasmus' cheep once
 		_cheepRepository.LikeCheep(rasmusCheepId, likingAuthor1);
 
-		List<Guid> orderedCheeps = _cheepRepository.GetMostLikedCheeps(page).OrderByDescending(c => c.Likes.Count).Select(c => c.Id).ToList();
-
 		// Act
-		List<Guid> actualCheeps = _cheepRepository.GetMostLikedCheeps(page).Select(c => c.Id).ToList();
+		List<Guid> cheeps = _cheepRepository.GetMostLikedCheeps(page).Select(c => c.Id).ToList();
 
 		// Assert
-		Assert.Equal(orderedCheeps, actualCheeps);
+		Assert.Equal(helgeCheepId, cheeps[0]);
+		Assert.Equal(rasmusCheepId, cheeps[1]);
 	}
 }

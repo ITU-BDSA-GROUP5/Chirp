@@ -159,6 +159,7 @@ namespace Chirp.Infrastructure.Repositories
 			return _context.Cheeps
 				.Include(c => c.LikedBy)
 				.OrderByDescending(c => c.LikedBy.Count)
+				.ThenByDescending(c => c.TimeStamp)
 				.Skip((page - 1) * pageSize)
 				.Take(pageSize)
 				.Select(c => new CheepDTO
