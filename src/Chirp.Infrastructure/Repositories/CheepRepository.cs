@@ -153,5 +153,23 @@ namespace Chirp.Infrastructure.Repositories
 				})
 				.ToList();
 		}
+
+		public List<CheepDTO> GetMostLikedCheeps(int page)
+		{
+			return _context.Cheeps
+				.Include(c => c.LikedBy)
+				.OrderByDescending(c => c.LikedBy.Count)
+				.Skip((page - 1) * pageSize)
+				.Take(pageSize)
+				.Select(c => new CheepDTO
+				{
+					Id = c.CheepId,
+					AuthorName = c.Author.Name,
+					Message = c.Text,
+					TimeStamp = c.TimeStamp.ToString("yyyy-MM-dd H:mm:ss"),
+					Likes = c.LikedBy.Select(a => a.Name).ToList()
+				})
+				.ToList();
+		}
 	}
 }
