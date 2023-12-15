@@ -1,6 +1,7 @@
 ﻿@page "/user/info"
 @model MyApp.Namespace.UserModel
 @using System.Security.Principal
+@using Microsoft.AspNetCore.Http.Extensions
 @addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
 @{
     ViewData["Title"] = "Chirp!";
@@ -54,14 +55,18 @@
 						@if (Model.Followees.Select(f => f.Name).Contains(author.Name))
 						{
 							<form asp-page-handler="Unfollow" asp-route-followeeName="@author.Name"
-								asp-route-followerName="@User.Identity?.Name" method="post">
+								asp-route-followerName="@User.Identity?.Name"
+                                asp-route-ReturnUrl="@Request.GetEncodedPathAndQuery()"
+                                method="post">
 								<input type="submit" value="Unfollow">
 							</form>
 						}
 						else
 						{
 							<form asp-page-handler="Follow" asp-route-followeeName="@author.Name"
-								asp-route-followerName="@User.Identity?.Name" method="post">
+								asp-route-followerName="@User.Identity?.Name"
+                                asp-route-ReturnUrl="@Request.GetEncodedPathAndQuery()"
+                                method="post">
 								<input type="submit" value="Follow">
 							</form>
 						}
@@ -93,14 +98,18 @@
 								@if (Model.Followees.Select(f => f.Name).Contains(cheep.AuthorName))
 								{
 									<form asp-page-handler="Unfollow" asp-route-followeeName="@cheep.AuthorName"
-										asp-route-followerName="@User.Identity?.Name" method="post">
+										asp-route-followerName="@User.Identity?.Name"
+                                        asp-route-ReturnUrl="@Request.GetEncodedPathAndQuery()"
+                                        method="post">
 										<input type="submit" value="Unfollow">
 									</form>
 								}
 								else
 								{
 									<form asp-page-handler="Follow" asp-route-followeeName="@cheep.AuthorName"
-										asp-route-followerName="@User.Identity?.Name" method="post">
+										asp-route-followerName="@User.Identity?.Name"
+                                        asp-route-ReturnUrl="@Request.GetEncodedPathAndQuery()"
+                                        method="post">
 										<input type="submit" value="Follow">
 									</form>
 								}

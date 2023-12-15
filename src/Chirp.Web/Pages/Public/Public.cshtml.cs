@@ -1,5 +1,4 @@
-﻿﻿using System.Security.Cryptography;
-using Chirp.Core;
+﻿﻿using Chirp.Core;
 using FluentValidation;
 using Microsoft.AspNetCore.Http.Extensions;
 using Microsoft.AspNetCore.Mvc;
@@ -23,7 +22,9 @@ public class PublicModel : PageModel
 	public string? ErrorMessage { get; set; }
 	public int PageNumber { get; set; }
 	public int LastPageNumber { get; set; }
-	public string? PageUrl { get; set; }
+
+	[BindProperty]
+	public string? ReturnUrl { get; set; }
 
 	public PublicModel(IAuthorRepository authorRepository, ICheepRepository cheepRepository, IValidator<CreateCheepDTO> _cheepValidator)
 	{
@@ -43,7 +44,6 @@ public class PublicModel : PageModel
 		Cheeps = CheepRepository.GetCheeps(page);
 		PageNumber = page;
 		LastPageNumber = CheepRepository.GetPageAmount();
-		PageUrl = HttpContext.Request.GetEncodedUrl().Split("?")[0];
 
 		return Page();
 	}
@@ -108,7 +108,7 @@ public class PublicModel : PageModel
 			ErrorMessage = e.Message;
 		}
 
-		return OnGet();
+		return Redirect(ReturnUrl ?? "/");
 	}
 
 	public IActionResult OnPostUnlike(Guid cheep)
@@ -127,7 +127,7 @@ public class PublicModel : PageModel
 			ErrorMessage = e.Message;
 		}
 
-		return OnGet();
+		return Redirect(ReturnUrl ?? "/");
 	}
 
 	public async Task<IActionResult> OnPostFollow(string followeeName, string followerName)
@@ -144,13 +144,13 @@ public class PublicModel : PageModel
 		}
 
 		AuthorRepository.FollowAuthor(followerName ?? throw new Exception("Name is null!"), followeeName);
-		return Redirect("/");
+		return Redirect(ReturnUrl ?? "/");
 	}
 
 	public IActionResult OnPostUnfollow(string followeeName, string followerName)
 	{
 		AuthorRepository.UnfollowAuthor(followerName ?? throw new Exception("Name is null!"), followeeName);
-		return Redirect(PageUrl ?? "/");
+		return Redirect(ReturnUrl ?? "/");
 	}
 
 	public IActionResult OnPostDeleteCheep(Guid id)
