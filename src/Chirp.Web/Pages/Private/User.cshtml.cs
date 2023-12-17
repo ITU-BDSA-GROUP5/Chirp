@@ -1,6 +1,5 @@
 using Chirp.Core;
 using System.Text.Json;
-using Microsoft.AspNetCore.Http.Extensions;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 
@@ -16,7 +15,9 @@ namespace MyApp.Namespace
 		public int PageNumber { get; set; }
 		public int LastPageNumber { get; set; }
 		public string? ErrorMessage { get; set; }
-		public string? PageUrl { get; set; }
+
+		[BindProperty]
+		public string? ReturnUrl { get; set; }
 
 		public string? Mail { get; set; }
 
@@ -37,7 +38,6 @@ namespace MyApp.Namespace
 				PageNumber = page;
 				LastPageNumber = CheepRepository.GetPageAmount(name);
 				Followees = AuthorRepository.GetFollowing(name);
-				PageUrl = HttpContext.Request.GetEncodedUrl().Split("?")[0];
 
 				string token = User.FindFirst("idp_access_token")?.Value
 					?? throw new Exception("Github token not found");
@@ -53,7 +53,11 @@ namespace MyApp.Namespace
 		{
 			AuthorRepository.DeleteAuthorByName(User.Identity?.Name!);
 			Response.Cookies.Delete("AuthorCreated");
-			return Redirect("/");
+			if (Request.Cookies["Music"] == "enabled")
+			{
+				Response.Cookies.Delete("Music");
+			}
+			return Redirect("/MicrosoftIdentity/Account/SignOut");
 		}
 
 		public async Task<ActionResult> OnPostDownload()
@@ -83,7 +87,7 @@ namespace MyApp.Namespace
 		public IActionResult OnPostUnfollow(string followeeName, string followerName)
 		{
 			AuthorRepository.UnfollowAuthor(followerName ?? throw new Exception("Name is null!"), followeeName);
-			return Redirect(PageUrl ?? "/");
+			return Redirect(ReturnUrl ?? "/");
 		}
 
 		public IActionResult OnPostToggleMusic()
@@ -97,7 +101,7 @@ namespace MyApp.Namespace
 				Response.Cookies.Append("Music", "enabled");
 			}
 
-			return Redirect(PageUrl ?? "/");
+			return Redirect(ReturnUrl ?? "/");
 		}
 	}
 }
