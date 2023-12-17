@@ -1,5 +1,4 @@
-﻿﻿using System.Security.Cryptography;
-using Chirp.Core;
+﻿using Chirp.Core;
 using FluentValidation;
 using Microsoft.AspNetCore.Http.Extensions;
 using Microsoft.AspNetCore.Mvc;
@@ -32,10 +31,47 @@ public class PublicModel : PageModel
 		CheepValidator = _cheepValidator;
 	}
 
+	private async Task EnsureAuthorCreated()
+	{
+		// If user is not authenticated, just return
+		if (User.Identity != null && !User.Identity.IsAuthenticated)
+		{
+			return;
+		}
+
+		string authorCookieName = "AuthorCreated";
+
+		// If cookie exists, return
+		string? authorCookie = Request.Cookies[authorCookieName];
+		
+		if (authorCookie != null)
+		{
+			return;
+		}
+
+		var authorName = User.Identity?.Name
+			?? throw new Exception("User identity name is null");
+
+        var author = AuthorRepository.GetAuthorByName(authorName);
+
+		if (author == null)
+		{
+			string token = User.FindFirst("idp_access_token")?.Value
+				?? throw new Exception("Github token not found");
+
+			string email = await GithubHelper.GetUserEmailGithub(token, authorName);
+
+			AuthorRepository.CreateNewAuthor(authorName, email);
+		}
+		
+		Response.Cookies.Append(authorCookieName, "true");
+	}
+
 	public ActionResult OnGet([FromQuery(Name = "page")] int page = 1)
 	{
 		if (User.Identity != null && User.Identity.IsAuthenticated)
 		{
+			EnsureAuthorCreated().Wait();
 			string name = (User.Identity?.Name) ?? throw new Exception("Name is null!");
 			Following = AuthorRepository.GetFollowing(name);
 		}

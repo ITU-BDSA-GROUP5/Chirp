@@ -1,7 +1,6 @@
 using Chirp.Core;
 using System.Text.Json;
 using Microsoft.AspNetCore.Http.Extensions;
-using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 
@@ -53,6 +52,7 @@ namespace MyApp.Namespace
 		public ActionResult OnPostDelete()
 		{
 			AuthorRepository.DeleteAuthorByName(User.Identity?.Name!);
+			Response.Cookies.Delete("AuthorCreated");
 			return Redirect("/");
 		}
 

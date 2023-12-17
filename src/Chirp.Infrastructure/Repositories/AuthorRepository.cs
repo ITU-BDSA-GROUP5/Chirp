@@ -13,15 +13,8 @@ namespace Chirp.Infrastructure.Repositories
 
 		public void CreateNewAuthor(string name, string email)
 		{
-			try
-			{
-				_context.Authors.Add(new Author { Name = name, Email = email, Cheeps = new List<Cheep>() });
-				_context.SaveChanges();
-			}
-			catch (Exception)
-			{
-				throw new Exception("Error when creating new author");
-			}
+			_context.Authors.Add(new Author { Name = name, Email = email, Cheeps = new List<Cheep>() });
+			_context.SaveChanges();
 		}
 
 		public AuthorDTO? GetAuthorByEmail(string email)
