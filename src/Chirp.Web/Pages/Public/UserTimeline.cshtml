@@ -38,82 +38,8 @@
 	}
 
 	@if (Model.Cheeps.Any())
-	{
-		<ul id="messagelist" class="cheeps">
-			@foreach (var cheep in Model.Cheeps)
-			{
-				<li>
-					<p class="wrap">
-						<strong>
-							<a href="/@cheep.AuthorName">@cheep.AuthorName</a>
-							 @* make sure user is logged in and can't follow themselves *@
-							@if (User.Identity?.IsAuthenticated == true && cheep.AuthorName != User.Identity.Name)
-							{
-								// check if the user is already following the author
-								@if (Model.Following.Select(f => f.Name).Contains(cheep.AuthorName))
-								{
-									<form asp-page-handler="Unfollow" asp-route-followeeName="@cheep.AuthorName"
-										asp-route-followerName="@User.Identity.Name"
-										asp-route-ReturnUrl="@Request.GetEncodedPathAndQuery()"
-										method="post">
-										<input type="submit" value="Unfollow">
-									</form>
-								}
-								else
-								{
-									<form asp-page-handler="Follow" asp-route-followeeName="@cheep.AuthorName"
-										asp-route-followerName="@User.Identity.Name"
-										asp-route-ReturnUrl="@Request.GetEncodedPathAndQuery()"
-										method="post">
-										<input type="submit" value="Follow">
-									</form>
-								}
-							}
-							@if (User.Identity?.IsAuthenticated == true && cheep.AuthorName == User.Identity.Name)
-							{
-								<form asp-page-handler="DeleteCheep" asp-route-id="@cheep.Id" method="post">
-									<input class="delete-button" type="submit" value="Delete">
-								</form>
-							}
-						</strong>
-						@cheep.Message
-						@if (User.Identity?.IsAuthenticated == true && User.Identity.Name != null)
-						{
-							<div class="likes">
-								@if (cheep.Likes.Contains(User.Identity.Name))
-								{
-									<form asp-page-handler="Unlike" asp-route-cheep="@cheep.Id"
-										asp-route-ReturnUrl="@Request.GetEncodedPathAndQuery()"
-										method="post">
-										<input type="submit" value="❤️" class="like">
-									</form>
-								}
-								else
-								{
-									<form asp-page-handler="Like" asp-route-cheep="@cheep.Id"
-										asp-route-ReturnUrl="@Request.GetEncodedPathAndQuery()"
-										method="post">
-										<input type="submit" value="♡" class="like">
-									</form>
-								}
-								<span> 
-									@cheep.Likes.Count
-									@if (cheep.Likes.Count != 1)
-									{
-										<span>likes</span>
-									}
-									else
-									{
-										<span>like</span>
-									}
-								</span>
-							</div>
-						}
-						<small>&mdash; @cheep.TimeStamp</small>
-					</p>
-				</li>
-			}
-		</ul>
+    {
+		@await Html.PartialAsync("_CheepsPartial")
 	}
 	else
 	{

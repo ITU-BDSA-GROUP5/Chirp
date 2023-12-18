@@ -51,25 +51,12 @@
                         <strong>
                             <a href="/@author.Name">@author.Name</a>
                         </strong>
-                        <!--check if the user is already following the author-->
-						@if (Model.Followees.Select(f => f.Name).Contains(author.Name))
-						{
-							<form asp-page-handler="Unfollow" asp-route-followeeName="@author.Name"
-								asp-route-followerName="@User.Identity?.Name"
-                                asp-route-ReturnUrl="@Request.GetEncodedPathAndQuery()"
-                                method="post">
-								<input type="submit" value="Unfollow">
-							</form>
-						}
-						else
-						{
-							<form asp-page-handler="Follow" asp-route-followeeName="@author.Name"
-								asp-route-followerName="@User.Identity?.Name"
-                                asp-route-ReturnUrl="@Request.GetEncodedPathAndQuery()"
-                                method="post">
-								<input type="submit" value="Follow">
-							</form>
-						}
+                        <form asp-page-handler="Unfollow" asp-route-followeeName="@author.Name"
+                            asp-route-followerName="@User.Identity?.Name"
+                            asp-route-ReturnUrl="@Request.GetEncodedPathAndQuery()"
+                            method="post">
+                            <input type="submit" value="Unfollow">
+                        </form>
                     </p>
                 </li>
             }
@@ -92,34 +79,6 @@
                         <strong>
                             <a href="/@cheep.AuthorName">@cheep.AuthorName</a>
                         </strong>
-                        @if (cheep.AuthorName != User.Identity?.Name)
-							{
-								// check if the user is already following the author
-								@if (Model.Followees.Select(f => f.Name).Contains(cheep.AuthorName))
-								{
-									<form asp-page-handler="Unfollow" asp-route-followeeName="@cheep.AuthorName"
-										asp-route-followerName="@User.Identity?.Name"
-                                        asp-route-ReturnUrl="@Request.GetEncodedPathAndQuery()"
-                                        method="post">
-										<input type="submit" value="Unfollow">
-									</form>
-								}
-								else
-								{
-									<form asp-page-handler="Follow" asp-route-followeeName="@cheep.AuthorName"
-										asp-route-followerName="@User.Identity?.Name"
-                                        asp-route-ReturnUrl="@Request.GetEncodedPathAndQuery()"
-                                        method="post">
-										<input type="submit" value="Follow">
-									</form>
-								}
-							}
-                        	@if (User.Identity?.IsAuthenticated == true && cheep.AuthorName == User.Identity.Name)
-							{
-								<form asp-page-handler="DeleteCheep" asp-route-id="@cheep.Id" method="post">
-									<input class="delete-button" type="submit" value="Delete">
-								</form>
-							}
                         @cheep.Message
                         <small>&mdash; @cheep.TimeStamp</small>
                     </p>

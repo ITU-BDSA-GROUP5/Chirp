@@ -49,6 +49,7 @@ namespace MyApp.Namespace
 		{
 			AuthorRepository.DeleteAuthorByName(User.Identity?.Name!);
 			Response.Cookies.Delete("Music");
+			Response.Cookies.Delete("AuthorCreated");
 			return Redirect("/MicrosoftIdentity/Account/SignOut");
 		}
 
@@ -66,7 +67,7 @@ namespace MyApp.Namespace
 					cheeps,
 					followeeNames
 				);
-				
+
 				string myDataJson = JsonSerializer.Serialize(myData);
 
 				return File(System.Text.Encoding.UTF8.GetBytes(myDataJson), "text/json", "My_Chirp_Data.json");
