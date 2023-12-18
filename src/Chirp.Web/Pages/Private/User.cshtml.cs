@@ -28,7 +28,7 @@ namespace MyApp.Namespace
 			CheepRepository = cheepRepository;
 		}
 
-		public async Task<ActionResult> OnGet([FromQuery(Name = "page")] int page = 1)
+		public ActionResult OnGet([FromQuery(Name = "page")] int page = 1)
 		{
 			string? name = User.Identity?.Name;
 
@@ -38,11 +38,7 @@ namespace MyApp.Namespace
 				PageNumber = page;
 				LastPageNumber = CheepRepository.GetPageAmount(name);
 				Followees = AuthorRepository.GetFollowing(name);
-
-				string token = User.FindFirst("idp_access_token")?.Value
-					?? throw new Exception("Github token not found");
-
-				Mail = await GithubHelper.GetUserEmailGithub(token, name);
+				Mail = AuthorRepository.GetAuthorByName(name)?.Email;
 			}
 
 			return Page();
@@ -60,7 +56,7 @@ namespace MyApp.Namespace
 			return Redirect("/MicrosoftIdentity/Account/SignOut");
 		}
 
-		public async Task<ActionResult> OnPostDownload()
+		public ActionResult OnPostDownload()
 		{
 			string? name = User.Identity?.Name;
 			if (name != null)
@@ -68,11 +64,13 @@ namespace MyApp.Namespace
 				List<CheepDTO> cheeps = CheepRepository.GetCheepsFromAuthor(name);
 				List<string> followeeNames = AuthorRepository.GetFollowing(name).Select(a => a.Name).ToList();
 
-				string token = User.FindFirst("idp_access_token")?.Value
-					?? throw new Exception("Github token not found");
-				string mail = await GithubHelper.GetUserEmailGithub(token, name);
-
-				MyDataRecord myData = new MyDataRecord(name, mail, cheeps, followeeNames);
+				MyDataRecord myData = new MyDataRecord(
+					name,
+					AuthorRepository.GetAuthorByName(name)?.Email ?? throw new Exception("Email not found"),
+					cheeps,
+					followeeNames
+				);
+				
 				string myDataJson = JsonSerializer.Serialize(myData);
 
 				return File(System.Text.Encoding.UTF8.GetBytes(myDataJson), "text/json", "My_Chirp_Data.json");
@@ -80,7 +78,7 @@ namespace MyApp.Namespace
 			else
 			{
 				ErrorMessage = "Name is null!";
-				return await OnGet();
+				return OnGet();
 			}
 		}
 
