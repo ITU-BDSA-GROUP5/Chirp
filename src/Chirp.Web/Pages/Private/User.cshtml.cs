@@ -48,11 +48,7 @@ namespace MyApp.Namespace
 		public ActionResult OnPostDelete()
 		{
 			AuthorRepository.DeleteAuthorByName(User.Identity?.Name!);
-			Response.Cookies.Delete("AuthorCreated");
-			if (Request.Cookies["Music"] == "enabled")
-			{
-				Response.Cookies.Delete("Music");
-			}
+			Response.Cookies.Delete("Music");
 			return Redirect("/MicrosoftIdentity/Account/SignOut");
 		}
 
