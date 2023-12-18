@@ -75,9 +75,9 @@
 							}
 						</strong>
 						@cheep.Message
-						@if (User.Identity?.IsAuthenticated == true && User.Identity.Name != null)
-						{
-						<div class="likes">
+					<div class="likes">
+							@if (User.Identity?.IsAuthenticated == true && User.Identity.Name != null)
+							{
 								@if (cheep.Likes.Contains(User.Identity.Name))
 								{
 								<form asp-page-handler="Unlike" asp-route-cheep="@cheep.Id"
@@ -92,19 +92,19 @@
 									<input type="submit" value="♡" class="like">
 								</form>
 								}
-							<span>
-									@cheep.Likes.Count
-									@if (cheep.Likes.Count != 1)
-									{
-									<span>likes</span>
-									}
-									else
-									{
-									<span>like</span>
-									}
-							</span>
-						</div>
-						}
+							}
+						<span>
+								@cheep.Likes.Count
+								@if (cheep.Likes.Count != 1)
+								{
+								<span>likes</span>
+								}
+								else
+								{
+								<span>like</span>
+								}
+						</span>
+					</div>
 					</p>
 				</li>
 			}
