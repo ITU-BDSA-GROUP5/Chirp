@@ -113,17 +113,17 @@ public class CheepRepositoryUnitTests : IAsyncLifetime
 	public void GetCheeps_OnePageOfCheeps_CheepsDescendingOrder()
 	{
 		// Arrange
-		var cheeps = _cheepRepository.GetCheeps(1).Select(c => c.ToString());
+		var cheeps = _cheepRepository.GetCheeps(1).Select(c => c.Id);
 
 		// Act
-		var orderedCheeps = _cheepRepository.GetCheeps(1).OrderByDescending(c => c.TimeStamp).Select(c => c.ToString());
+		var orderedCheeps = _cheepRepository.GetCheeps(1).OrderByDescending(c => c.TimeStamp).Select(c => c.Id);
 
 		// Assert
-		Assert.Equal(cheeps, orderedCheeps);
+		Assert.Equal(orderedCheeps, cheeps);
 	}
 
 	[Fact]
-	public void GetCheeps_AmmountOfCheeps_EqualToPageSize()
+	public void GetCheeps_AmountOfCheeps_EqualToPageSize()
 	{
 		// Arrange
 		int pageSize = 32;
@@ -188,6 +188,40 @@ public class CheepRepositoryUnitTests : IAsyncLifetime
 
 		// Assert
 		Assert.Empty(authorUnliking.LikedCheeps);
+	}
+
+	[Fact]
+	public void GetMostLikedCheeps_OnePageOfCheeps_CheepsInDescingAmountOfLikes()
+	{
+		int page = 1;
+
+		// Arrange
+		var likingAuthor1 = "Helge";
+		var likingAuthor2 = "Rasmus";
+
+		Guid helgeCheepId = _context.Cheeps
+			.Where(c => c.Text == "Hello, BDSA students!")
+			.Select(c => c.CheepId)
+			.First();
+
+		Guid rasmusCheepId = _context.Cheeps
+			.Where(c => c.Text == "Hej, velkommen til kurset.")
+			.Select(c => c.CheepId)
+			.First();
+
+		// Like Helge's cheep twice
+		_cheepRepository.LikeCheep(helgeCheepId, likingAuthor1);
+		_cheepRepository.LikeCheep(helgeCheepId, likingAuthor2);
+
+		// Like Rasmus' cheep once
+		_cheepRepository.LikeCheep(rasmusCheepId, likingAuthor1);
+
+		// Act
+		List<Guid> cheeps = _cheepRepository.GetMostLikedCheeps(page).Select(c => c.Id).ToList();
+
+		// Assert
+		Assert.Equal(helgeCheepId, cheeps[0]);
+		Assert.Equal(rasmusCheepId, cheeps[1]);
 	}
 
 	[Fact]
