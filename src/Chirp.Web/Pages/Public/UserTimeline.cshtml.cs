@@ -171,4 +171,10 @@ public class UserTimelineModel : PageModel
 			Cheeps = CheepRepository.GetCheepsFromAuthor(page, author);
 		}
 	}
+
+	public IActionResult OnPostDeleteCheep(Guid id)
+	{
+		CheepRepository.DeleteCheep(id);
+		return RedirectToPage("UserTimeline");
+	}
 }
