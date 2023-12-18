@@ -41,9 +41,7 @@
 								{
 									<form asp-page-handler="Unfollow" asp-route-followeeName="@cheep.AuthorName"
 										asp-route-followerName="@User.Identity.Name"
-										asp-route-ReturnUrl="@Request.GetEncodedPathAndQuery()"
-										method="post"
-									>
+										asp-route-ReturnUrl="@Request.GetEncodedPathAndQuery()" method="post">
 										<input type="submit" value="Unfollow">
 									</form>
 								}
@@ -51,9 +49,7 @@
 								{
 									<form asp-page-handler="Follow" asp-route-followeeName="@cheep.AuthorName"
 										asp-route-followerName="@User.Identity.Name"
-										asp-route-ReturnUrl="@Request.GetEncodedPathAndQuery()"
-										method="post"
-									>
+										asp-route-ReturnUrl="@Request.GetEncodedPathAndQuery()" method="post">
 										<input type="submit" value="Follow">
 									</form>
 								}
@@ -67,38 +63,36 @@
 							}
 						</strong>
 						@cheep.Message
-						@if (User.Identity?.IsAuthenticated == true && User.Identity.Name != null)
-						{
-							<div class="likes">
+					<div class="likes">
+							@if (User.Identity?.IsAuthenticated == true && User.Identity.Name != null)
+							{
 								@if (cheep.Likes.Contains(User.Identity.Name))
 								{
-									<form asp-page-handler="Unlike" asp-route-cheep="@cheep.Id"
-										asp-route-ReturnUrl="@Request.GetEncodedPathAndQuery()"
-										method="post">
-										<input type="submit" value="❤️" class="like">
-									</form>
+								<form asp-page-handler="Unlike" asp-route-cheep="@cheep.Id"
+									asp-route-ReturnUrl="@Request.GetEncodedPathAndQuery()" method="post">
+									<input type="submit" value="❤️" class="like">
+								</form>
 								}
 								else
 								{
-									<form asp-page-handler="Like" asp-route-cheep="@cheep.Id"
-										asp-route-ReturnUrl="@Request.GetEncodedPathAndQuery()"
-										method="post">
-										<input type="submit" value="♡" class="like">
-									</form>
+								<form asp-page-handler="Like" asp-route-cheep="@cheep.Id"
+									asp-route-ReturnUrl="@Request.GetEncodedPathAndQuery()" method="post">
+									<input type="submit" value="♡" class="like">
+								</form>
 								}
-								<span> 
-									@cheep.Likes.Count
-									@if (cheep.Likes.Count != 1)
-									{
-										<span>likes</span>
-									}
-									else
-									{
-										<span>like</span>
-									}
-								</span>
-							</div>
-						}
+							}
+						<span>
+								@cheep.Likes.Count
+								@if (cheep.Likes.Count != 1)
+								{
+								<span>likes</span>
+								}
+								else
+								{
+								<span>like</span>
+								}
+						</span>
+					</div>
 					</p>
 				</li>
 			}

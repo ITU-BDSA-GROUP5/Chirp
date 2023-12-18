@@ -16,11 +16,11 @@
 		<div>
 			@if (Model.FollowerCount == 1)
 			{
-				<h3>@Model.FollowerCount   Follower</h3>
+				<h3>@Model.FollowerCount Follower</h3>
 			}
 			else
 			{
-				<h3>@Model.FollowerCount   Followers</h3>
+				<h3>@Model.FollowerCount Followers</h3>
 			}
 		</div>
 
@@ -45,8 +45,8 @@
 				<li>
 					<p class="wrap">
 						<strong>
-							<a href="/@cheep.AuthorName">@cheep.AuthorName</a>
-							 @* make sure user is logged in and can't follow themselves *@
+							<a href="/@cheep.AuthorName">@cheep.AuthorName</a> <small>&mdash; @cheep.TimeStamp</small>
+							@* make sure user is logged in and can't follow themselves *@
 							@if (User.Identity?.IsAuthenticated == true && cheep.AuthorName != User.Identity.Name)
 							{
 								// check if the user is already following the author
@@ -54,8 +54,7 @@
 								{
 									<form asp-page-handler="Unfollow" asp-route-followeeName="@cheep.AuthorName"
 										asp-route-followerName="@User.Identity.Name"
-										asp-route-ReturnUrl="@Request.GetEncodedPathAndQuery()"
-										method="post">
+										asp-route-ReturnUrl="@Request.GetEncodedPathAndQuery()" method="post">
 										<input type="submit" value="Unfollow">
 									</form>
 								}
@@ -63,8 +62,7 @@
 								{
 									<form asp-page-handler="Follow" asp-route-followeeName="@cheep.AuthorName"
 										asp-route-followerName="@User.Identity.Name"
-										asp-route-ReturnUrl="@Request.GetEncodedPathAndQuery()"
-										method="post">
+										asp-route-ReturnUrl="@Request.GetEncodedPathAndQuery()" method="post">
 										<input type="submit" value="Follow">
 									</form>
 								}
@@ -79,37 +77,34 @@
 						@cheep.Message
 						@if (User.Identity?.IsAuthenticated == true && User.Identity.Name != null)
 						{
-							<div class="likes">
+						<div class="likes">
 								@if (cheep.Likes.Contains(User.Identity.Name))
 								{
-									<form asp-page-handler="Unlike" asp-route-cheep="@cheep.Id"
-										asp-route-ReturnUrl="@Request.GetEncodedPathAndQuery()"
-										method="post">
-										<input type="submit" value="❤️" class="like">
-									</form>
+								<form asp-page-handler="Unlike" asp-route-cheep="@cheep.Id"
+									asp-route-ReturnUrl="@Request.GetEncodedPathAndQuery()" method="post">
+									<input type="submit" value="❤️" class="like">
+								</form>
 								}
 								else
 								{
-									<form asp-page-handler="Like" asp-route-cheep="@cheep.Id"
-										asp-route-ReturnUrl="@Request.GetEncodedPathAndQuery()"
-										method="post">
-										<input type="submit" value="♡" class="like">
-									</form>
+								<form asp-page-handler="Like" asp-route-cheep="@cheep.Id"
+									asp-route-ReturnUrl="@Request.GetEncodedPathAndQuery()" method="post">
+									<input type="submit" value="♡" class="like">
+								</form>
 								}
-								<span> 
+							<span>
 									@cheep.Likes.Count
 									@if (cheep.Likes.Count != 1)
 									{
-										<span>likes</span>
+									<span>likes</span>
 									}
 									else
 									{
-										<span>like</span>
+									<span>like</span>
 									}
-								</span>
-							</div>
+							</span>
+						</div>
 						}
-						<small>&mdash; @cheep.TimeStamp</small>
 					</p>
 				</li>
 			}

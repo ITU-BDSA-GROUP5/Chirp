@@ -90,7 +90,7 @@
                 <li>
                     <p class="wrap">
                         <strong>
-                            <a href="/@cheep.AuthorName">@cheep.AuthorName</a>
+                            <a href="/@cheep.AuthorName">@cheep.AuthorName</a> <small>&mdash; @cheep.TimeStamp</small>
                         </strong>
                         @if (cheep.AuthorName != User.Identity?.Name)
 							{
@@ -121,7 +121,6 @@
 								</form>
 							}
                         @cheep.Message
-                        <small>&mdash; @cheep.TimeStamp</small>
                     </p>
                 </li>
             }
