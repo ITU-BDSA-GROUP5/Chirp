@@ -1,7 +1,6 @@
 using Chirp.Core;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
-using Microsoft.AspNetCore.Http.Extensions;
 using FluentValidation;
 
 namespace Chirp.Web.Pages;

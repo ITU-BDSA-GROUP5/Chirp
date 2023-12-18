@@ -1,16 +1,15 @@
-using Chirp.Core;
+﻿﻿using Chirp.Core;
 using FluentValidation;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 
 namespace Chirp.Web.Pages;
 
-public abstract class ChirpPage : PageModel
+public class TrendingModel : PageModel
 {
-	protected readonly IAuthorRepository AuthorRepository;
-	protected readonly ICheepRepository CheepRepository;
-	protected readonly IValidator<CreateCheepDTO> CheepValidator;
-
+	private readonly IAuthorRepository AuthorRepository;
+	private readonly ICheepRepository CheepRepository;
+	private readonly IValidator<CreateCheepDTO> CheepValidator;
 	public required List<CheepDTO> Cheeps { get; set; }
 
 	public required List<AuthorDTO> Following { get; set; }
@@ -26,14 +25,28 @@ public abstract class ChirpPage : PageModel
 	[BindProperty]
 	public string? ReturnUrl { get; set; }
 
-    protected ChirpPage(IAuthorRepository authorRepository, ICheepRepository cheepRepository, IValidator<CreateCheepDTO> _cheepValidator)
+	public TrendingModel(IAuthorRepository authorRepository, ICheepRepository cheepRepository, IValidator<CreateCheepDTO> _cheepValidator)
 	{
 		AuthorRepository = authorRepository;
 		CheepRepository = cheepRepository;
 		CheepValidator = _cheepValidator;
 	}
 
-	public async Task<IActionResult> OnPost()
+	public ActionResult OnGet([FromQuery(Name = "page")] int page = 1)
+	{
+		if (User.Identity != null && User.Identity.IsAuthenticated)
+		{
+			string name = (User.Identity?.Name) ?? throw new Exception("Name is null!");
+			Following = AuthorRepository.GetFollowing(name);
+		}
+
+		Cheeps = CheepRepository.GetMostLikedCheeps(page);
+		PageNumber = page;
+		LastPageNumber = CheepRepository.GetPageAmount();
+
+		return Page();
+	}
+	public IActionResult OnPost()
 	{
 		InvalidCheep = false;
 		try
@@ -44,20 +57,10 @@ public abstract class ChirpPage : PageModel
 			}
 
 			string name = (User.Identity?.Name) ?? throw new Exception("Error in getting username");
-			AuthorDTO? user = AuthorRepository.GetAuthorByName(name);
+			AuthorDTO? user = AuthorRepository.GetAuthorByName(name)
+				?? throw new Exception("User not found!");
 
-			if (user == null)
-			{
-				string token = User.FindFirst("idp_access_token")?.Value
-					?? throw new Exception("Github token not found");
-
-				string email = await GithubHelper.GetUserEmailGithub(token, name);
-
-				AuthorRepository.CreateNewAuthor(name, email);
-				user = AuthorRepository.GetAuthorByName(name) ?? throw new Exception("Error when getting user with name: " + name);
-			}
-
-			CreateCheepDTO cheep = new CreateCheepDTO()
+            CreateCheepDTO cheep = new CreateCheepDTO()
 			{
 				Text = CheepMessage,
 				Name = user.Name,
@@ -75,7 +78,7 @@ public abstract class ChirpPage : PageModel
 			InvalidCheep = true;
 		}
 
-		return Redirect(ReturnUrl ?? "/");
+		return OnGet();
 	}
 
 	public IActionResult OnPostLike(Guid cheep)
@@ -85,9 +88,10 @@ public abstract class ChirpPage : PageModel
 			return Unauthorized();
 		}
 
-		try {
+		try
+		{
 			CheepRepository.LikeCheep(cheep, User.Identity.Name);
-		} 
+		}
 		catch (Exception e)
 		{
 			ErrorMessage = e.Message;
@@ -103,30 +107,20 @@ public abstract class ChirpPage : PageModel
 			return Unauthorized();
 		}
 
-		try {
+		try
+		{
 			CheepRepository.UnlikeCheep(cheep, User.Identity.Name);
-		} 
+		}
 		catch (Exception e)
 		{
 			ErrorMessage = e.Message;
 		}
-		
+
 		return Redirect(ReturnUrl ?? "/");
 	}
 
-	public async Task<IActionResult> OnPostFollow(string followeeName, string followerName)
+	public IActionResult OnPostFollow(string followeeName, string followerName)
 	{
-		string name = (User.Identity?.Name) ?? throw new Exception("Name is null!");
-
-		if (AuthorRepository.GetAuthorByName(name) == null)
-		{
-			string token = User.FindFirst("idp_access_token")?.Value
-					?? throw new Exception("Github token not found");
-			string email = await GithubHelper.GetUserEmailGithub(token, name);
-
-			AuthorRepository.CreateNewAuthor(name, email);
-		}
-
 		AuthorRepository.FollowAuthor(followerName ?? throw new Exception("Name is null!"), followeeName);
 		return Redirect(ReturnUrl ?? "/");
 	}
@@ -135,11 +129,5 @@ public abstract class ChirpPage : PageModel
 	{
 		AuthorRepository.UnfollowAuthor(followerName ?? throw new Exception("Name is null!"), followeeName);
 		return Redirect(ReturnUrl ?? "/");
-	}
-
-    public IActionResult OnPostDeleteCheep(Guid id)
-	{
-		CheepRepository.DeleteCheep(id);
-		return RedirectToPage("Public");
 	}
 }
