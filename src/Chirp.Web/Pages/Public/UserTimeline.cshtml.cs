@@ -1,7 +1,6 @@
 using Chirp.Core;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
-using Microsoft.AspNetCore.Http.Extensions;
 using FluentValidation;
 
 namespace Chirp.Web.Pages;
@@ -54,7 +53,7 @@ public class UserTimelineModel : PageModel
 		return Page();
 	}
 
-	public async Task<IActionResult> OnPost()
+	public IActionResult OnPost()
 	{
 		InvalidCheep = false;
 		try
@@ -65,19 +64,8 @@ public class UserTimelineModel : PageModel
 			}
 
 			string name = (User.Identity?.Name) ?? throw new Exception("Error in getting username");
-			AuthorDTO? user = AuthorRepository.GetAuthorByName(name);
-
-			if (user == null)
-			{
-				string token = User.FindFirst("idp_access_token")?.Value
-					?? throw new Exception("Github token not found");
-
-
-				string email = await GithubHelper.GetUserEmailGithub(token, name);
-
-				AuthorRepository.CreateNewAuthor(name, email);
-				user = AuthorRepository.GetAuthorByName(name) ?? throw new Exception("Error when getting user with name: " + name);
-			}
+			AuthorDTO? user = AuthorRepository.GetAuthorByName(name)
+				?? throw new Exception("User not found!");
 
 			CreateCheepDTO cheep = new CreateCheepDTO()
 			{
@@ -136,18 +124,8 @@ public class UserTimelineModel : PageModel
 		return Redirect(ReturnUrl ?? "/");
 	}
 
-	public async Task<IActionResult> OnPostFollow(string followeeName, string followerName)
+	public IActionResult OnPostFollow(string followeeName, string followerName)
 	{
-		string name = (User.Identity?.Name) ?? throw new Exception("Name is null!");
-
-		if (AuthorRepository.GetAuthorByName(name) == null)
-		{
-			string token = User.FindFirst("idp_access_token")?.Value
-					?? throw new Exception("Github token not found");
-			string email = await GithubHelper.GetUserEmailGithub(token, name);
-			AuthorRepository.CreateNewAuthor(name, email);
-		}
-
 		AuthorRepository.FollowAuthor(followerName ?? throw new Exception("Name is null!"), followeeName);
 		return Redirect(ReturnUrl ?? "/");
 	}
