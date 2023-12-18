@@ -1,4 +1,4 @@
-﻿using Chirp.Core;
+﻿﻿using Chirp.Core;
 using FluentValidation;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
@@ -69,6 +69,7 @@ public class PublicModel : PageModel
 			catch (Exception e)
 			{
 				Console.WriteLine($"User creation failed: {e}");
+				return;
 			}
 		}
 		
