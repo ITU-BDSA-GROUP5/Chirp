@@ -99,9 +99,10 @@ public class PublicModel : PageModel
 			return Unauthorized();
 		}
 
-		try {
+		try
+		{
 			CheepRepository.LikeCheep(cheep, User.Identity.Name);
-		} 
+		}
 		catch (Exception e)
 		{
 			ErrorMessage = e.Message;
@@ -117,14 +118,15 @@ public class PublicModel : PageModel
 			return Unauthorized();
 		}
 
-		try {
+		try
+		{
 			CheepRepository.UnlikeCheep(cheep, User.Identity.Name);
-		} 
+		}
 		catch (Exception e)
 		{
 			ErrorMessage = e.Message;
 		}
-		
+
 		return Redirect(ReturnUrl ?? "/");
 	}
 
@@ -149,5 +151,11 @@ public class PublicModel : PageModel
 	{
 		AuthorRepository.UnfollowAuthor(followerName ?? throw new Exception("Name is null!"), followeeName);
 		return Redirect(ReturnUrl ?? "/");
+	}
+
+	public IActionResult OnPostDeleteCheep(Guid id)
+	{
+		CheepRepository.DeleteCheep(id);
+		return RedirectToPage("Public");
 	}
 }
