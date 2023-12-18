@@ -101,5 +101,11 @@ namespace MyApp.Namespace
 
 			return Redirect(ReturnUrl ?? "/");
 		}
+
+		public IActionResult OnPostDeleteCheep(Guid id)
+		{
+			CheepRepository.DeleteCheep(id);
+			return RedirectToPage("User");
+		}
 	}
 }

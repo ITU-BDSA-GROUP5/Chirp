@@ -1,5 +1,5 @@
-@page "/"
-@model Chirp.Web.Pages.PublicModel
+@page "/trending"
+@model Chirp.Web.Pages.TrendingModel
 @addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
 @using Microsoft.AspNetCore.Http.Extensions
 @{
@@ -8,8 +8,8 @@
 }
 
 <div>
-	<h2> Public Timeline </h2>
-
+	<h2> Trending Page </h2>
+	<h3>See the most liked cheeps of all time!</h3>
 	@if (User.Identity?.IsAuthenticated == true)
 	{
 		<div class="cheepbox">
@@ -19,7 +19,7 @@
 				<p>@Model.ErrorMessage</p>
 			}
 			<form method="post">
-				<input style="float: left" type="text" asp-for="CheepMessage" value="">
+				<input style="float: left" type="text" asp-for="CheepMessage">
 				<input type="submit" value="Share">
 			</form>
 		</div>
@@ -41,9 +41,7 @@
 								{
 									<form asp-page-handler="Unfollow" asp-route-followeeName="@cheep.AuthorName"
 										asp-route-followerName="@User.Identity.Name"
-										asp-route-ReturnUrl="@Request.GetEncodedPathAndQuery()"
-										method="post"
-									>
+										asp-route-ReturnUrl="@Request.GetEncodedPathAndQuery()" method="post">
 										<input type="submit" value="Unfollow">
 									</form>
 								}
@@ -51,53 +49,43 @@
 								{
 									<form asp-page-handler="Follow" asp-route-followeeName="@cheep.AuthorName"
 										asp-route-followerName="@User.Identity.Name"
-										asp-route-ReturnUrl="@Request.GetEncodedPathAndQuery()"
-										method="post"
-									>
+										asp-route-ReturnUrl="@Request.GetEncodedPathAndQuery()" method="post">
 										<input type="submit" value="Follow">
 									</form>
 								}
 
 							}
-							@if (User.Identity?.IsAuthenticated == true && cheep.AuthorName == User.Identity.Name)
-							{
-								<form asp-page-handler="DeleteCheep" asp-route-id="@cheep.Id" method="post">
-									<input class="delete-button" type="submit" value="Delete">
-								</form>
-							}
 						</strong>
 						@cheep.Message
 						@if (User.Identity?.IsAuthenticated == true && User.Identity.Name != null)
 						{
-							<div class="likes">
+						<div class="likes">
 								@if (cheep.Likes.Contains(User.Identity.Name))
 								{
-									<form asp-page-handler="Unlike" asp-route-cheep="@cheep.Id"
-										asp-route-ReturnUrl="@Request.GetEncodedPathAndQuery()"
-										method="post">
-										<input type="submit" value="❤️" class="like">
-									</form>
+								<form asp-page-handler="Unlike" asp-route-cheep="@cheep.Id"
+									asp-route-ReturnUrl="@Request.GetEncodedPathAndQuery()" method="post">
+									<input type="submit" value="❤️" class="like">
+								</form>
 								}
 								else
 								{
-									<form asp-page-handler="Like" asp-route-cheep="@cheep.Id"
-										asp-route-ReturnUrl="@Request.GetEncodedPathAndQuery()"
-										method="post">
-										<input type="submit" value="♡" class="like">
-									</form>
+								<form asp-page-handler="Like" asp-route-cheep="@cheep.Id"
+									asp-route-ReturnUrl="@Request.GetEncodedPathAndQuery()" method="post">
+									<input type="submit" value="♡" class="like">
+								</form>
 								}
-								<span> 
+							<span>
 									@cheep.Likes.Count
 									@if (cheep.Likes.Count != 1)
 									{
-										<span>likes</span>
+									<span>likes</span>
 									}
 									else
 									{
-										<span>like</span>
+									<span>like</span>
 									}
-								</span>
-							</div>
+							</span>
+						</div>
 						}
 					</p>
 				</li>

@@ -9,6 +9,8 @@ public interface ICheepRepository
 	public void CreateNewCheep(CreateCheepDTO createCheepDTO);
 	public void LikeCheep(Guid cheepId, string author);
 	public void UnlikeCheep(Guid CheepId, string author);
-
 	public List<CheepDTO> GetCheepsFromAuthorAndFollowings(int page, string author, List<String> following);
+	public List<CheepDTO> GetMostLikedCheeps(int page);
+	public void DeleteCheep(Guid cheepId);
+
 }

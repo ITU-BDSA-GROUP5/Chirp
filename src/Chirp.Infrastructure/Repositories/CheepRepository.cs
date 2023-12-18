@@ -30,6 +30,16 @@ namespace Chirp.Infrastructure.Repositories
 			_context.SaveChanges();
 		}
 
+		public void DeleteCheep(Guid cheepId)
+		{
+			var cheep = _context.Cheeps
+				.Where(c => c.CheepId == cheepId)
+				.First();
+
+			_context.Cheeps.Remove(cheep);
+			_context.SaveChanges();
+		}
+
 		public List<CheepDTO> GetCheeps(int page)
 		{
 			return _context.Cheeps
@@ -141,6 +151,25 @@ namespace Chirp.Infrastructure.Repositories
 				.Where(c => following.Contains(c.Author.Name))
 				.Include(c => c.LikedBy)
 				.OrderByDescending(c => c.TimeStamp)
+				.Skip((page - 1) * pageSize)
+				.Take(pageSize)
+				.Select(c => new CheepDTO
+				{
+					Id = c.CheepId,
+					AuthorName = c.Author.Name,
+					Message = c.Text,
+					TimeStamp = c.TimeStamp.ToString("yyyy-MM-dd H:mm:ss"),
+					Likes = c.LikedBy.Select(a => a.Name).ToList()
+				})
+				.ToList();
+		}
+
+		public List<CheepDTO> GetMostLikedCheeps(int page)
+		{
+			return _context.Cheeps
+				.Include(c => c.LikedBy)
+				.OrderByDescending(c => c.LikedBy.Count)
+				.ThenByDescending(c => c.TimeStamp)
 				.Skip((page - 1) * pageSize)
 				.Take(pageSize)
 				.Select(c => new CheepDTO
