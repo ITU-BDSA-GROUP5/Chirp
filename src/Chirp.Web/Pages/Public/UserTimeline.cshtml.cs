@@ -9,17 +9,15 @@ public class UserTimelineModel : ChirpPage
 {
 	public int FollowerCount { get; set; }
 
-	public UserTimelineModel (
-		IAuthorRepository authorRepository,
-		ICheepRepository cheepRepository,
-		IValidator<CreateCheepDTO> _cheepValidator) : base(authorRepository, cheepRepository, _cheepValidator
-	) { }
+	public UserTimelineModel (IAuthorRepository authorRepository, ICheepRepository cheepRepository, IValidator<CreateCheepDTO> _cheepValidator)
+		: base(authorRepository, cheepRepository, _cheepValidator) { }
 
 	public ActionResult OnGet(string author, [FromQuery(Name = "page")] int page = 1)
 	{
 		// if user is logged in we want to see if they are viewing their own timeline or somebody elses
 		if (User.Identity != null && User.Identity.IsAuthenticated)
 		{
+			EnsureAuthorCreated().Wait();
 			LoadTimelineSpecificCheeps(author, page);
 
 			FollowerCount = AuthorRepository.GetFollowers(author).Count;
