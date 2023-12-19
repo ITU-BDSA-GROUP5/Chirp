@@ -88,16 +88,17 @@ public class CreateCheepTests : PageTest
 
         await page.GotoAsync("https://localhost:7102/");
 
-        await page.Locator("li").Filter(new() { HasText = "Jacqualine Gilcoine Follow Starbuck now is what we hear the worst. — 2023-08-01 13:17:" }).GetByRole(AriaRole.Button).ClickAsync();
-
-        await Expect(page.Locator("#messagelist")).ToContainTextAsync("Unfollow");
+        await page.Locator("li").Filter(new() { HasText = "Jacqualine Gilcoine — 2023-08-01 13:17:39 Follow Starbuck now is what we hear" }).GetByRole(AriaRole.Button).First.ClickAsync();
 
         await page.GetByRole(AriaRole.Link, new() { Name = "my timeline" }).ClickAsync();
 
-        await Expect(page.Locator("#messagelist")).ToContainTextAsync("Jacqualine Gilcoine");
+        await Expect(page.Locator("#messagelist")).ToContainTextAsync("Jacqualine Gilcoine Unfollow Starbuck now is what we hear the worst.");
 
-        await page.Locator("li").Filter(new() { HasText = "Jacqualine Gilcoine Unfollow Starbuck now is what we hear the worst. — 2023-08-01 13:17:" }).GetByRole(AriaRole.Button).ClickAsync();
+        await page.Locator("li").Filter(new() { HasText = "Jacqualine Gilcoine Unfollow Starbuck now is what we hear the worst." }).GetByRole(AriaRole.Button).First.ClickAsync();
+
+        await page.GetByRole(AriaRole.Link, new() { Name = "public timeline" }).ClickAsync();
 
         await Expect(page.Locator("#messagelist")).ToContainTextAsync("Follow");
+
     }
 }
