@@ -46,3 +46,4 @@ We have used GitHub Copilot in the development process of the project. Copilot h
 GitHub Copilot's chat functionality within the workspace has also been used for proof of concept. The response helped us to get an idea of, how a certain functionality might be implemented. This would then lead to an inspired but manual implementation of that functionality.
 
 We have also used ChatGPT in some rare cases during the project. This was mainly used for researching purposes to get details about a concept or receive an explanation of some code examples from the internet. The help from ChatGPT primarily helped to faster gain an understanding of a subject, before implementing a feature.
+
