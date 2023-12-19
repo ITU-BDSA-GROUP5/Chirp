@@ -1,0 +1,20 @@
+@startuml
+
+participant ":Client" as Client #white
+participant ":Chirp" as Chirp #white
+participant ":AzureDatabase" as DB #white
+
+
+Client -> Chirp: GET "/"
+Activate Chirp
+
+Chirp -> DB: GetCheeps()
+Activate DB
+
+DB --> Chirp: return Cheeps
+Deactivate DB
+
+Chirp --> Client: Frontpage
+Deactivate Chirp
+
+@enduml
