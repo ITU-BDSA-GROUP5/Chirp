@@ -1,0 +1,25 @@
+@startuml
+
+skin rose
+
+skinparam nodesep 120
+
+title Domain Model
+
+class Author {
+  +Guid AuthorId
+  +string Name
+  +string Email
+}
+
+class Cheep {
+  +Guid CheepId
+  +string Text
+  +DateTime TimeStamp
+}
+
+Author "Author 1" -Left- "~* Cheeps" Cheep
+Author "LikedBy *" -Left- "~* LikedCheeps" Cheep
+Author "~* Following" -- "~* Followees" Author
+
+@enduml
