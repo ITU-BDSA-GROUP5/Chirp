@@ -28,6 +28,10 @@ UML deployment diagrams overview, common types of deployment diagrams - manifest
 
 ![Client-Server communication component diagram](/docs/images/architecture-of-deployed-app/component-communication.png)
 
+The web server communicates only with the GitHub API to get the email (AND THE PROFILE PICTURE??) of the user.
+
+![Deployment diagram](/docs/images/architecture-of-deployed-app/deployment-diagram.png)
+
 ## User activities
 
 ## Sequence of functionality/calls trough _Chirp!_
