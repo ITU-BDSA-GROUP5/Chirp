@@ -1,0 +1,20 @@
+@startuml
+
+skin rose
+
+title Browsing "Chirp!" unauthenticated [User Activity Diagram] \n
+
+start
+
+:Display public timeline;
+
+:Go to trending page;
+
+:Scroll to bottom;
+:Go to next page;
+:Click on author X's name;
+:Display author X's cheeps;
+
+stop
+
+@enduml

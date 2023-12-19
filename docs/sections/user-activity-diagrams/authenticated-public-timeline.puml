@@ -1,0 +1,32 @@
+@startuml
+
+skin rose
+
+title Authenticated User Activity Diagram \n
+
+start
+
+repeat :Display unauthenticated public timeline;
+
+  :Login;
+
+repeat while (Successful?) is (no) not (yes)
+
+:Display authenticated public timeline;
+
+
+:Like a cheep;
+  
+:Write a cheep;
+
+repeat :Share cheep;
+  Backward:Display user error;
+repeat while (Valid?) is (no) not (yes)
+
+:Publish cheep;
+
+:Reload page;
+
+stop
+
+@enduml
