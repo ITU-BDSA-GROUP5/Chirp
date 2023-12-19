@@ -37,7 +37,11 @@ This workflow is run upon every push to main and pull request to main. It builds
 
 ![UML activity diagram of the deployment workflow.](images/Build_test_release_and_deployment/deployment_workflow.png)
 
+This workflow is run upon every push to main. Note the redundant "build" step. We do not need this since the "publish" step already builds the application. This redundancy was not noticed during development and has not been removed due to time constraints. The illustration describes the two jobs: "build" and "deploy". Jobs are normally run in parallel, however, these are run sequentially as we do not want to deploy before the application is successfully built.
+
 ![UML activity diagram of the release razor workflow.](images/Build_test_release_and_deployment/release_razor_workflow.png)
+
+The Release Razor workflow is only run if a push to main contains a version tag. We've made use of a matrix strategy in order to automatically create multiple job runs that builds, publishes, zips and releases the application for their respective platform.
 
 ## Team work
 
