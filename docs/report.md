@@ -41,7 +41,7 @@ This workflow is run upon every push to main. Note the redundant "build" step. W
 
 ![UML activity diagram of the release razor workflow.](images/Build_test_release_and_deployment/release_razor_workflow.png)
 
-The Release Razor workflow is only run if a push to main contains a version tag. We've made use of a matrix strategy in order to automatically create multiple job runs that builds, publishes, zips and releases the application for their respective platform.
+The Release Razor workflow is only run if a push to main contains a version tag. We've made use of a matrix strategy in order to automatically create multiple parallel job runs that builds, publishes, zips and releases the application for their respective platform.
 
 ## Team work
 
