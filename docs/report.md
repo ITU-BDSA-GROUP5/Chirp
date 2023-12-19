@@ -41,3 +41,5 @@ Here comes a description of our domain model.
 ## License
 
 ## LLMs, ChatGPT, CoPilot, and others
+
+We have used GitHub Copilot in the development process of the project. Copilot has mainly been utilized for generation of small code samples. This was typically done for simple and repetitive code methods and functions. In some cases, GitHub Copilot has also been used for proof of concept, to get an idea of, how a certain functionality might be implemented. This would then lead to an inspired but manual implementation of that functionality.
