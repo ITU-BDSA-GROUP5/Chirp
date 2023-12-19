@@ -24,17 +24,19 @@ Here comes a description of our domain model.
 
 ## User activities
 
-The user activity diagram below illustrates a typical user journey for an unauthenticated user of the application.
+The following user activity diagrams are for typical user journeys in our "Chirp!" application.
+
+The figure below illustrates a user journey for an **unauthenticated** user of the application.
 
 ![Unauthenticated User activity diagrams](/docs/images/user-activity-diagrams/unauthenticated-user-activity-diagram.png)
 
-The diagram below illustrates a typical user journey for an authenticated user of the application.
+The diagram below illustrates a user journey for an **authenticated** user of the application.
 
 ![Authenticated User activity diagrams](/docs/images/user-activity-diagrams/authenticated-user-activity-diagram.png)
 
 The next diagram illustrates a user journey where a user wants to exercise their GDPR rights.
 
-![Authenticated user downloads their data and deletes themselves](/docs/images/user-activity-diagrams/deleting-user-activity-diagram.png)
+![Authenticated user downloads their data and deletes themselves](/docs/images/user-activity-diagrams/)
 
 ## Sequence of functionality/calls trough _Chirp!_
 
