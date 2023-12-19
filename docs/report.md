@@ -24,6 +24,9 @@ Here comes a description of our domain model.
 
 ## User activities
 
+![Unauthenticated User activity diagrams](/docs/images/user-activity-diagrams/unauthenticated-user-activity-diagram.png)
+![Authenticated User activity diagrams](/docs/images/user-activity-diagrams/authenticated-user-activity-diagram.png)
+
 ## Sequence of functionality/calls trough _Chirp!_
 
 # Process

@@ -2,7 +2,7 @@
 
 skin rose
 
-title Authenticated User Activity Diagram \n
+title Browsing "Chirp!" authenticated [User Activity Diagram] \n
 
 start
 
@@ -10,10 +10,10 @@ repeat :Display unauthenticated public timeline;
 
   :Login;
 
+
 repeat while (Successful?) is (no) not (yes)
 
 :Display authenticated public timeline;
-
 
 :Like a cheep;
   
