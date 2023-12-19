@@ -29,6 +29,15 @@ Here comes a description of our domain model.
 # Process
 
 ## Build, test, release, and deployment
+The following UML activity diagrams illustrate the GitHub actions workflows that are run when different criteria are met. This will be briefly described under the respective diagrams.
+
+![UML activity diagram of the build and test workflow.](images/Build_test_release_and_deployment/build_and_test_workflow.png)
+
+This workflow is run upon every push to main and pull request to main. It builds and tests to application in order to keep main void of faulty code (as **safety net**).
+
+![UML activity diagram of the deployment workflow.](images/Build_test_release_and_deployment/deployment_workflow.png)
+
+![UML activity diagram of the release razor workflow.](images/Build_test_release_and_deployment/release_razor_workflow.png)
 
 ## Team work
 
