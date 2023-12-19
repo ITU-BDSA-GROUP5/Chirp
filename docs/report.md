@@ -22,6 +22,12 @@ Here comes a description of our domain model.
 
 ## Architecture of deployed application
 
+UML component diagram shows components, provided and required interfaces, ports, and relationships between them.
+
+UML deployment diagrams overview, common types of deployment diagrams - manifestation diagram, specification and instance level deployment diagram.
+
+![Client-Server communication component diagram](/docs/images/architecture-of-deployed-app/component-communication.png)
+
 ## User activities
 
 ## Sequence of functionality/calls trough _Chirp!_
