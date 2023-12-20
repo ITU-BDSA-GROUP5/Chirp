@@ -23,9 +23,8 @@ else (no)
   :Like cheep;
 endif
 
-:Write a cheep;
-
-repeat :Share cheep;
+repeat :Write a cheep;
+  :Share cheep;
   Backward:Display user error;
 repeat while (Valid?) is (no) not (yes)
 
