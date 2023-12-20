@@ -36,7 +36,7 @@ The following component diagram shows how the different high level components co
 
 ![Client-Server communication component diagram](images/architecture-of-deployed-app/component-communication.png)
 
-The client communicates with the web server using HTTP requests. The server itself uses HTTP requests to get information about the user from the GitHub API. Furthermore, the server has a connection to the SQL Server which contains the database.
+The client communicates with the Azure web server using HTTP requests. The Azure web server itself uses HTTP requests to get information about the user from the GitHub API. Furthermore, the Azure web server has a connection to the Azure SQL Server which contains the database.
 
 The following deployment diagram shows the artifacts of the system and where they are deployed.
 
@@ -46,11 +46,13 @@ Each client computer uses a browser, which uses HTTP requests, to access the web
 
 ## User activities
 
-The following user activity diagrams are for typical user journeys in our "Chirp!" application.
+The following user activity diagrams are for typical user journeys in our "Chirp!" application, where a user completes a couple of tasks.
 
 The figure below illustrates a user journey for an **unauthenticated** user of the application.
 
 ![Unauthenticated User activity diagrams](images/user-activity-diagrams/unauthenticated-user-activity-diagram.png)
+
+"Author X" represents any author present on the second page of the public timeline.
 
 The diagram below illustrates a user journey for an **authenticated** user of the application.
 
