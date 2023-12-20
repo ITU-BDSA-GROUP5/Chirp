@@ -13,10 +13,13 @@ numbersections: true
 # Design and Architecture of _Chirp!_
 
 ## Domain model
+![Domain Model as Class Diagram](/docs/images/domain_model_diagram.png)
 
-Here comes a description of our domain model.
-
-![Illustration of the _Chirp!_ data model as UML class diagram.](docs/images/domain_model.png)
+The Author class represents a user in Chirp!.
+A Cheep represents the messages shared on the Chirp! platform.
+A Cheep is written by an Author, and an Author can write many Cheeps.
+An Author can follow, as well as be followed, by another Author.
+An Author can like a Cheep. A Cheep can be liked by many Authors.
 
 ## Architecture — In the small
 
