@@ -1,0 +1,38 @@
+@startuml
+
+skin rose
+
+title Browsing "Chirp!" authenticated [User Activity Diagram] \n
+
+start
+
+repeat :Display unauthenticated public timeline;
+
+  :Login;
+
+
+repeat while (Successful?) is (no) not (yes)
+
+:Display authenticated public timeline;
+
+:Press like button on a cheep;
+
+if (user has already liked the cheep?) then (yes)
+  :Unlike cheep;
+else (no)
+  :Like cheep;
+endif
+
+:Write a cheep;
+
+repeat :Share cheep;
+  Backward:Display user error;
+repeat while (Valid?) is (no) not (yes)
+
+:Publish cheep;
+
+:Reload page;
+
+stop
+
+@enduml

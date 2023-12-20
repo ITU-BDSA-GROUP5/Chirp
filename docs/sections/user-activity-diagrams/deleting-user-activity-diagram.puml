@@ -1,0 +1,36 @@
+@startuml
+
+skin rose
+
+title Deleting user data [User Activity Diagram] \n
+
+start
+
+repeat :Display unauthenticated public timeline;
+
+  :Login;
+
+
+repeat while (Successful?) is (no) not (yes)
+
+:Display authenticated public timeline;
+
+:Navigate to "about me" page;
+
+:Click "Download my data";
+note right
+  JSON file of user 
+  data is downloaded
+end note
+
+:Click "Forget me!";
+
+:Delete user data from database;
+
+:Log user out;
+
+:Display Signed out page;
+
+stop
+
+@enduml
