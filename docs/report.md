@@ -17,9 +17,9 @@ numbersections: true
 ![Domain Model as Class Diagram](images/domain_model_diagram.png)
 
 The Author class represents a user in _Chirp!_.
-A Cheep represents the messages shared on the _Chirp!_ platform.
+The Cheep class represents the messages shared on the _Chirp!_ platform.
 A Cheep is written by an Author, and an Author can write many Cheeps.
-An Author can follow, as well as be followed, by another Author.
+An Author can follow, as well as be followed by, many other Authors.
 An Author can like a Cheep. A Cheep can be liked by many Authors.
 
 ## Architecture — In the small
