@@ -40,4 +40,26 @@ Here comes a description of our domain model.
 
 ## License
 
+Our Chirp! application is licensed under [Creative Commons Attribution Share Alike 4.0 International](https://github.com/ITU-BDSA23-GROUP5/Chirp/blob/main/LICENSE).
+
+This permits:
+* Commercial use
+* Modification
+* Distribution
+* Private use
+
+With the following limitations:
+* Liability
+* Trademark use
+* Patent use
+* Warranty
+
+Under the following conditions:
+* License and copyright notice
+* Changes are stated
+* The license is kept
+
+
+All dependencies in src use either the MIT License (e.g. Microsoft.EntityFrameworkCore.design, Microsoft.EntityFrameworkCore.SqlServer) or the Apache License 2.0 (e.g. FluentValidation), both of which are permissive.
+
 ## LLMs, ChatGPT, CoPilot, and others
