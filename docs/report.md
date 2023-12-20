@@ -13,6 +13,7 @@ numbersections: true
 # Design and Architecture of _Chirp!_
 
 ## Domain model
+
 ![Domain Model as Class Diagram](images/domain_model_diagram.png)
 
 The Author class represents a user in Chirp!.
@@ -26,7 +27,6 @@ An Author can like a Cheep. A Cheep can be liked by many Authors.
 The architecture is illustrated on figure \ref{onion_arch_diagram} with three circles representing the layers of our onion architecture. The legend to the left should be self-explanatory except for the terms Grouping of classes. Grouping of classes refers to a set of classes that serve similar functions e.g. the Repositories - it is an abstraction made to increase readability.
 
 ![Illustration of organization of the code base (onion architecture diagram).\label{onion_arch_diagram}](images/architecture_in_the_small/Onion_architecture.png)
-
 
 ## Architecture of deployed application
 
@@ -61,12 +61,14 @@ The next diagram illustrates a user journey where a user wants to exercise their
 ![Authenticated user downloads their data and deletes themselves](images/user-activity-diagrams/deleting-user-activity-diagram.png)
 
 ## Sequence of functionality/calls through _Chirp!_
+
 ![Sequence of functionality/calls through chirp!\label{functionsequence}](images/sequence_of_functionality.png)
-The figure \ref{functionsequence} illustrates the sequence of events, from a user requests the root of __Chirp!__ to a page is rendered and returned.
+The figure \ref{functionsequence} illustrates the sequence of events, from a user requests the root of **Chirp!** to a page is rendered and returned.
 
 # Process
 
 ## Build, test, release, and deployment
+
 The following UML activity diagrams illustrate the GitHub actions workflows that are run when different criteria are met. This will be briefly described under the respective diagrams. Note that each step can fail and will result in the Github Action aborting.
 
 ![UML activity diagram of the build and test workflow.\label{build_test_workflow}](images/build_test_release_and_deployment/build_and_test_workflow.png)
@@ -83,10 +85,10 @@ The release workflow illustrated on figure \ref{release_workflow} only runs if a
 
 ## Team work
 
-No functionality is incomplete. Planned features we did not get to implement include:
+No functionality is in progress, but a bug has been spotted. Planned features we did not get to implement include:
 
-* A character counter when writing cheeps
-* Adding liked cheeps to about me page (as well as the "Download my data" json data)
+- A character counter when writing cheeps
+- Adding liked cheeps to about me page (as well as the "Download my data" json data)
 
 To get an overview of our group work consult figure \ref{groupwork}.
 
@@ -101,7 +103,9 @@ Ideally after merging a tag is applied and pushed which triggers the release wor
 ![Group work process illustration\label{groupwork}](images/group-work-activity-diagram.png)
 
 ## How to make _Chirp!_ work locally
+
 ### Prerequisites
+
 - .NET (>=7.0)
 - dotnet ef-tools
 - Docker
@@ -109,40 +113,50 @@ Ideally after merging a tag is applied and pushed which triggers the release wor
 - Github OAuth App
 
 ### Azure AD B2C
+
 _Chirp!_ uses an Azure AD B2C user flow for authentication. The `AzureADB2C` object in `appsettings.Development.json` must be configured according to [Step 2. of the documentation](https://learn.microsoft.com/en-us/aspnet/core/security/authentication/azure-ad-b2c?view=aspnetcore-8.0).
 
 1. Add a user-secret from within the `src/Chirp.Web` folder, using the following command in your terminal:
+
 ```bash
 dotnet user-secrets set "AzureADB2C:ClientSecret" "[CLIENT-SECRET]"
 ```
+
 | Replacing [CLIENT-SECRET] with your client secret from Azure.
 
 2. You must configure your [Github OAuth App with your user flow on your Azure ADB2C tenant](https://learn.microsoft.com/en-us/azure/active-directory-b2c/identity-provider-github?pivots=b2c-user-flow).
 
 ### Local database
+
 _Chirp!_ uses an MSSQL database, which can be run locally using Docker.
 
 1. Set up the database using the following command from your terminal:
+
 ```bash
 docker run -e "ACCEPT_EULA=Y" -e "MSSQL_SA_PASSWORD=my}}Pass;word" \
    -p 1433:1433 --name azuresql --hostname azuresql \
    -d \
    mcr.microsoft.com/mssql/server:2022-latest
 ```
+
 | Password specifications can be found [here](https://learn.microsoft.com/en-us/sql/relational-databases/security/strong-passwords?view=sql-server-ver16). The given password is not of importance and is only used for the individual Docker instance.
 
 2. Add a user-secret from within the `src/Chirp.Web` folder, using the following command in your terminal:
+
 ```bash
 dotnet user-secrets set "ConnectionStrings:AZURE_SQL_CONNECTIONSTRING" "Server=localhost,1433;Initial Catalog=bdsagroup5-chirpdb;Persist Security Info=False;User ID=sa;Password=my}}Pass;word;MultipleActiveResultSets=False;Encrypt=True;TrustServerCertificate=True;Connection Timeout=30;"
 ```
 
 3. The database is configured using the dotnet-ef tool by running the following command from within the `src/Chirp.Infrastructure` folder:
+
 ```bash
 dotnet ef database update --startup-project "../Chirp.Web"
 ```
 
 ### Running _Chirp!_
+
 To run _Chirp!_, use the following command from within the `src/Chirp.Web` folder, in your terminal:
+
 ```bash
 dotnet run
 ```
@@ -192,27 +206,17 @@ The Chirp.Web.End2EndTests project tests the whole program, including UI and key
 
 Our Chirp! application is licensed under [Creative Commons Attribution Share Alike 4.0 International](https://github.com/ITU-BDSA23-GROUP5/Chirp/blob/main/LICENSE).
 
-This permits:
-* Commercial use
-* Modification
-* Distribution
-* Private use
+| Permits        | Limitations   | Conditions                   |
+| -------------- | ------------- | ---------------------------- |
+| Commercial use | Liability     | License and copyright notice |
+| Modification   | Trademark use | Changes are stated           |
+| Distribution   | Patent use    | The license is kept          |
+| Private use    | Warranty      |                              |
 
-With the following limitations:
-* Liability
-* Trademark use
-* Patent use
-* Warranty
-
-Under the following conditions:
-* License and copyright notice
-* Changes are stated
-* The license is kept
-
-
-All dependencies in src use either the MIT License (e.g. Microsoft.EntityFrameworkCore.design, Microsoft.EntityFrameworkCore.SqlServer) or the Apache License 2.0 (e.g. FluentValidation), both of which are permissive.
+All dependencies in src use either the MIT License (e.g. Microsoft.EntityFrameworkCore.design, Microsoft.EntityFrameworkCore.SqlServer) or the Apache License 2.0 (e.g. FluentValidation), both of which are permissive and **allow for sublicensing**.
 
 ## LLMs, ChatGPT, CoPilot, and others
+
 Two of our five members used LLMs throughout the development. One of whom stopped their use, as they felt their perspective on the code was impaired in terms of possible solutions. The other primarily used it for Azure ADB2C and ASP.NET configuration.
 
 We have used the following LLMs in some manner during the project.
