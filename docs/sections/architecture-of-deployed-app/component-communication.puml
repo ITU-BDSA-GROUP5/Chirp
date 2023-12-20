@@ -5,7 +5,7 @@ skin rose
 title Client-Server communication [Component Diagram]
 
 [Client] as C
-[GitHub] as GH
+[GitHub API] as GH
 () HTTP as H
 () HTTP as HT
 [<<Webserver>>\nServer] as W
