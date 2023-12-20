@@ -15,8 +15,14 @@ repeat while (Successful?) is (no) not (yes)
 
 :Display authenticated public timeline;
 
-:Like a cheep;
-  
+:Press like button on a cheep;
+
+if (user has already liked the cheep?) then (yes)
+  :Unlike cheep;
+else (no)
+  :Like cheep;
+endif
+
 :Write a cheep;
 
 repeat :Share cheep;
