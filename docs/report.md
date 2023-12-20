@@ -23,6 +23,11 @@ An Author can like a Cheep. A Cheep can be liked by many Authors.
 
 ## Architecture — In the small
 
+The architecture is illustrated on figure \ref{onion_arch_diagram} with three circles representing the layers of our onion architecture. The legend to the left should be self-explanatory except for the terms Grouping of classes. Grouping of classes refers to a set of classes that serve similar functions e.g. the Repositories - it is an abstraction made to increase readability.
+
+![Illustration of organization of the code base (onion architecture diagram).\label{onion_arch_diagram}](images/architecture_in_the_small/Onion_architecture.png)
+
+
 ## Architecture of deployed application
 
 <!-- UML component diagram shows components, provided and required interfaces, ports, and relationships between them. -->
