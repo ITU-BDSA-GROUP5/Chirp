@@ -1,0 +1,22 @@
+@startuml
+
+skin rose
+
+title Client-Server communication [Component Diagram]
+
+[Client] as C
+[GitHub API] as GH
+() HTTP as H
+() HTTP as HT
+[<<Webserver>>\nServer] as W
+database "SQL Server" as DB
+
+C .> H : use
+H - W
+W -> DB
+
+W ..> HT : use
+HT - GH
+
+
+@enduml

@@ -25,6 +25,20 @@ An Author can like a Cheep. A Cheep can be liked by many Authors.
 
 ## Architecture of deployed application
 
+<!-- UML component diagram shows components, provided and required interfaces, ports, and relationships between them. -->
+
+The following component diagram shows how the different high level components communicate with each other.
+
+![Client-Server communication component diagram](/docs/images/architecture-of-deployed-app/component-communication.png)
+
+The client communicates with the web server using HTTP requests. The server itself uses HTTP requests to get information about the user from the GitHub API. Furthermore, the server has a connection to the SQL Server which contains the database.
+
+The following deployment diagram shows the artifacts of the system and where they are deployed.
+
+![Deployment diagram](/docs/images/architecture-of-deployed-app/deployment-diagram.png)
+
+Each client computer uses a browser, which uses HTTP requests, to access the website. The Chirp.Web project executable is deployed on an Azure App Server which hosts it, and has a connection to an Azure SQL Server. The SQL Server contains a database with all the persistent data of the "Chirp!" application.
+
 ## User activities
 
 The following user activity diagrams are for typical user journeys in our "Chirp!" application.

@@ -1,0 +1,33 @@
+@startuml
+
+title Deployment Diagram
+
+skin rose
+
+node "Client Computer A" as N1 {
+  component "Browser :\nChirp! website" as C1
+}
+
+node "Client Computer B" as N2 {
+  component "Browser :\nChirp! website" as C2
+}
+
+node "Azure App Server" as AAS {
+  component "Chirp.Web Server" as S
+}
+
+node "Azure\nSQL Server" as ASS {
+  database "SQL\ndatabase" as DB
+}
+
+
+() HTTP as H
+
+C1 ..> H : use
+C2 ..> H : use
+
+H - S
+
+S - DB
+
+@enduml
