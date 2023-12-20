@@ -1,5 +1,8 @@
 using FluentValidation;
 
+/// <summary>
+/// CreateCheepDTO is intended for gathering the information for creating a new Cheep
+/// </summary>
 public class CreateCheepDTO
 {
 	public required string Text { get; set; }

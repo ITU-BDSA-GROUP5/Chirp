@@ -1,11 +1,16 @@
 using System.Net.Http.Headers;
 using System.Text.Json;
 
+/// <summary>
+/// Used to retrieve a user's email using the GitHub API
+/// </summary>
 public class GithubHelper
 {
-    private static HttpClient HttpClient = new HttpClient();
+	private static HttpClient HttpClient = new HttpClient();
 
-    public static async Task<string> GetUserEmailGithub(string token, string username)
+	/// <param name="token">Identity provider access token</param>
+	/// <param name="username">GitHub username</param>
+	public static async Task<string> GetUserEmailGithub(string token, string username)
 	{
 		// Adapted from following resources
 		// https://learn.microsoft.com/en-us/dotnet/fundamentals/networking/http/httpclient
@@ -20,22 +25,22 @@ public class GithubHelper
 			requestMessage.Headers.Add("User-Agent", username);
 
 			HttpResponseMessage response = await HttpClient.SendAsync(requestMessage);
-				
+
 			if (!response.IsSuccessStatusCode)
 			{
-				throw new Exception($"An error occured getting user email: Error code {response.StatusCode}");
+				throw new Exception($"An error occurred getting user email: Error code {response.StatusCode}");
 			}
-			
+
 			var emailsJson = await response.Content.ReadAsStringAsync();
 			var emails = JsonSerializer.Deserialize<List<EmailInfo>>(emailsJson);
 			var primaryEmail = emails?
-				.Where(e => e.primary == true)
-				.Select(e => e.email)
+				.Where(e => e.Primary == true)
+				.Select(e => e.Email)
 				.SingleOrDefault();
 
 			return primaryEmail ?? throw new Exception("Error reading email or no primary email");
 		}
 	}
 
-    private record EmailInfo(string email, bool primary);
+	private record EmailInfo(string Email, bool Primary);
 }

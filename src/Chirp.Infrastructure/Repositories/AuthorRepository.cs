@@ -41,10 +41,10 @@ namespace Chirp.Infrastructure.Repositories
 				.SingleOrDefault();
 		}
 
-		public List<AuthorDTO> GetFollowing(string authorname)
+		public List<AuthorDTO> GetFollowing(string authorName)
 		{
 			return _context.Authors
-				.Where(a => a.Name == authorname)
+				.Where(a => a.Name == authorName)
 				.SelectMany(a => a.Following)
 				.OrderByDescending(a => a.AuthorId)
 				.Select(a => new AuthorDTO
@@ -55,10 +55,10 @@ namespace Chirp.Infrastructure.Repositories
 				.ToList();
 		}
 
-		public List<AuthorDTO> GetFollowers(string authorname)
+		public List<AuthorDTO> GetFollowers(string authorName)
 		{
 			return _context.Authors
-				.Where(a => a.Name == authorname)
+				.Where(a => a.Name == authorName)
 				.SelectMany(a => a.Followers)
 				.OrderByDescending(a => a.AuthorId)
 				.Select(a => new AuthorDTO
