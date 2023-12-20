@@ -13,7 +13,7 @@ numbersections: true
 # Design and Architecture of _Chirp!_
 
 ## Domain model
-![Domain Model as Class Diagram](/docs/images/domain_model_diagram.png)
+![Domain Model as Class Diagram](images/domain_model_diagram.png)
 
 The Author class represents a user in Chirp!.
 A Cheep represents the messages shared on the Chirp! platform.
@@ -34,13 +34,13 @@ The architecture is illustrated on figure \ref{onion_arch_diagram} with three ci
 
 The following component diagram shows how the different high level components communicate with each other.
 
-![Client-Server communication component diagram](/docs/images/architecture-of-deployed-app/component-communication.png)
+![Client-Server communication component diagram](images/architecture-of-deployed-app/component-communication.png)
 
 The client communicates with the web server using HTTP requests. The server itself uses HTTP requests to get information about the user from the GitHub API. Furthermore, the server has a connection to the SQL Server which contains the database.
 
 The following deployment diagram shows the artifacts of the system and where they are deployed.
 
-![Deployment diagram](/docs/images/architecture-of-deployed-app/deployment-diagram.png)
+![Deployment diagram](images/architecture-of-deployed-app/deployment-diagram.png)
 
 Each client computer uses a browser, which uses HTTP requests, to access the website. The Chirp.Web project executable is deployed on an Azure App Server which hosts it, and has a connection to an Azure SQL Server. The SQL Server contains a database with all the persistent data of the "Chirp!" application.
 
@@ -50,18 +50,18 @@ The following user activity diagrams are for typical user journeys in our "Chirp
 
 The figure below illustrates a user journey for an **unauthenticated** user of the application.
 
-![Unauthenticated User activity diagrams](/docs/images/user-activity-diagrams/unauthenticated-user-activity-diagram.png)
+![Unauthenticated User activity diagrams](images/user-activity-diagrams/unauthenticated-user-activity-diagram.png)
 
 The diagram below illustrates a user journey for an **authenticated** user of the application.
 
-![Authenticated User activity diagrams](/docs/images/user-activity-diagrams/authenticated-user-activity-diagram.png)
+![Authenticated User activity diagrams](images/user-activity-diagrams/authenticated-user-activity-diagram.png)
 
 The next diagram illustrates a user journey where a user wants to exercise their GDPR rights.
 
-![Authenticated user downloads their data and deletes themselves](/docs/images/user-activity-diagrams/)
+![Authenticated user downloads their data and deletes themselves](images/user-activity-diagrams/deleting-user-activity-diagram.png)
 
 ## Sequence of functionality/calls trough _Chirp!_
-![Sequence of functionality/calls through chirp!\label{functionsequence}](docs/images/sequence_of_functionality.png)
+![Sequence of functionality/calls through chirp!\label{functionsequence}](images/sequence_of_functionality.png)
 The figure \ref{functionsequence} illustrates the sequence of events, from a user requests the root of __Chirp!__ to a page is rendered and returned.
 
 # Process
@@ -69,15 +69,15 @@ The figure \ref{functionsequence} illustrates the sequence of events, from a use
 ## Build, test, release, and deployment
 The following UML activity diagrams illustrate the GitHub actions workflows that are run when different criteria are met. This will be briefly described under the respective diagrams.
 
-![UML activity diagram of the build and test workflow.\label{build_test_workflow}](images/Build_test_release_and_deployment/build_and_test_workflow.png)
+![UML activity diagram of the build and test workflow.\label{build_test_workflow}](images/build_test_release_and_deployment/build_and_test_workflow.png)
 
 The workflow on figure \ref{build_test_workflow} is run upon every push to main and pull request to main. It builds and tests to application in order to keep main void of faulty code (as a **safety net**).
 
-![UML activity diagram of the deployment workflow.\label{deployment_workflow}](images/Build_test_release_and_deployment/deployment_workflow.png)
+![UML activity diagram of the deployment workflow.\label{deployment_workflow}](images/build_test_release_and_deployment/deployment_workflow.png)
 
 The deployment workflow illustrated on figure \ref{deployment_workflow} is run upon every push to main. Note the redundant "build" step. We do not need this since the "publish" step already builds the application. This redundancy was not noticed during development and has not been removed due to time constraints. The illustration describes the two jobs: "build" and "deploy". Jobs are normally run in parallel, however, these are run sequentially as we do not want to deploy before the application is successfully built.
 
-![UML activity diagram of the release razor workflow.\label{release_workflow}](images/Build_test_release_and_deployment/release_razor_workflow.png)
+![UML activity diagram of the release razor workflow.\label{release_workflow}](images/build_test_release_and_deployment/release_razor_workflow.png)
 
 The release workflow illustrated on figure \ref{release_workflow} only run if a push to main contains a version tag. We've made use of a matrix strategy in order to automatically create multiple parallel job runs that builds, publishes, zips and releases the application for their respective platform.
 
@@ -98,7 +98,7 @@ Then we create a pull request and notify group members who are not involved. The
 
 Ideally after merging a tag is applied which causes the main branch to be redeployed.
 
-[Group work process illustration\label{groupwork}](/docs/images/group-work-activity-diagram.png)
+![Group work process illustration\label{groupwork}](images/group-work-activity-diagram.png)
 
 ## How to make _Chirp!_ work locally
 ### Prerequisites
