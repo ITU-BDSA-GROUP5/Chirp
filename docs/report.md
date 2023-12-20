@@ -16,8 +16,8 @@ numbersections: true
 
 ![Domain Model as Class Diagram](images/domain_model_diagram.png)
 
-The Author class represents a user in Chirp!.
-A Cheep represents the messages shared on the Chirp! platform.
+The Author class represents a user in _Chirp!_.
+A Cheep represents the messages shared on the _Chirp!_ platform.
 A Cheep is written by an Author, and an Author can write many Cheeps.
 An Author can follow, as well as be followed, by another Author.
 An Author can like a Cheep. A Cheep can be liked by many Authors.
@@ -42,11 +42,11 @@ The following deployment diagram shows the artifacts of the system and where the
 
 ![Deployment diagram](images/architecture-of-deployed-app/deployment-diagram.png)
 
-Each client computer uses a browser, which uses HTTP requests, to access the website. The Chirp.Web project executable is deployed on an Azure App Server which hosts it, and has a connection to an Azure SQL Server. The SQL Server contains a database with all the persistent data of the "Chirp!" application.
+Each client computer uses a browser, which uses HTTP requests, to access the website. The Chirp.Web project executable is deployed on an Azure App Server which hosts it, and has a connection to an Azure SQL Server. The SQL Server contains a database with all the persistent data of the _Chirp!_ application.
 
 ## User activities
 
-The following user activity diagrams are for typical user journeys in our "Chirp!" application, where a user completes a couple of tasks.
+The following user activity diagrams are for typical user journeys in our _Chirp!_ application, where a user completes a couple of tasks.
 
 The figure below illustrates a user journey for an **unauthenticated** user of the application.
 
@@ -65,7 +65,7 @@ The next diagram illustrates a user journey where a user wants to exercise their
 ## Sequence of functionality/calls through _Chirp!_
 
 ![Sequence of functionality/calls through chirp!\label{functionsequence}](images/sequence_of_functionality.png)
-The figure \ref{functionsequence} illustrates the sequence of events, from a user requests the root of **Chirp!** to a page is rendered and returned.
+The figure \ref{functionsequence} illustrates the sequence of events, from a user requests the root of _Chirp!_ to a page is rendered and returned.
 
 # Process
 
@@ -200,13 +200,13 @@ The test suite contains three different test projects:
 
 The Chirp.Infrastructure.Tests and Chirp.Web.Tests project contains unit-tests and integration tests for the Chirp.Infrastructure and Chirp.Web projects respectively.
 
-The Chirp.Web.End2EndTests project tests the whole program, including UI and key functionality. This test project uses the NUnit test framework. The other projects use the xUnit testing tool.
+The Chirp.Web.End2EndTests project tests the whole program, including UI and key functionality throughout _Chirp!_. This test project uses the NUnit test framework. The other projects use the xUnit testing tool.
 
 # Ethics
 
 ## License
 
-Our Chirp! application is licensed under [Creative Commons Attribution Share Alike 4.0 International](https://github.com/ITU-BDSA23-GROUP5/Chirp/blob/main/LICENSE).
+Our _Chirp!_ application is licensed under [Creative Commons Attribution Share Alike 4.0 International](https://github.com/ITU-BDSA23-GROUP5/Chirp/blob/main/LICENSE).
 
 | Permissions    | Limitations   | Conditions                   |
 | -------------- | ------------- | ---------------------------- |
