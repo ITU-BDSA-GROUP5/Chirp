@@ -13,7 +13,7 @@ numbersections: true
 # Design and Architecture of _Chirp!_
 
 ## Domain model
-![Domain Model as Class Diagram](/docs/images/domain_model_diagram.png)
+![Domain Model as Class Diagram](images/domain_model_diagram.png)
 
 The Author class represents a user in Chirp!.
 A Cheep represents the messages shared on the Chirp! platform.
@@ -34,13 +34,13 @@ The architecture is illustrated on figure \ref{onion_arch_diagram} with three ci
 
 The following component diagram shows how the different high level components communicate with each other.
 
-![Client-Server communication component diagram](/docs/images/architecture-of-deployed-app/component-communication.png)
+![Client-Server communication component diagram](images/architecture-of-deployed-app/component-communication.png)
 
 The client communicates with the web server using HTTP requests. The server itself uses HTTP requests to get information about the user from the GitHub API. Furthermore, the server has a connection to the SQL Server which contains the database.
 
 The following deployment diagram shows the artifacts of the system and where they are deployed.
 
-![Deployment diagram](/docs/images/architecture-of-deployed-app/deployment-diagram.png)
+![Deployment diagram](images/architecture-of-deployed-app/deployment-diagram.png)
 
 Each client computer uses a browser, which uses HTTP requests, to access the website. The Chirp.Web project executable is deployed on an Azure App Server which hosts it, and has a connection to an Azure SQL Server. The SQL Server contains a database with all the persistent data of the "Chirp!" application.
 
@@ -50,36 +50,36 @@ The following user activity diagrams are for typical user journeys in our "Chirp
 
 The figure below illustrates a user journey for an **unauthenticated** user of the application.
 
-![Unauthenticated User activity diagrams](/docs/images/user-activity-diagrams/unauthenticated-user-activity-diagram.png)
+![Unauthenticated User activity diagrams](images/user-activity-diagrams/unauthenticated-user-activity-diagram.png)
 
 The diagram below illustrates a user journey for an **authenticated** user of the application.
 
-![Authenticated User activity diagrams](/docs/images/user-activity-diagrams/authenticated-user-activity-diagram.png)
+![Authenticated User activity diagrams](images/user-activity-diagrams/authenticated-user-activity-diagram.png)
 
 The next diagram illustrates a user journey where a user wants to exercise their GDPR rights.
 
-![Authenticated user downloads their data and deletes themselves](/docs/images/user-activity-diagrams/)
+![Authenticated user downloads their data and deletes themselves](images/user-activity-diagrams/deleting-user-activity-diagram.png)
 
-## Sequence of functionality/calls trough _Chirp!_
-![Sequence of functionality/calls through chirp!\label{functionsequence}](docs/images/sequence_of_functionality.png)
+## Sequence of functionality/calls through _Chirp!_
+![Sequence of functionality/calls through chirp!\label{functionsequence}](images/sequence_of_functionality.png)
 The figure \ref{functionsequence} illustrates the sequence of events, from a user requests the root of __Chirp!__ to a page is rendered and returned.
 
 # Process
 
 ## Build, test, release, and deployment
-The following UML activity diagrams illustrate the GitHub actions workflows that are run when different criteria are met. This will be briefly described under the respective diagrams.
+The following UML activity diagrams illustrate the GitHub actions workflows that are run when different criteria are met. This will be briefly described under the respective diagrams. Note that each step can fail and will result in the Github Action aborting.
 
-![UML activity diagram of the build and test workflow.\label{build_test_workflow}](images/Build_test_release_and_deployment/build_and_test_workflow.png)
+![UML activity diagram of the build and test workflow.\label{build_test_workflow}](images/build_test_release_and_deployment/build_and_test_workflow.png)
 
-The workflow on figure \ref{build_test_workflow} is run upon every push to main and pull request to main. It builds and tests to application in order to keep main void of faulty code (as a **safety net**).
+The workflow on figure \ref{build_test_workflow} is run upon every push and pull request to main. It builds and tests the application in order to keep main void of faulty code (as a **safety net**).
 
-![UML activity diagram of the deployment workflow.\label{deployment_workflow}](images/Build_test_release_and_deployment/deployment_workflow.png)
+![UML activity diagram of the deployment workflow.\label{deployment_workflow}](images/build_test_release_and_deployment/deployment_workflow.png)
 
 The deployment workflow illustrated on figure \ref{deployment_workflow} is run upon every push to main. Note the redundant "build" step. We do not need this since the "publish" step already builds the application. This redundancy was not noticed during development and has not been removed due to time constraints. The illustration describes the two jobs: "build" and "deploy". Jobs are normally run in parallel, however, these are run sequentially as we do not want to deploy before the application is successfully built.
 
-![UML activity diagram of the release razor workflow.\label{release_workflow}](images/Build_test_release_and_deployment/release_razor_workflow.png)
+![UML activity diagram of the release razor workflow.\label{release_workflow}](images/build_test_release_and_deployment/release_razor_workflow.png)
 
-The release workflow illustrated on figure \ref{release_workflow} only run if a push to main contains a version tag. We've made use of a matrix strategy in order to automatically create multiple parallel job runs that builds, publishes, zips and releases the application for their respective platform.
+The release workflow illustrated on figure \ref{release_workflow} only runs if a push to main contains a version tag. We've made use of a matrix strategy in order to automatically create multiple parallel job runs that build, publish, zip and release the application for their respective platform.
 
 ## Team work
 
@@ -88,17 +88,17 @@ No functionality is incomplete. Planned features we did not get to implement inc
 * A character counter when writing cheeps
 * Adding liked cheeps to about me page (as well as the "Download my data" json data)
 
-To get an overview of our group work consult \ref{groupwork}.
+To get an overview of our group work consult figure \ref{groupwork}.
 
-After an issue has been created. We assign responsibility for it to one or more persons.
+After an issue has been created we assign responsibility for it to one or more persons.
 
 We work alone or with pair programming iteratively in research and implement steps until the issue is handled.
 
 Then we create a pull request and notify group members who are not involved. They strive to review within 24 hours. If the request is approved we merge it into the Main branch. Otherwise we evaluate whether or not to continue working on the issue or close it with a comment.
 
-Ideally after merging a tag is applied which causes the main branch to be redeployed.
+Ideally after merging a tag is applied and pushed which triggers the release workflow.
 
-[Group work process illustration\label{groupwork}](/docs/images/group-work-activity-diagram.png)
+![Group work process illustration\label{groupwork}](images/group-work-activity-diagram.png)
 
 ## How to make _Chirp!_ work locally
 ### Prerequisites
@@ -117,7 +117,7 @@ dotnet user-secrets set "AzureADB2C:ClientSecret" "[CLIENT-SECRET]"
 ```
 | Replacing [CLIENT-SECRET] with your client secret from Azure.
 
-2. You must configure uour [Github OAuth App with your user flow on your Azure ADB2C client](https://learn.microsoft.com/en-us/azure/active-directory-b2c/identity-provider-github?pivots=b2c-user-flow).
+2. You must configure your [Github OAuth App with your user flow on your Azure ADB2C tenant](https://learn.microsoft.com/en-us/azure/active-directory-b2c/identity-provider-github?pivots=b2c-user-flow).
 
 ### Local database
 _Chirp!_ uses an MSSQL database, which can be run locally using Docker.
@@ -213,11 +213,12 @@ Under the following conditions:
 All dependencies in src use either the MIT License (e.g. Microsoft.EntityFrameworkCore.design, Microsoft.EntityFrameworkCore.SqlServer) or the Apache License 2.0 (e.g. FluentValidation), both of which are permissive.
 
 ## LLMs, ChatGPT, CoPilot, and others
-We have used the following set of LLMs in some manner during the project.
+Two of our five members used LLMs throughout the development. One of whom stopped their use, as they felt their perspective on the code was impaired in terms of possible solutions. The other primarily used it for Azure ADB2C and ASP.NET configuration.
 
-We have used GitHub Copilot in the development process of the project. Copilot has mainly been utilized for generation of small code samples. This was done for a small amount of simple and repetitive methods and functions in the code. In these cases, the generated code was always heavily modified. 
-GitHub Copilot's chat functionality within the workspace has also been used for proof of concept. The response helped us to get an idea of, how a certain functionality might be implemented. This would then lead to an inspired but manual implementation of that functionality.
+We have used the following LLMs in some manner during the project.
 
-We have also used ChatGPT in some rare cases during the project. This was mainly used for researching purposes to get details about a concept or receive an explanation of some code examples from the internet. The help from ChatGPT primarily helped to faster gain an understanding of a subject, before implementing a feature.
+We have used GitHub Copilot in the development process of the project. Copilot has mainly been utilized for generation of small code snippets. This was done for manually accessing login, before we knew we had to import taghelpers in cshtml files.
 
-The usage of LLMs did not have a substantial effect on the development speed. In some situations, the LLMs improved our understanding of the given issue, and sped up the research phase. In other situations, the response was misleading or imprecise, which led to more refactoring of the written code.
+GitHub Copilot's chat functionality within the workspace and ChatGPT were rarely used during the project. This was mainly used for researching purposes to get details about a concept or receive an explanation of some code examples from the internet. ChatGPT and Copilot chat primarily helped to gain an understanding of a subject, before implementing a feature.
+
+The usage of LLMs did not have a substantial effect on the development speed. In some situations, the LLMs improved our understanding of the given issue, and sped up the development. In other situations, the response was misleading or imprecise, leading to inefficiency.

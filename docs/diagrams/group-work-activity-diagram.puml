@@ -1,0 +1,29 @@
+@startuml
+
+skin rose
+
+title Group Work [Activity Diagram] \n
+
+start
+
+:Create Issue;
+:Assign Responsibility;
+
+repeat
+:Research;
+:Implement;
+:Create/Update Pull Request;
+Backward :Reprioritize;
+note right
+  The issue may be postponed
+  or closed with comment here.
+end note
+repeat while (Request Approved) is (no)
+-> yes;
+
+:Merge into Main Branch;
+:Deploy;
+:Tag & Release;
+stop
+
+@enduml
