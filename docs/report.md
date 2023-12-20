@@ -206,7 +206,7 @@ The Chirp.Web.End2EndTests project tests the whole program, including UI and key
 
 Our Chirp! application is licensed under [Creative Commons Attribution Share Alike 4.0 International](https://github.com/ITU-BDSA23-GROUP5/Chirp/blob/main/LICENSE).
 
-| Permits        | Limitations   | Conditions                   |
+| Permissions    | Limitations   | Conditions                   |
 | -------------- | ------------- | ---------------------------- |
 | Commercial use | Liability     | License and copyright notice |
 | Modification   | Trademark use | Changes are stated           |
@@ -221,7 +221,7 @@ Two of our five members used LLMs throughout the development. One of whom stoppe
 
 We have used the following LLMs in some manner during the project.
 
-We have used GitHub Copilot in the development process of the project. Copilot has mainly been utilized for generation of small code snippets. This was done for manually accessing login, before we knew we had to import taghelpers in cshtml files.
+We have used GitHub Copilot in some of the development process of the project. Copilot has mainly been utilized for generation of small code snippets. For example, this was done for manually accessing login and logout URLs, before we knew we had to import "taghelpers" in cshtml files to use ASP.NET specific.
 
 GitHub Copilot's chat functionality within the workspace and ChatGPT were rarely used during the project. This was mainly used for researching purposes to get details about a concept or receive an explanation of some code examples from the internet. ChatGPT and Copilot chat primarily helped to gain an understanding of a subject, before implementing a feature.
 
