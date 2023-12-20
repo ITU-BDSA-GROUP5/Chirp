@@ -14,7 +14,7 @@ numbersections: true
 
 ## Domain model
 
-![Domain Model as Class Diagram](images/domain_model_diagram.png)
+![Class Diagram of Domain Model](images/domain_model_diagram.png)
 
 The Author class represents a user in _Chirp!_.
 The Cheep class represents the messages shared on the _Chirp!_ platform.
@@ -48,15 +48,15 @@ Each client computer uses a browser, which uses HTTP requests, to access the web
 
 The following user activity diagrams are for typical user journeys in our _Chirp!_ application, where a user completes a couple of tasks.
 
-The figure below illustrates a user journey for an **unauthenticated** user of the application.
+The diagram below illustrates a user journey for an **unauthenticated** user of the application.
 
-![Unauthenticated User activity diagrams](images/user-activity-diagrams/unauthenticated-user-activity-diagram.png)
+![Unauthenticated User activity diagram](images/user-activity-diagrams/unauthenticated-user-activity-diagram.png)
 
 "Author X" represents any author present on the second page of the public timeline.
 
 The diagram below illustrates a user journey for an **authenticated** user of the application.
 
-![Authenticated User activity diagrams](images/user-activity-diagrams/authenticated-user-activity-diagram.png)
+![Authenticated User activity diagram](images/user-activity-diagrams/authenticated-user-activity-diagram.png)
 
 The next diagram illustrates a user journey where a user wants to exercise their GDPR rights.
 
@@ -64,8 +64,8 @@ The next diagram illustrates a user journey where a user wants to exercise their
 
 ## Sequence of functionality/calls through _Chirp!_
 
-![Sequence of functionality/calls through chirp!\label{functionsequence}](images/sequence_of_functionality.png)
-The figure \ref{functionsequence} illustrates the sequence of events, from a user requests the root of _Chirp!_ to a page is rendered and returned.
+![Sequence of functionality/calls through Chirp!\label{function-sequence}](images/sequence_of_functionality.png)
+The figure \ref{function-sequence} illustrates the sequence of events, from a user requests the root of _Chirp!_ to a page is rendered and returned.
 
 # Process
 
