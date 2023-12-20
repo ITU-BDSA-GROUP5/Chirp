@@ -42,6 +42,8 @@ The next diagram illustrates a user journey where a user wants to exercise their
 ![Authenticated user downloads their data and deletes themselves](/docs/images/user-activity-diagrams/)
 
 ## Sequence of functionality/calls trough _Chirp!_
+![Sequence of functionality/calls through chirp!\label{functionsequence}](docs/images/sequence_of_functionality.png)
+The figure \ref{functionsequence} illustrates the sequence of events, from a user requests the root of __Chirp!__ to a page is rendered and returned.
 
 # Process
 
