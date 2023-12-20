@@ -35,7 +35,9 @@ Here comes a description of our domain model.
 ## How to make _Chirp!_ work locally
 
 ## How to run test suite locally
-
+Once you have made _Chirp!_ work locally and installed Playwright, you can proceed to running tests. Here follows a guide to running our test suite locally (Make sure you have the local _Chirp!_ up and running):
+1. In the terminal, navigate to the root directory (Chirp) of the project
+2. Run the command `dotnet test`
 
 # Ethics
 
