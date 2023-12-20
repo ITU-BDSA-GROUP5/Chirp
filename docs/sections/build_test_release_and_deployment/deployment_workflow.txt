@@ -1,0 +1,12 @@
+@startuml
+title Deployment Workflow
+start
+:Set up .NET core;
+:Build with dotnet;
+:Update database with dotnet-ef;
+:Dotnet publish;
+:Upload artifact for deployment job;
+:Download artifact from build job;
+:Deploy to Azure Web App;
+stop
+@enduml

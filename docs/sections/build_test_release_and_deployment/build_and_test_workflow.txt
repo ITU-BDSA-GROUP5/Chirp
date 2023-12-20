@@ -1,0 +1,14 @@
+@startuml
+title Build_And_Test Workflow\n
+start
+:Set timezone;
+:Setup .NET;
+:Setup Docker;
+:Pull and run SQL server container;
+:Set dotnet user secrets;
+:Restore dependencies;
+:Build;
+:Test;
+stop
+@enduml
+
