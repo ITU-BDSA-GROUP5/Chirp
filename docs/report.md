@@ -25,7 +25,7 @@ Here comes a description of our domain model.
 ## User activities
 
 ## Sequence of functionality/calls trough _Chirp!_
-![Sequence of functionality/calls through chirp!\label{functionsequence}]("../images/sequence_of_functionality.png")
+![Sequence of functionality/calls through chirp!\label{functionsequence}](docs/images/sequence_of_functionality.png)
 The figure \ref{functionsequence} illustrates the sequence of events, from a user requests the root of __Chirp!__ to a page is rendered and returned.
 
 # Process
