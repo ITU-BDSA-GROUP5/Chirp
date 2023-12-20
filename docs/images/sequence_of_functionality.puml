@@ -2,19 +2,39 @@
 
 participant ":Client" as Client #white
 participant ":Chirp" as Chirp #white
-participant ":AzureDatabase" as DB #white
+participant ":AzureDB" as DB #white
 
 
 Client -> Chirp: GET "/"
 Activate Chirp
 
-Chirp -> DB: GetCheeps()
+Chirp -> Chirp: GetCheeps()
+Activate Chirp #pink
+
+Chirp -> DB: Execute SQL
 Activate DB
 
-DB --> Chirp: return Cheeps
+DB --> Chirp: Return data records
 Deactivate DB
 
-Chirp --> Client: Frontpage
+Chirp --> Chirp: Return CheepDTOs
+Deactivate Chirp
+
+Chirp -> Chirp: GetPageAmount()
+Activate Chirp #pink
+
+Chirp -> DB: Execute SQL
+Activate DB
+
+DB --> Chirp: Return Count
+Deactivate DB
+
+Chirp --> Chirp: Return page amount
+Deactivate Chirp
+
+Chirp -> Chirp: Render page
+
+Chirp --> Client: Return page
 Deactivate Chirp
 
 @enduml
