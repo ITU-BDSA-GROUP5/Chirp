@@ -1,21 +1,22 @@
 @startuml
 
+title Deployment Diagram
+
 skin rose
 
 node "Client Computer A" as N1 {
-  component "Chirp! website" as C1
+  component "Browser :\nChirp! website" as C1
 }
 
 node "Client Computer B" as N2 {
-  component "Chirp! website" as C2
+  component "Browser :\nChirp! website" as C2
 }
 
 node "Azure App Server" as AAS {
   component "Chirp.Web Server" as S
 }
 
-node "Azure SQL Server" as ASS {
-  component "SQL Server" as SQL
+node "Azure\nSQL Server" as ASS {
   database "SQL\ndatabase" as DB
 }
 
@@ -27,8 +28,6 @@ C2 ..> H : use
 
 H - S
 
-S - SQL
-
-SQL - DB
+S - DB
 
 @enduml
