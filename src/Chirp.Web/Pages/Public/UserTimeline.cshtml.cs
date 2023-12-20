@@ -19,16 +19,15 @@ public class UserTimelineModel : ChirpPage
 		{
 			EnsureAuthorCreated().Wait();
 			LoadTimelineSpecificCheeps(author, page);
-
-			FollowerCount = AuthorRepository.GetFollowers(author).Count;
 		}
 		else
 		{
 			Cheeps = CheepRepository.GetCheepsFromAuthor(page, author);
+			LastPageNumber = CheepRepository.GetPageAmount(author);
 		}
 
+		FollowerCount = AuthorRepository.GetFollowers(author).Count;
 		PageNumber = page;
-		LastPageNumber = CheepRepository.GetPageAmount(author);
 
 		return Page();
 	}
@@ -40,10 +39,12 @@ public class UserTimelineModel : ChirpPage
 		if (name == author)
 		{
 			Cheeps = CheepRepository.GetCheepsFromAuthorAndFollowings(page, author, Following.Select(a => a.Name).ToList());
+			LastPageNumber = CheepRepository.GetPageAmountAuthorAndFollowing(author);
 		}
 		else
 		{
 			Cheeps = CheepRepository.GetCheepsFromAuthor(page, author);
+			LastPageNumber = CheepRepository.GetPageAmount(author);
 		}
 	}
 }

@@ -71,6 +71,17 @@ namespace Chirp.Infrastructure.Repositories
 				.Count / pageSize
 			);
 		}
+		public int GetPageAmountAuthorAndFollowing(string author)
+		{
+			var followeeCheepCount = _context.Authors
+				.Where(a => a.Name == author)
+				.SelectMany(a => a.Following)
+				.SelectMany(a => a.Cheeps)
+				.Select(c => c)
+				.Count();
+
+			return (int)Math.Ceiling((double)(followeeCheepCount + GetCheepsFromAuthor(author).Count) / pageSize);
+		}
 
 		// Method gets a subset of all cheeps from the author
 		public List<CheepDTO> GetCheepsFromAuthor(int page, string author)
