@@ -98,12 +98,8 @@ namespace Chirp.Infrastructure.Repositories
 				.FirstOrDefault();
 			if (follower == null || followee == null)
 			{
-				Console.WriteLine("Either follower or followee does not exist. No new follow was made");
-				return;
+				throw new InvalidOperationException("Either follower or followee does not exist. No new follow was made");
 			}
-			Console.WriteLine("Unfollowed " + followee + " from " + follower);
-			Console.WriteLine(follower.Following.Count);
-			Console.WriteLine(followee.Followers.Count);
 			followee.Followers.Remove(follower);
 			follower.Following.Remove(followee);
 			_context.SaveChanges();
