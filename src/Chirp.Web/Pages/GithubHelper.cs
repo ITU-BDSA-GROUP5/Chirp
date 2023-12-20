@@ -34,13 +34,13 @@ public class GithubHelper
 			var emailsJson = await response.Content.ReadAsStringAsync();
 			var emails = JsonSerializer.Deserialize<List<EmailInfo>>(emailsJson);
 			var primaryEmail = emails?
-				.Where(e => e.Primary == true)
-				.Select(e => e.Email)
+				.Where(e => e.primary == true)
+				.Select(e => e.email)
 				.SingleOrDefault();
 
 			return primaryEmail ?? throw new Exception("Error reading email or no primary email");
 		}
 	}
 
-	private record EmailInfo(string Email, bool Primary);
+	private record EmailInfo(string email, bool primary);
 }
