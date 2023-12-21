@@ -9,12 +9,9 @@ public interface ICheepRepository
 	/// <returns>The amount of pages produced by paginating all cheeps from one author.</returns>
 	public int GetPageAmount(string author);
 
-	/// <param name="page"></param>
-	/// <param name="author"></param>
 	/// <returns>A specified page of cheeps from a given author. Can be used for pagination.</returns>
 	public List<CheepDTO> GetCheepsFromAuthor(int page, string author);
 
-	/// <param name="author"></param>
 	/// <returns>All cheeps from an author.</returns>
 	public List<CheepDTO> GetCheepsFromAuthor(string author);
 	public void CreateNewCheep(CreateCheepDTO createCheepDTO);
@@ -27,8 +24,6 @@ public interface ICheepRepository
 	/// <param name="author">The author who un-likes the cheep</param>
 	public void UnlikeCheep(Guid cheepId, string author);
 
-	/// <param name="page"></param>
-	/// <param name="author"></param>
 	/// <param name="following">List of author names which the given author follows.</param>
 	/// <returns>The list of cheeps from the given author and the people they follow.</returns>
 	public List<CheepDTO> GetCheepsFromAuthorAndFollowings(int page, string author, List<String> following);
@@ -36,8 +31,6 @@ public interface ICheepRepository
 	/// <summary>
 	/// Like GetCheeps-method but sorted by most likes first.
 	/// </summary>
-	/// <param name="page"></param>
-	/// <returns></returns>
 	public List<CheepDTO> GetMostLikedCheeps(int page);
 	public void DeleteCheep(Guid cheepId);
 
