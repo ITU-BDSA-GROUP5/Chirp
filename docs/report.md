@@ -20,13 +20,15 @@ The Author class represents a user in _Chirp!_.
 The Cheep class represents the messages shared on the _Chirp!_ platform.
 A Cheep is written by an Author, and an Author can write many Cheeps.
 An Author can follow, as well as be followed by, many other Authors.
-An Author can like a Cheep. A Cheep can be liked by many Authors.
+An Author can like many Cheeps, at most one time per cheep. A Cheep can be liked by many Authors.
 
 ## Architecture — In the small
 
-The architecture is illustrated on figure \ref{onion_arch_diagram} with three circles representing the layers of our onion architecture. The legend to the left should be self-explanatory except for the terms Grouping of classes. Grouping of classes refers to a set of classes that serve similar functions e.g. the Repositories - it is an abstraction made to increase readability.
+The architecture is illustrated on the figure below with three circles representing the layers of our onion architecture. The legend to the left should be self-explanatory except for the term _"Grouping of classes"_. Grouping of classes refers to a set of classes that serve similar functions e.g. the Repositories - it is an abstraction made to increase readability.
 
-![Illustration of organization of the code base (onion architecture diagram).\label{onion_arch_diagram}](images/architecture_in_the_small/Onion_architecture.png)
+![Illustration of organization of the code base (onion architecture diagram).](images/architecture_in_the_small/Onion_architecture.png)
+
+_A piece of un-centered figure text_
 
 ## Architecture of deployed application
 
@@ -40,7 +42,7 @@ The client communicates with the Azure web server using HTTP requests. The Azure
 
 The following deployment diagram shows the artifacts of the system and where they are deployed.
 
-![Deployment diagram](images/architecture-of-deployed-app/deployment-diagram.png)
+![Deployment diagram](images/architecture-of-deployed-app/deployment-diagram.png){height=100%}
 
 Each client computer uses a browser, which uses HTTP requests, to access the website. The Chirp.Web project executable is deployed on an Azure App Server which hosts it, and has a connection to an Azure SQL Server. The SQL Server contains a database with all the persistent data of the _Chirp!_ application.
 
@@ -48,24 +50,28 @@ Each client computer uses a browser, which uses HTTP requests, to access the web
 
 The following user activity diagrams are for typical user journeys in our _Chirp!_ application, where a user completes a couple of tasks.
 
-The diagram below illustrates a user journey for an **unauthenticated** user of the application.
+The diagram below illustrates an example of a user journey for an **unauthenticated** user of the application.
 
-![Unauthenticated User activity diagram](images/user-activity-diagrams/unauthenticated-user-activity-diagram.png)
+![Unauthenticated User activity diagram](images/user-activity-diagrams/unauthenticated-user-activity-diagram.png){width=50%}
 
-"Author X" represents any author present on the second page of the public timeline.
+"Author X" represents any author present on the second page of the public timeline. The user browses the trending page, finds an interesting cheep, and decides to check out what else author X has to offer.
 
-The diagram below illustrates a user journey for an **authenticated** user of the application.
+The diagram below illustrates an example of a user journey for an **authenticated** user of the application.
 
-![Authenticated User activity diagram](images/user-activity-diagrams/authenticated-user-activity-diagram.png)
+![Authenticated User activity diagram](images/user-activity-diagrams/authenticated-user-activity-diagram.png){width=100% height=650px}
 
-The next diagram illustrates a user journey where a user wants to exercise their GDPR rights.
+The user logs in, likes a cheep from the public timeline, and decides to write their own.
 
-![Authenticated user downloads their data and deletes themselves](images/user-activity-diagrams/deleting-user-activity-diagram.png)
+The next diagram illustrates an example of a user journey where a user wants to exercise their GDPR rights.
+
+![Authenticated user downloads their data and deletes themselves](images/user-activity-diagrams/deleting-user-activity-diagram.png){height=75%}
+
+The user logs in, goes to the about me page to download, and delete their data.
 
 ## Sequence of functionality/calls through _Chirp!_
 
-![Sequence of functionality/calls through Chirp!\label{function-sequence}](images/sequence_of_functionality.png)
-The figure \ref{function-sequence} illustrates the sequence of events, from a user requests the root of _Chirp!_ to a page is rendered and returned.
+![Sequence of functionality/calls through Chirp!](images/sequence_of_functionality.png)
+The figure above illustrates the sequence of events, from a user requests the root of _Chirp!_ to a page is rendered and returned.
 
 # Process
 
@@ -73,26 +79,26 @@ The figure \ref{function-sequence} illustrates the sequence of events, from a us
 
 The following UML activity diagrams illustrate the GitHub actions workflows that are run when different criteria are met. This will be briefly described under the respective diagrams. Note that each step can fail and will result in the Github Action aborting.
 
-![UML activity diagram of the build and test workflow.\label{build_test_workflow}](images/build_test_release_and_deployment/build_and_test_workflow.png)
+![UML activity diagram of the build and test workflow.](images/build_test_release_and_deployment/build_and_test_workflow.png){width=100% height=500px}
 
-The workflow on figure \ref{build_test_workflow} is run upon every push and pull request to main. It builds and tests the application in order to keep main void of faulty code (as a **safety net**).
+The workflow on the figure above is run upon every push and pull request to main. It builds and tests the application in order to keep main void of faulty code (as a **safety net**).
 
-![UML activity diagram of the deployment workflow.\label{deployment_workflow}](images/build_test_release_and_deployment/deployment_workflow.png)
+![UML activity diagram of the deployment workflow.](images/build_test_release_and_deployment/deployment_workflow.png){width=100% height=550px}
 
-The deployment workflow illustrated on figure \ref{deployment_workflow} is run upon every push to main. Note the redundant "build" step. We do not need this since the "publish" step already builds the application. This redundancy was not noticed during development and has not been removed due to time constraints. The illustration describes the two jobs: "build" and "deploy". Jobs are normally run in parallel, however, these are run sequentially as we do not want to deploy before the application is successfully built.
+The deployment workflow illustrated on the figure above is run upon every push to main. Note the redundant "build" step. We do not need this since the "publish" step already builds the application. This redundancy was not noticed during development and has not been removed due to time constraints. The illustration describes the two jobs: "build" and "deploy". Jobs are normally run in parallel, however, these are run **sequentially** as we do not want to deploy before the application is successfully built.
 
-![UML activity diagram of the release razor workflow.\label{release_workflow}](images/build_test_release_and_deployment/release_razor_workflow.png)
+![UML activity diagram of the release razor workflow.](images/build_test_release_and_deployment/release_razor_workflow.png)
 
-The release workflow illustrated on figure \ref{release_workflow} only runs if a push to main contains a version tag. We've made use of a matrix strategy in order to automatically create multiple parallel job runs that build, publish, zip and release the application for their respective platform.
+The release workflow illustrated on figure above only runs if a push to main contains a version tag. We've made use of a matrix strategy in order to automatically create multiple **parallel** job runs that build, publish, zip and release the application for their respective platform.
 
 ## Team work
 
-No functionality is in progress, but a bug has been spotted. Planned features we did not get to implement include:
+No additional functionality is in progress. Planned features we did not get to implement include:
 
 - A character counter when writing cheeps
 - Adding liked cheeps to about me page (as well as the "Download my data" json data)
 
-To get an overview of our group work consult figure \ref{groupwork}.
+To get an overview of our group work consult the figure below.
 
 After an issue has been created we assign responsibility for it to one or more persons.
 
@@ -100,9 +106,9 @@ We work alone or with pair programming iteratively in research and implement ste
 
 Then we create a pull request and notify group members who are not involved. They strive to review within 24 hours. If the request is approved we merge it into the Main branch. Otherwise we evaluate whether or not to continue working on the issue or close it with a comment.
 
-Ideally after merging a tag is applied and pushed which triggers the release workflow.
+After merging deployment happens automatically, and ideally a tag is manually applied afterwards and pushed which triggers the release workflow.
 
-![Group work process illustration\label{groupwork}](images/group-work-activity-diagram.png)
+![Group work process illustration.](images/group-work-activity-diagram.png)
 
 ## How to make _Chirp!_ work locally
 
@@ -223,7 +229,7 @@ Two of our five members used LLMs throughout the development. One of whom stoppe
 
 We have used the following LLMs in some manner during the project.
 
-We have used GitHub Copilot in some of the development process of the project. Copilot has mainly been utilized for generation of small code snippets. For example, this was done for manually accessing login and logout URLs, before we knew we had to import "taghelpers" in cshtml files to use ASP.NET specific.
+We have used GitHub Copilot in some of the development process of the project. Copilot has mainly been utilized for generation of small code snippets. For example, this was done for manually accessing login and logout URLs, before we knew we had to import "taghelpers" in cshtml files to use ASP.NET specific features for links. We have forgotten to credit GitHub Copilot when writing the GetFollowing() and GetFollowers() methods. Although the final code remaining hardly resembles what was generated, co-authoring would still have been the appropriate thing to do.
 
 GitHub Copilot's chat functionality within the workspace and ChatGPT were rarely used during the project. This was mainly used for researching purposes to get details about a concept or receive an explanation of some code examples from the internet. ChatGPT and Copilot chat primarily helped to gain an understanding of a subject, before implementing a feature.
 
