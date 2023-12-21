@@ -52,7 +52,7 @@ The following user activity diagrams are for typical user journeys in our _Chirp
 
 The diagram below illustrates an example of a user journey for an **unauthenticated** user of the application.
 
-![Unauthenticated User activity diagram](images/user-activity-diagrams/unauthenticated-user-activity-diagram.png){width=50%}
+![Unauthenticated User activity diagram](images/user-activity-diagrams/unauthenticated-user-activity-diagram.png){width=100%}
 
 "Author X" represents any author present on the second page of the public timeline. The user browses the trending page, finds an interesting cheep, and decides to check out what else author X has to offer.
 
@@ -92,6 +92,8 @@ The deployment workflow illustrated on the figure above is run upon every push t
 The release workflow illustrated on figure above only runs if a push to main contains a version tag. We've made use of a matrix strategy in order to automatically create multiple **parallel** job runs that build, publish, zip and release the application for their respective platform.
 
 ## Team work
+
+![project-board just before submission](images/Projectboard-before-handin.png)
 
 No additional functionality is in progress. Planned features we did not get to implement include:
 
