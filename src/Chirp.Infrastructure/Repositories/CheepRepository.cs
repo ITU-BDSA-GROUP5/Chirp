@@ -1,4 +1,3 @@
-using System.ComponentModel;
 using Chirp.Core;
 using Microsoft.EntityFrameworkCore;
 namespace Chirp.Infrastructure.Repositories
@@ -73,6 +72,7 @@ namespace Chirp.Infrastructure.Repositories
 		}
 		public int GetPageAmountAuthorAndFollowing(string author)
 		{
+			// Get the amount of cheeps from all the authors which the given author follows
 			var followeeCheepCount = _context.Authors
 				.Where(a => a.Name == author)
 				.SelectMany(a => a.Following)
@@ -80,7 +80,9 @@ namespace Chirp.Infrastructure.Repositories
 				.Select(c => c)
 				.Count();
 
-			return (int)Math.Ceiling((double)(followeeCheepCount + GetCheepsFromAuthor(author).Count) / pageSize);
+			return (int)Math.Ceiling(
+				(double)(followeeCheepCount + GetCheepsFromAuthor(author)
+				.Count) / pageSize);
 		}
 
 		// Method gets a subset of all cheeps from the author

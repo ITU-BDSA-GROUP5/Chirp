@@ -191,7 +191,7 @@ public class CheepRepositoryUnitTests : IAsyncLifetime
 	}
 
 	[Fact]
-	public void GetMostLikedCheeps_OnePageOfCheeps_CheepsInDescingAmountOfLikes()
+	public void GetMostLikedCheeps_OnePageOfCheeps_CheepsInDescendingAmountOfLikes()
 	{
 		int page = 1;
 
