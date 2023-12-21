@@ -9,6 +9,8 @@ public interface ICheepRepository
 	/// <returns>The amount of pages produced by paginating all cheeps from one author.</returns>
 	public int GetPageAmount(string author);
 
+	/// <returns>The amount of pages produced by paginating all cheeps from an author and the authors they follow.</returns>
+	public int GetPageAmountAuthorAndFollowing(string author);
 	/// <returns>A specified page of cheeps from a given author. Can be used for pagination.</returns>
 	public List<CheepDTO> GetCheepsFromAuthor(int page, string author);
 
