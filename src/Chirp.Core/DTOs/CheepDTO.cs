@@ -1,3 +1,6 @@
+/// <summary>
+/// CheepDTO is intended for sending the information of a Cheep throughout the program
+/// </summary>
 public class CheepDTO
 {
 	public required Guid Id { get; set; }

@@ -9,7 +9,7 @@ using FluentValidation;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// add database context and repositoies
+// add database context and repositories
 var connection = String.Empty;
 if (builder.Environment.IsDevelopment())
 {
@@ -40,8 +40,7 @@ builder.Services.Configure<OpenIdConnectOptions>(OpenIdConnectDefaults.Authentic
 
 builder.Services.AddAuthorization(options =>
 {
-	// By default, all incoming requests will be authorized according to 
-	// the default policy
+	// By default, all incoming requests will be authorized according to the default policy
 	options.FallbackPolicy = options.DefaultPolicy;
 });
 

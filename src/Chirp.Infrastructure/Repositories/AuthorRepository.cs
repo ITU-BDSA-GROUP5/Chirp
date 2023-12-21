@@ -41,10 +41,10 @@ namespace Chirp.Infrastructure.Repositories
 				.SingleOrDefault();
 		}
 
-		public List<AuthorDTO> GetFollowing(string authorname)
+		public List<AuthorDTO> GetFollowing(string authorName)
 		{
 			return _context.Authors
-				.Where(a => a.Name == authorname)
+				.Where(a => a.Name == authorName)
 				.SelectMany(a => a.Following)
 				.OrderByDescending(a => a.AuthorId)
 				.Select(a => new AuthorDTO
@@ -55,10 +55,10 @@ namespace Chirp.Infrastructure.Repositories
 				.ToList();
 		}
 
-		public List<AuthorDTO> GetFollowers(string authorname)
+		public List<AuthorDTO> GetFollowers(string authorName)
 		{
 			return _context.Authors
-				.Where(a => a.Name == authorname)
+				.Where(a => a.Name == authorName)
 				.SelectMany(a => a.Followers)
 				.OrderByDescending(a => a.AuthorId)
 				.Select(a => new AuthorDTO
@@ -98,12 +98,8 @@ namespace Chirp.Infrastructure.Repositories
 				.FirstOrDefault();
 			if (follower == null || followee == null)
 			{
-				Console.WriteLine("Either follower or followee does not exist. No new follow was made");
-				return;
+				throw new InvalidOperationException("Either follower or followee does not exist. No new follow was made");
 			}
-			Console.WriteLine("Unfollowed " + followee + " from " + follower);
-			Console.WriteLine(follower.Following.Count);
-			Console.WriteLine(followee.Followers.Count);
 			followee.Followers.Remove(follower);
 			follower.Following.Remove(followee);
 			_context.SaveChanges();
