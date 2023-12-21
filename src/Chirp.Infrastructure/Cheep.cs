@@ -1,3 +1,6 @@
+/// <summary>
+/// This represents the Cheeps in the Chirp Application, and are used by EF Core to generate migrations for the database.
+/// </summary>
 public class Cheep
 {
 	public Guid CheepId { get; set; }
